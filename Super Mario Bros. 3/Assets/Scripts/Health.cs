@@ -4,6 +4,7 @@ using System.Collections;
 public class Health : MonoBehaviour {
 	public bool big = false;
 	public bool gothurt = false;
+	public bool felloff;
 	public int item_number = 0;
 	public GameObject mario_small;
 	public GameObject mario_big;
@@ -17,7 +18,7 @@ public class Health : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-		if (gothurt && !big) {
+		if ((gothurt && !big) || (felloff)){
 			gothurt = false;
 			// make mario die
 			// Time.timeScale = 0.001f;

@@ -22,7 +22,7 @@ public class PlayerMovement : MonoBehaviour {
 	public BoxCollider2D coll;
 	private GameObject camera;
 	void Awake () {
-
+		CameraFollow.character = this.gameObject;
 	}
 	// Use this for initialization
 	void Start () {
@@ -212,5 +212,9 @@ public class PlayerMovement : MonoBehaviour {
 		timer += Time.deltaTime;
 		HitJump = false;
 		Hit = false;
+
+		if (this.gameObject.transform.position.y <= camera.transform.position.y - 12) {
+			camera.GetComponent<Health>().felloff = true;
+		}
 	}
 }
