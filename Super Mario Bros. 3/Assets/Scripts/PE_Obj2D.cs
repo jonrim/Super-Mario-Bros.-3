@@ -257,7 +257,7 @@ public class PE_Obj2D : MonoBehaviour {
 						float slopeB = slopeY - (slopeM * slopeX);
 
 
-						float dist = (slopeM * eX1) + slopeB - eY1 + 0.01f;
+						float dist = (slopeM * eX1) + slopeB - eY1;
 						//calculate new Y position = mX + B
 						Vector2 pos = new Vector2(this.transform.position.x, this.transform.position.y + dist);
 						// Vector2 pos = new Vector2(slopeX, slopeY);
