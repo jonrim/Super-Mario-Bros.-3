@@ -3,6 +3,9 @@ using System.Collections;
 
 public class CameraFollow : MonoBehaviour {
 	public static GameObject character;
+	public GameObject mario_small;
+	public GameObject mario_big;
+	
 	public float bound;
 	public bool right_bound = false;
 	public  bool left_bound = false;
@@ -15,6 +18,12 @@ public class CameraFollow : MonoBehaviour {
 	// Update is called once per frame
 	void Update () {
 		float dist = character.transform.position.x - this.transform.position.x;
+//		if (mario_small.renderer.enabled == true) {
+//			character = mario_small;
+//		}
+//		else {
+//			character = mario_big;
+//		}
 		if (dist > bound){
 			if (right_bound)
 				return;

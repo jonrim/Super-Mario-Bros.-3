@@ -30,24 +30,12 @@ public class PE_Obj2D : MonoBehaviour {
 		if (PhysEngine2D.objs.IndexOf(this) == -1) {
 			PhysEngine2D.objs.Add(this);
 		}
+		camera = GameObject.Find ("Main Camera");
 		// Block_empty = GameObject.FindWithTag("Block_empty");
 	}
 
 	// Update is called once per frame
 	void FixedUpdate () {
-		if ((!spawnitem) && (blockhit)){
-			if (MakeMushroom) {
-				Instantiate(mushroom, new Vector2(this.transform.position.x,
-				                                  this.transform.position.y + this.collider2D.bounds.size.y/2 + 0.5f), 
-				            					  this.transform.rotation);
-				// PhysEngine2D.objs.Add (mushroom.GetComponent<PE_Obj2D>());
-				// mushroom.GetComponent<PE_Obj2D>().grav = PE_GravType2D.constant;
-			}
-			else {
-
-			}
-			spawnitem = true;
-		}
 	}
 
 
@@ -69,7 +57,8 @@ public class PE_Obj2D : MonoBehaviour {
 		// Assumes that "that" is still
 		if ((that.gameObject.tag != "Player") && (that.gameObject.tag != "Floor") && (that.gameObject.tag != "Platform")
 		    && (that.gameObject.tag != "Item") && ((this.gameObject.tag == "Item")
-		    || (this.gameObject.tag == "Enemy")) && (acc.y == 0) && (that.gameObject.tag != "Platform")) {
+		    || (this.gameObject.tag == "Enemy")) && (acc.y == 0) && (that.gameObject.tag != "Platform") &&
+		    (transform.position.y < that.gameObject.transform.position.y + that.collider2D.bounds.size.y / 2)) {
 			vel.x = -vel.x;
 			float sign = Mathf.Sign (vel.x);
 			transform.position = new Vector2(transform.position.x + sign * 0.1f, transform.position.y);
@@ -87,7 +76,8 @@ public class PE_Obj2D : MonoBehaviour {
 		}
 		if ((that.gameObject.tag != "Player") && (this.gameObject.tag != "ItemBottom") &&
 		    !(this.gameObject.tag == "Item" && that.gameObject.tag == "Item") && 
-		    (this.gameObject.tag != "Block_item")){
+		    (this.gameObject.tag != "Block_item") && !(that.gameObject.tag == "Enemy" &&
+		     this.gameObject.tag == "Player" && camera.GetComponent<Health>().invincible == true)){
 			switch (this.coll) {
 
 			case PE_Collider2D.aabb:
@@ -143,8 +133,10 @@ public class PE_Obj2D : MonoBehaviour {
 						else if ((this.gameObject.tag != "Enemy") && (this.gameObject.tag != "Item")
 						         && (that.gameObject.tag != "Platform")) { // hit the right side
 							float dist = this.collider2D.bounds.size.x/2 + that.collider2D.bounds.size.x/2;
-							vel.x = 0;
-							acc.x = 0;
+							if (pos0.x > pos1.x) {
+								vel.x = 0;
+								acc.x = 0;
+							}
 							Vector2 pos = new Vector2(that.transform.position.x + dist + 0.1f, this.transform.position.y);
 							this.transform.position = pos;
 						}
@@ -167,9 +159,11 @@ public class PE_Obj2D : MonoBehaviour {
 						else if ((this.gameObject.tag != "Enemy") && (this.gameObject.tag != "Item")
 						         && (that.gameObject.tag != "Platform")) { // hit the right side
 							float dist = this.collider2D.bounds.size.x/2 + that.collider2D.bounds.size.x/2;
-							vel.x = 0;
-							acc.x = 0;
-							Vector2 pos = new Vector2(that.transform.position.x + dist + 0.06f, this.transform.position.y);
+							if (pos0.x > pos1.x) {
+								vel.x = 0;
+								acc.x = 0;
+							}
+							Vector2 pos = new Vector2(that.transform.position.x + dist + 0.1f, this.transform.position.y);
 							this.transform.position = pos;
 						}
 					} else if (delta.x < 0 && delta.y < 0) { // Bottom, Left
@@ -190,9 +184,11 @@ public class PE_Obj2D : MonoBehaviour {
 						else if ((this.gameObject.tag != "Enemy") && (this.gameObject.tag != "Item")
 						         && (that.gameObject.tag != "Platform")) { // hit the left side
 							float dist = this.collider2D.bounds.size.x/2 + that.collider2D.bounds.size.x/2;
-							vel.x = 0;
-							acc.x = 0;
-							Vector2 pos = new Vector2(that.transform.position.x - dist - 0.06f, this.transform.position.y);
+							if (pos0.x < pos1.x) {
+								vel.x = 0;
+								acc.x = 0;
+							}
+							Vector2 pos = new Vector2(that.transform.position.x - dist - 0.1f, this.transform.position.y);
 							this.transform.position = pos;
 						}
 					} else if (delta.x < 0 && delta.y >= 0) { // Top, Left
@@ -214,8 +210,10 @@ public class PE_Obj2D : MonoBehaviour {
 						else if ((this.gameObject.tag != "Enemy") && (this.gameObject.tag != "Item")
 						         && (that.gameObject.tag != "Platform")){ // hit the left side
 							float dist = this.collider2D.bounds.size.x/2 + that.collider2D.bounds.size.x/2;
-							vel.x = 0;
-							acc.x = 0;
+							if (pos0.x < pos1.x) {
+								vel.x = 0;
+								acc.x = 0;
+							}
 							Vector2 pos = new Vector2(that.transform.position.x - dist-0.1f, this.transform.position.y);
 							this.transform.position = pos;
 						}
@@ -277,14 +275,24 @@ public class PE_Obj2D : MonoBehaviour {
 			thatP = that.transform.position;
 			if ((thatP.x <= this.transform.position.x + this.collider2D.bounds.size.x/2 ) &&
 			    (thatP.x >= this.transform.position.x - this.collider2D.bounds.size.x/2 )) { // if the center of this obj is between the x-bounds of that obj
-				if (thatP.y < pos1.y) {
+				if (thatP.y < this.transform.position.y) {
+//					float dist = this.collider2D.bounds.size.y/2 + that.collider2D.bounds.size.y/2;
+//					Vector2 pos = new Vector2(that.transform.position.x, this.transform.position.y - dist-0.03f);
+//					that.transform.position = pos;
+//					that.gameObject.GetComponent<PE_Obj2D>().vel.y = -1;
 					blockhit = true;
 					block_anim.SetBool ("BlockHit", blockhit);
+					if (MakeMushroom) {
+						Instantiate(mushroom, new Vector2(this.transform.position.x,
+						                                  this.transform.position.y + this.collider2D.bounds.size.y/2 + 0.5f), 
+						            this.transform.rotation);
+
+					}
 				}
 			}
 		}
 		if ((this.gameObject.tag == "Player") && (that.gameObject.tag == "Item")) {
-			camera = GameObject.Find ("Main Camera");
+			// camera = GameObject.Find ("Main Camera");
 			if (that.gameObject.GetComponent<ItemBehavior>().mushroom) {
 				camera.GetComponent<Health>().item_number = 1;
 			}

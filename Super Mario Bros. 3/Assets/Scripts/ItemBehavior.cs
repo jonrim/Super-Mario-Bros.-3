@@ -8,18 +8,22 @@ public class ItemBehavior : MonoBehaviour {
 	public bool canJump2;
 	public bool mushroom;
 	public bool destroyed = false;
+	public bool spawned = false;
 	private Animator anim;
 	private float timer = 0;
 	// Use this for initialization
 	void Start () {
-		if (mushroom) {
-			GetComponent<PE_Obj2D>().vel.x = -3.0f;
-		}
 		is_on_ground = transform.FindChild("IsOnGround");
 		anim = GetComponent<Animator>();
 	}
 	// Update is called once per frame
 	void FixedUpdate () {
+		if (mushroom && timer >= 1.0f && !spawned) {
+			GetComponent<PE_Obj2D>().vel.x = -3.0f;
+			// transform.FindChild("IsOnGround").GetComponent<PE_Obj2D>().vel.x = -3.0f;
+			timer = 0;
+			spawned = true;
+		}
 		anim.speed = 1.0f + Mathf.Pow (timer/7.0f,7);
 		if (timer >= 5.0f) {
 			anim.SetBool("Disappear", true);

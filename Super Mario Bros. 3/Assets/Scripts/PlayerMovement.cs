@@ -184,7 +184,7 @@ public class PlayerMovement : MonoBehaviour {
 				// only if you're going upwards and the timer just started can you slow down gravity
 				// the faster you were running at takeoff, the longer you can slow down gravity
 				if ((GetComponent<PE_Obj2D>().vel.y > 0) && (timer < (0.5f + 0.001f * jumpMultiplier * Mathf.Pow (Mathf.Abs (velAtTakeOff), 10)))){
-					GetComponent<PE_Obj2D>().acc.y = -25.0f;
+					GetComponent<PE_Obj2D>().acc.y = -27.5f;
 				}
 				else { // standard gravity
 					GetComponent<PE_Obj2D>().acc.y = -60.0f;
