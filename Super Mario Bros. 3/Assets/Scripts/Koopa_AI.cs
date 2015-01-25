@@ -1,17 +1,19 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class Enemy_AI : PE_Obj2D {
+public class Koopa_AI : PE_Obj2D {
 	public LayerMask GroundLayers;
 	private Transform is_on_ground;
 	public bool canJump;
 	public bool canJump2;
+
 	// Use this for initialization
 	public override void Start () {
-		GetComponent<PE_Obj2D>().vel.x = -2.0f;
-		transform.localScale = new Vector3(-1, 1, 1);
+		vel.x = -2.0f;
+		transform.localScale = new Vector3(1, 1, 1);
 		is_on_ground = transform.FindChild("IsOnGround");
-		base.Start ();
+
+		base.Start();
 	}
 	// Update is called once per frame
 	void FixedUpdate () {
@@ -21,6 +23,7 @@ public class Enemy_AI : PE_Obj2D {
 		                             is_on_ground.transform.position.y + is_on_ground.collider2D.bounds.size.y/2);
 		canJump = Physics2D.OverlapArea(point1, point2, GroundLayers, 0, 0);
 		// next bool needed so that you can't jump off walls
+
 		canJump2 = Physics2D.OverlapPoint(is_on_ground.position, GroundLayers);
 		// go in opposite direction if the enemy approaches a cliff
 
@@ -33,8 +36,7 @@ public class Enemy_AI : PE_Obj2D {
 			}
 		}
 		if (!canJump2 && GetComponent<PE_Obj2D>().acc.y == 0) {
-			GetComponent<PE_Obj2D>().vel.x = -GetComponent<PE_Obj2D>().vel.x;
-			transform.localScale = new Vector3(Mathf.Sign(GetComponent<PE_Obj2D>().vel.x), 1, 1);
+			turnAround();
 		}
 		// canJump2 = canJump2 || (Mathf.Abs (GetComponent<PE_Obj2D>().acc.y) < 0.1f);
 	}
@@ -44,18 +46,28 @@ public class Enemy_AI : PE_Obj2D {
 		if (other == null) {
 			return;
 		}
+		if (other.gameObject.tag == "PlayerFeet"){
+			print ("stomped");
+		}
 		else if (other.gameObject.tag == "Block_item" || other.gameObject.tag == "Block_empty") {
-			vel.x = -vel.x;
-			float sign = Mathf.Sign (vel.x);
-			transform.position = new Vector2(transform.position.x + sign * 0.1f, transform.position.y);
-			transform.localScale = new Vector3(sign, 1, 1);
+			turnAround ();
 			base.OnTriggerEnter2D(otherColl);
 		} else {
 			base.OnTriggerEnter2D(otherColl);
 		}
 	}
-	
+
 	public override void OnTriggerStay2D(Collider2D other){
 		OnTriggerEnter2D(other);
+	}
+
+	void turnAround() {
+
+
+		float curr_vel = vel.x;
+		vel.x = -curr_vel;
+		transform.position = new Vector2(transform.position.x + Mathf.Sign (vel.x) * 0.1f, transform.position.y);
+		//transform.FindChild("Sprite").localScale = new Vector3(Mathf.Sign (curr_vel), 1, 1);
+		transform.localScale = new Vector3 (Mathf.Sign (curr_vel), 1, 1);
 	}
 }

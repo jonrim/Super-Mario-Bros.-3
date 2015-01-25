@@ -14,8 +14,11 @@ public class Stomp : MonoBehaviour {
 	}
 
 	void OnTriggerEnter2D (Collider2D other) {
+
 		if (other.gameObject.tag == "Enemy") {
+
 			other.gameObject.transform.GetComponent<Enemy_Death>().dead = true;
+
 			if (Input.GetButton("Jump")) {
 				this.transform.parent.GetComponent<PlayerMovement>().HitJump = true;
 				this.transform.parent.GetComponent<PlayerMovement>().Hit = false;
@@ -25,5 +28,9 @@ public class Stomp : MonoBehaviour {
 				this.transform.parent.GetComponent<PlayerMovement>().Hit = true;
 			}
 		}
+	}
+
+	void OnTriggerStay2D(Collider2D other) {
+		OnTriggerEnter2D (other);
 	}
 }

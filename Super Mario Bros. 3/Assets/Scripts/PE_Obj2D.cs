@@ -8,7 +8,7 @@ public class PE_Obj2D : MonoBehaviour {
 	public bool			still = false;
 	public PE_Collider2D	coll = PE_Collider2D.aabb;
 	public PE_GravType2D	grav = PE_GravType2D.constant;
-	public GameObject camera;
+	public GameObject mainCamera;
 	public GameObject mushroom;
 	public bool MakeMushroom;
 	public Vector2		acc = Vector2.zero;
@@ -21,64 +21,80 @@ public class PE_Obj2D : MonoBehaviour {
 	public Vector2		delta = Vector2.zero;
 	// public GameObject Block_empty;
 	private bool blockhit = false;
-	private bool spawnitem = false;
 	private Animator block_anim;
-	void Start() {
+	virtual public void Start() {
 		if (this.gameObject.tag == "Block_item") {
 			block_anim = this.gameObject.GetComponentInParent<Animator>();
 		}
 		if (PhysEngine2D.objs.IndexOf(this) == -1) {
 			PhysEngine2D.objs.Add(this);
 		}
-		camera = GameObject.Find ("Main Camera");
+		mainCamera = GameObject.Find ("Main Camera");
 		// Block_empty = GameObject.FindWithTag("Block_empty");
 	}
+	
 
-	// Update is called once per frame
-	void FixedUpdate () {
-	}
-
-
-	void OnTriggerEnter2D(Collider2D other) {
+	virtual public void OnTriggerEnter2D(Collider2D other) {
 		// Ignore collisions of still objects
 		if (still) return;
 
-		PE_Obj2D otherPEO = other.GetComponent<PE_Obj2D>();
+		PE_Obj2D otherPEO = other.gameObject.GetComponent<PE_Obj2D>();
 		if (otherPEO == null) return;
 
 		ResolveCollisionWith(otherPEO);
 	}
 
-	void OnTriggerStay2D(Collider2D other) {
+	virtual public void OnTriggerStay2D(Collider2D other) {
 		OnTriggerEnter2D(other);
 	}
 	
 	void ResolveCollisionWith(PE_Obj2D that) {
+			// print ("Collision between this: " + this.gameObject.tag + " and that: " + that.gameObject.tag);
+
 		// Assumes that "that" is still
 		if ((that.gameObject.tag != "Player") && (that.gameObject.tag != "Floor") && (that.gameObject.tag != "Platform")
 		    && (that.gameObject.tag != "Item") && ((this.gameObject.tag == "Item")
 		    || (this.gameObject.tag == "Enemy")) && (acc.y == 0) && (that.gameObject.tag != "Platform") &&
 		    (transform.position.y < that.gameObject.transform.position.y + that.collider2D.bounds.size.y / 2)) {
-			vel.x = -vel.x;
-			float sign = Mathf.Sign (vel.x);
-			transform.position = new Vector2(transform.position.x + sign * 0.1f, transform.position.y);
-			transform.localScale = new Vector3(sign, 1, 1);
+
+				// print ("ResolveCollisionWith 1");
+		
+
+			//vel.x = -vel.x;
+			//float sign = Mathf.Sign (vel.x);
+			//transform.position = new Vector2(transform.position.x + sign * 0.1f, transform.position.y);
+			//transform.localScale = new Vector3(sign, 1, 1);
 		}
 		else if ((this.gameObject.tag == "Item") && (that.gameObject.tag == "Player")) {
+			
+				// print ("ResolveCollisionWith 2");
+			
 			transform.GetComponent<ItemBehavior>().destroyed = true;
 		}
 		else if ((this.gameObject.tag == "Enemy") && (that.gameObject.tag == "Player")) {
+			
+			// print ("ResolveCollisionWith 3");
+			print ("Hit");
+			//Time.timeScale = 0;
+
 			if (this.gameObject.GetComponent<Enemy_Death>().dead == false) {
 				// damage Mario
-				camera = GameObject.Find ("Main Camera");
-				camera.GetComponent<Health>().gothurt = true;
+				mainCamera = GameObject.Find ("Main Camera");
+				mainCamera.GetComponent<Health>().gothurt = true;
 			}
 		}
 		if ((that.gameObject.tag != "Player") && (this.gameObject.tag != "ItemBottom") &&
 		    !(this.gameObject.tag == "Item" && that.gameObject.tag == "Item") && 
 		    (this.gameObject.tag != "Block_item") && !(that.gameObject.tag == "Enemy" &&
-		     this.gameObject.tag == "Player" && camera.GetComponent<Health>().invincible == true)){
+		     this.gameObject.tag == "Player" && mainCamera.GetComponent<Health>().invincible == true)){
+
+			if (this.gameObject.tag == "Shell" && that.gameObject.tag == "Player") {
+				print ("ResolveCollisionWith 4");
+				
+			}
+
 			switch (this.coll) {
+			
 
 			case PE_Collider2D.aabb:
 
@@ -127,7 +143,7 @@ public class PE_Obj2D : MonoBehaviour {
 							float dist = this.collider2D.bounds.size.y/2 + that.collider2D.bounds.size.y/2;
 							vel.y = 0;
 							acc.y = 0;
-							Vector2 pos = new Vector2(this.transform.position.x, that.transform.position.y + dist + 0.01f);
+							Vector2 pos = new Vector2(this.transform.position.x, that.transform.position.y + dist + 0.03f);
 							this.transform.position = pos;
 						}
 						else if ((this.gameObject.tag != "Enemy") && (this.gameObject.tag != "Item")
@@ -204,7 +220,7 @@ public class PE_Obj2D : MonoBehaviour {
 							float dist = this.collider2D.bounds.size.y/2 + that.collider2D.bounds.size.y/2;
 							vel.y = 0;
 							acc.y = 0;
-							Vector2 pos = new Vector2(this.transform.position.x, that.transform.position.y + dist + 0.01f);
+							Vector2 pos = new Vector2(this.transform.position.x, that.transform.position.y + dist + 0.03f);
 							this.transform.position = pos;
 						}
 						else if ((this.gameObject.tag != "Enemy") && (this.gameObject.tag != "Item")
@@ -292,7 +308,7 @@ public class PE_Obj2D : MonoBehaviour {
 			}
 		}
 		if ((this.gameObject.tag == "Player") && (that.gameObject.tag == "Item")) {
-			// camera = GameObject.Find ("Main Camera");
+			// mainCamera = GameObject.Find ("Main mainCamera");
 			if (that.gameObject.GetComponent<ItemBehavior>().mushroom) {
 				camera.GetComponent<Health>().item_number = 1;
 			}

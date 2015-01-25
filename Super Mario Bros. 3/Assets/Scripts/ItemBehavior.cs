@@ -1,20 +1,20 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class ItemBehavior : MonoBehaviour {
+public class ItemBehavior : PE_Obj2D {
 	public LayerMask GroundLayers;
 	private Transform is_on_ground;
 	public bool canJump;
 	public bool canJump2;
-	public bool mushroom;
 	public bool destroyed = false;
 	public bool spawned = false;
 	private Animator anim;
 	private float timer = 0;
 	// Use this for initialization
-	void Start () {
+	public override void Start () {
 		is_on_ground = transform.FindChild("IsOnGround");
 		anim = GetComponent<Animator>();
+		base.Start ();
 	}
 	// Update is called once per frame
 	void FixedUpdate () {
@@ -50,5 +50,24 @@ public class ItemBehavior : MonoBehaviour {
 		timer += Time.fixedDeltaTime;
 	}
 
+	public override void OnTriggerEnter2D(Collider2D otherColl){
+		PE_Obj2D other = otherColl.gameObject.GetComponent<PE_Obj2D>();
+		if (other == null) {
+			return;
+		}
+		else if (other.gameObject.tag == "Block_item" || other.gameObject.tag == "Block_empty") {
+			vel.x = -vel.x;
+			float sign = Mathf.Sign (vel.x);
+			transform.position = new Vector2(transform.position.x + sign * 0.1f, transform.position.y);
+			transform.localScale = new Vector3(sign, 1, 1);
+			base.OnTriggerEnter2D(otherColl);
+		} else {
+			base.OnTriggerEnter2D(otherColl);
+		}
+	}
+	
+	public override void OnTriggerStay2D(Collider2D other){
+		OnTriggerEnter2D(other);
+	}
 
 }
