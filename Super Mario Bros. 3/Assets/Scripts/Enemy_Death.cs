@@ -13,7 +13,7 @@ public class Enemy_Death : MonoBehaviour {
 	}
 	
 	// Update is called once per frame
-	void FixedUpdate () {
+	virtual public void FixedUpdate () {
 		if (dead && !dead_anim) {
 			enemy_anim.SetBool ("Dead", dead);
 			timer = 0;

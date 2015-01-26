@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class Enemy_AI : MonoBehaviour {
+public class Enemy_AI : PE_Obj2D {
 	public LayerMask GroundLayers;
 	private Transform is_on_ground;
 	private Animator anim;
@@ -18,6 +18,9 @@ public class Enemy_AI : MonoBehaviour {
 	public bool hit;
 	public Vector3 startingPos;
 	// Use this for initialization
+/// <summary>
+/// /Jrim
+/// </summary>
 	void Start () {
 		camera = GameObject.Find ("Main Camera");
 		if (camera.GetComponent<Health>().type == PowerUp.none)
@@ -36,6 +39,13 @@ public class Enemy_AI : MonoBehaviour {
 		if (wingedGoomba) {
 			Health = 2;
 		}
+//Josh
+	public override void Start () {
+		GetComponent<PE_Obj2D>().vel.x = -2.0f;
+		transform.localScale = new Vector3(-1, 1, 1);
+		is_on_ground = transform.FindChild("IsOnGround");
+		base.Start ();
+//////>>>>>>>>>>>>>
 	}
 	// Update is called once per frame
 	void FixedUpdate () {
@@ -106,5 +116,25 @@ public class Enemy_AI : MonoBehaviour {
 		// canJump2 = canJump2 || (Mathf.Abs (GetComponent<PE_Obj2D>().acc.y) < 0.1f);
 		jumpTimer += Time.fixedDeltaTime;
 		timer += Time.fixedDeltaTime;
+	}
+
+	public override void OnTriggerEnter2D(Collider2D otherColl){
+		PE_Obj2D other = otherColl.gameObject.GetComponent<PE_Obj2D>();
+		if (other == null) {
+			return;
+		}
+		else if (other.gameObject.tag == "Block_item" || other.gameObject.tag == "Block_empty") {
+			vel.x = -vel.x;
+			float sign = Mathf.Sign (vel.x);
+			transform.position = new Vector2(transform.position.x + sign * 0.1f, transform.position.y);
+			transform.localScale = new Vector3(sign, 1, 1);
+			base.OnTriggerEnter2D(otherColl);
+		} else {
+			base.OnTriggerEnter2D(otherColl);
+		}
+	}
+	
+	public override void OnTriggerStay2D(Collider2D other){
+		OnTriggerEnter2D(other);
 	}
 }

@@ -20,7 +20,7 @@ public class PlayerMovement : MonoBehaviour {
 	private bool run = false;
 	public bool big = false;
 	public BoxCollider2D coll;
-	private GameObject camera;
+	private GameObject mainCamera;
 	void Awake () {
 		CameraFollow.character = this.gameObject;
 	}
@@ -28,7 +28,7 @@ public class PlayerMovement : MonoBehaviour {
 	void Start () {
 		mario_anim = GetComponent<Animator>();
 		is_on_ground = transform.FindChild("IsOnGround");
-		camera = GameObject.Find ("Main Camera");
+		mainCamera = GameObject.Find ("Main Camera");
 		coll = this.transform.GetComponent<BoxCollider2D>() as BoxCollider2D;
 		normalHeight = coll.size.y;
 	}
@@ -220,8 +220,8 @@ public class PlayerMovement : MonoBehaviour {
 		HitJump = false;
 		Hit = false;
 
-		if (this.gameObject.transform.position.y <= camera.transform.position.y - 12) {
-			camera.GetComponent<Health>().felloff = true;
+		if (this.gameObject.transform.position.y <= mainCamera.transform.position.y - 12) {
+			mainCamera.GetComponent<Health>().felloff = true;
 		}
 	}
 }
