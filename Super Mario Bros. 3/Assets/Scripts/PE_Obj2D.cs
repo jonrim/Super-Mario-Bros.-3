@@ -10,7 +10,10 @@ public class PE_Obj2D : MonoBehaviour {
 	public PE_GravType2D	grav = PE_GravType2D.constant;
 	public GameObject camera;
 	public GameObject mushroom;
-	public bool MakeMushroom;
+	public GameObject tanooki;
+	public GameObject multiplier;
+	public bool MakeTanooki;
+	public bool MakeClone;
 	public Vector2		acc = Vector2.zero;
 
 	public Vector2		vel = Vector2.zero;
@@ -55,7 +58,8 @@ public class PE_Obj2D : MonoBehaviour {
 	
 	void ResolveCollisionWith(PE_Obj2D that) {
 		// Assumes that "that" is still
-		if ((that.gameObject.tag != "Player") && (that.gameObject.tag != "Floor") && (that.gameObject.tag != "Platform")
+		if ((that.gameObject.tag != "Player") && (that.gameObject.tag != "Floor") && (that.gameObject.tag != "Platform") &&
+		    !(this.gameObject.tag == "Enemy" && that.gameObject.tag == "Enemy")
 		    && (that.gameObject.tag != "Item") && ((this.gameObject.tag == "Item")
 		    || (this.gameObject.tag == "Enemy")) && (acc.y == 0) && (that.gameObject.tag != "Platform") &&
 		    (transform.position.y < that.gameObject.transform.position.y + that.collider2D.bounds.size.y / 2)) {
@@ -76,6 +80,7 @@ public class PE_Obj2D : MonoBehaviour {
 		}
 		if ((that.gameObject.tag != "Player") && (this.gameObject.tag != "ItemBottom") &&
 		    !(this.gameObject.tag == "Item" && that.gameObject.tag == "Item") && 
+		    !(this.gameObject.tag == "Enemy" && that.gameObject.tag == "Enemy") && 
 		    (this.gameObject.tag != "Block_item") && !(that.gameObject.tag == "Enemy" &&
 		     this.gameObject.tag == "Player" && camera.GetComponent<Health>().invincible == true)){
 			switch (this.coll) {
@@ -271,7 +276,7 @@ public class PE_Obj2D : MonoBehaviour {
 				break;
 			}
 		}
-		else if ((this.gameObject.tag == "Block_item") && (!blockhit)){
+		else if ((this.gameObject.tag == "Block_item") && (that.gameObject.tag == "Player") && (!blockhit)){
 			thatP = that.transform.position;
 			if ((thatP.x <= this.transform.position.x + this.collider2D.bounds.size.x/2 ) &&
 			    (thatP.x >= this.transform.position.x - this.collider2D.bounds.size.x/2 )) { // if the center of this obj is between the x-bounds of that obj
@@ -282,11 +287,21 @@ public class PE_Obj2D : MonoBehaviour {
 //					that.gameObject.GetComponent<PE_Obj2D>().vel.y = -1;
 					blockhit = true;
 					block_anim.SetBool ("BlockHit", blockhit);
-					if (MakeMushroom) {
+					if (MakeClone) {
+						Instantiate(multiplier, new Vector2(this.transform.position.x,
+						                                    this.transform.position.y + this.collider2D.bounds.size.y/2 + 0.5f), 
+						            this.transform.rotation);
+					}
+					else if (!that.gameObject.GetComponent<PlayerMovement>().big) {
 						Instantiate(mushroom, new Vector2(this.transform.position.x,
 						                                  this.transform.position.y + this.collider2D.bounds.size.y/2 + 0.5f), 
 						            this.transform.rotation);
 
+					}
+					else if (MakeTanooki) {
+						Instantiate(tanooki, new Vector2(this.transform.position.x,
+						                                  this.transform.position.y + this.collider2D.bounds.size.y/2 + 0.5f), 
+						            this.transform.rotation);
 					}
 				}
 			}
@@ -295,6 +310,14 @@ public class PE_Obj2D : MonoBehaviour {
 			// camera = GameObject.Find ("Main Camera");
 			if (that.gameObject.GetComponent<ItemBehavior>().mushroom) {
 				camera.GetComponent<Health>().item_number = 1;
+				camera.GetComponent<Health>().type = PowerUp.mushroom;
+			}
+			else if (that.gameObject.GetComponent<ItemBehavior>().tanooki) {
+				camera.GetComponent<Health>().item_number = 2;
+				camera.GetComponent<Health>().type = PowerUp.tanooki;
+			}
+			else if (that.gameObject.GetComponent<ItemBehavior>().multiplier) {
+				camera.GetComponent<Health>().item_number = 3;
 			}
 		}
 	}

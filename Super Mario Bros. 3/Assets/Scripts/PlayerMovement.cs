@@ -11,7 +11,7 @@ public class PlayerMovement : MonoBehaviour {
 	public bool canJump2;
 	private Animator mario_anim;
 	private Transform is_on_ground;
-	private float timer = 10.0f;
+	public float timer = 10.0f;
 	private float velAtTakeOff = 0;
 	private float normalHeight = 0;
 	public bool HitJump = false;
@@ -51,6 +51,10 @@ public class PlayerMovement : MonoBehaviour {
 			mario_anim.SetBool("Crouch",false);
 			coll.size = new Vector2(coll.size.x, normalHeight);
 		}
+		if (Input.GetButtonDown ("Run") && camera.GetComponent<Health>().tanooki) {
+			mario_anim.SetBool("Attack", true);
+			// mario_anim.SetBool("Attack", false);
+		}
 		if (Input.GetButton ("Run")) {
 			run = true;
 		}
@@ -76,7 +80,7 @@ public class PlayerMovement : MonoBehaviour {
 			}
 			else {
 				turn = false;
-				GetComponent<PE_Obj2D>().acc.x = 7.0f;
+				GetComponent<PE_Obj2D>().acc.x = 10.0f;
 			}
 			mario_anim.SetBool ("Turn", turn);
 		}
@@ -89,15 +93,15 @@ public class PlayerMovement : MonoBehaviour {
 			}
 			else {
 				turn = false;
-				GetComponent<PE_Obj2D>().acc.x = -7.0f;
+				GetComponent<PE_Obj2D>().acc.x = -10.0f;
 			}
 			mario_anim.SetBool ("Turn", turn);
 		}
 		else {
 			turn = false;
 			mario_anim.SetBool ("Turn", turn);
-			if ((GetComponent<PE_Obj2D>().vel.x < 0.01f) || (GetComponent<PE_Obj2D>().vel.x > 0.01f)) {
-				GetComponent<PE_Obj2D>().acc.x = -GetComponent<PE_Obj2D>().vel.x * 2.5f;			
+			if ((GetComponent<PE_Obj2D>().vel.x < -0.01f) || (GetComponent<PE_Obj2D>().vel.x > 0.01f)) {
+				GetComponent<PE_Obj2D>().acc.x = -GetComponent<PE_Obj2D>().vel.x * 4.5f;			
 			}
 		}
 		if (turn) {
@@ -148,7 +152,7 @@ public class PlayerMovement : MonoBehaviour {
 
 		if (Input.GetButtonDown ("Jump")) {
 			if ((canJump) && (canJump2)){
-				GetComponent<PE_Obj2D>().vel.y = 15.0f;
+				GetComponent<PE_Obj2D>().vel.y = 10.0f;
 				if (audio.isPlaying) {
 					audio.Stop ();
 				}
@@ -162,7 +166,7 @@ public class PlayerMovement : MonoBehaviour {
 			}
 		}
 		if (HitJump || Hit) {
-			GetComponent<PE_Obj2D>().vel.y = 15.0f;
+			GetComponent<PE_Obj2D>().vel.y = 10.0f;
 			if (audio.isPlaying) {
 				audio.Stop ();
 			}
@@ -183,8 +187,11 @@ public class PlayerMovement : MonoBehaviour {
 			if (Input.GetButton("Jump") || HitJump) {
 				// only if you're going upwards and the timer just started can you slow down gravity
 				// the faster you were running at takeoff, the longer you can slow down gravity
-				if ((GetComponent<PE_Obj2D>().vel.y > 0) && (timer < (0.5f + 0.001f * jumpMultiplier * Mathf.Pow (Mathf.Abs (velAtTakeOff), 10)))){
-					GetComponent<PE_Obj2D>().acc.y = -27.5f;
+//				if ((GetComponent<PE_Obj2D>().vel.y > 0) && (timer < (0.5f + 0.001f * jumpMultiplier * Mathf.Pow (Mathf.Abs (velAtTakeOff), 10)))){
+//					GetComponent<PE_Obj2D>().acc.y = -27.5f;
+//				}
+				if ((GetComponent<PE_Obj2D>().vel.y > 0) && (timer < (0.35f + 0.0005f * jumpMultiplier * Mathf.Pow (Mathf.Abs (velAtTakeOff), 2)))){
+					GetComponent<PE_Obj2D>().acc.y = 0;
 				}
 				else { // standard gravity
 					GetComponent<PE_Obj2D>().acc.y = -60.0f;
@@ -194,9 +201,9 @@ public class PlayerMovement : MonoBehaviour {
 				GetComponent<PE_Obj2D>().acc.y = -60.0f;
 			}
 			// terminal velocity
-			if (GetComponent<PE_Obj2D>().vel.y <= -20.0f) {
+			if (GetComponent<PE_Obj2D>().vel.y <= -15.0f) {
 				GetComponent<PE_Obj2D>().acc.y = 0;
-				GetComponent<PE_Obj2D>().vel.y = -20.0f;
+				GetComponent<PE_Obj2D>().vel.y = -15.0f;
 			}
 		}
 		if (Input.GetButtonUp("Jump")) { // return to normal gravity if you let go of the jump button

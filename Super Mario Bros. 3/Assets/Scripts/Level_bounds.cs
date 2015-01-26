@@ -14,6 +14,8 @@ public class Level_bounds : MonoBehaviour {
 	// Use this for initialization
 	void Start () {
 		camera = GameObject.Find ("Main Camera").GetComponent<CameraFollow>();
+		camera.left_bound = false;
+		camera.right_bound = false;
 	}
 	
 	// Update is called once per frame

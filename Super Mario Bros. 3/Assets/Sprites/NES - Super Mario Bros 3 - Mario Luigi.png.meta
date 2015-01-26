@@ -251,25 +251,25 @@ TextureImporter:
     21300492: NES - Super Mario Bros 3 - Mario Luigi_245
     21300494: NES - Super Mario Bros 3 - Mario Luigi_246
     21300496: NES - Super Mario Bros 3 - Mario Luigi_247
-    21300498: NES - Super Mario Bros 3 - Mario Luigi_248
-    21300500: NES - Super Mario Bros 3 - Mario Luigi_249
-    21300502: NES - Super Mario Bros 3 - Mario Luigi_250
-    21300504: NES - Super Mario Bros 3 - Mario Luigi_251
-    21300506: NES - Super Mario Bros 3 - Mario Luigi_252
-    21300508: NES - Super Mario Bros 3 - Mario Luigi_253
-    21300510: NES - Super Mario Bros 3 - Mario Luigi_254
+    21300498: Mario_tanooki_walk_1
+    21300500: Mario_tanooki_walk_2
+    21300502: Mario_tanooki_walk_3
+    21300504: Mario_tanooki_turn
+    21300506: Mario_tanooki_attack
+    21300508: Mario_tanooki_attack_2
+    21300510: Mario_tanooki_attack_3
     21300512: NES - Super Mario Bros 3 - Mario Luigi_255
-    21300514: NES - Super Mario Bros 3 - Mario Luigi_256
+    21300514: Mario_tanooki_jump
     21300516: NES - Super Mario Bros 3 - Mario Luigi_257
     21300518: NES - Super Mario Bros 3 - Mario Luigi_258
     21300520: NES - Super Mario Bros 3 - Mario Luigi_259
-    21300522: NES - Super Mario Bros 3 - Mario Luigi_260
-    21300524: NES - Super Mario Bros 3 - Mario Luigi_261
-    21300526: NES - Super Mario Bros 3 - Mario Luigi_262
+    21300522: Mario_tanooki_run_1
+    21300524: Mario_tanooki_run_2
+    21300526: Mario_tanooki_run_3
     21300528: NES - Super Mario Bros 3 - Mario Luigi_263
-    21300530: NES - Super Mario Bros 3 - Mario Luigi_264
+    21300530: Mario_tanooki_run_jump
     21300532: NES - Super Mario Bros 3 - Mario Luigi_265
-    21300534: NES - Super Mario Bros 3 - Mario Luigi_266
+    21300534: Mario_tanooki_crouch
     21300536: NES - Super Mario Bros 3 - Mario Luigi_267
     21300538: NES - Super Mario Bros 3 - Mario Luigi_268
     21300540: NES - Super Mario Bros 3 - Mario Luigi_269
@@ -2914,7 +2914,7 @@ TextureImporter:
       alignment: 0
       pivot: {x: .5, y: .5}
       border: {x: 0, y: 0, z: 0, w: 0}
-    - name: NES - Super Mario Bros 3 - Mario Luigi_248
+    - name: Mario_tanooki_walk_1
       rect:
         serializedVersion: 2
         x: 62
@@ -2924,7 +2924,7 @@ TextureImporter:
       alignment: 0
       pivot: {x: .5, y: .5}
       border: {x: 0, y: 0, z: 0, w: 0}
-    - name: NES - Super Mario Bros 3 - Mario Luigi_249
+    - name: Mario_tanooki_walk_2
       rect:
         serializedVersion: 2
         x: 86
@@ -2934,7 +2934,7 @@ TextureImporter:
       alignment: 0
       pivot: {x: .5, y: .5}
       border: {x: 0, y: 0, z: 0, w: 0}
-    - name: NES - Super Mario Bros 3 - Mario Luigi_250
+    - name: Mario_tanooki_walk_3
       rect:
         serializedVersion: 2
         x: 111
@@ -2944,7 +2944,7 @@ TextureImporter:
       alignment: 0
       pivot: {x: .5, y: .5}
       border: {x: 0, y: 0, z: 0, w: 0}
-    - name: NES - Super Mario Bros 3 - Mario Luigi_251
+    - name: Mario_tanooki_turn
       rect:
         serializedVersion: 2
         x: 137
@@ -2954,7 +2954,7 @@ TextureImporter:
       alignment: 0
       pivot: {x: .5, y: .5}
       border: {x: 0, y: 0, z: 0, w: 0}
-    - name: NES - Super Mario Bros 3 - Mario Luigi_252
+    - name: Mario_tanooki_attack
       rect:
         serializedVersion: 2
         x: 156
@@ -2964,7 +2964,7 @@ TextureImporter:
       alignment: 0
       pivot: {x: .5, y: .5}
       border: {x: 0, y: 0, z: 0, w: 0}
-    - name: NES - Super Mario Bros 3 - Mario Luigi_253
+    - name: Mario_tanooki_attack_2
       rect:
         serializedVersion: 2
         x: 175
@@ -2974,7 +2974,7 @@ TextureImporter:
       alignment: 0
       pivot: {x: .5, y: .5}
       border: {x: 0, y: 0, z: 0, w: 0}
-    - name: NES - Super Mario Bros 3 - Mario Luigi_254
+    - name: Mario_tanooki_attack_3
       rect:
         serializedVersion: 2
         x: 200
@@ -2994,7 +2994,7 @@ TextureImporter:
       alignment: 0
       pivot: {x: .5, y: .5}
       border: {x: 0, y: 0, z: 0, w: 0}
-    - name: NES - Super Mario Bros 3 - Mario Luigi_256
+    - name: Mario_tanooki_jump
       rect:
         serializedVersion: 2
         x: 238
@@ -3034,7 +3034,7 @@ TextureImporter:
       alignment: 0
       pivot: {x: .5, y: .5}
       border: {x: 0, y: 0, z: 0, w: 0}
-    - name: NES - Super Mario Bros 3 - Mario Luigi_260
+    - name: Mario_tanooki_run_1
       rect:
         serializedVersion: 2
         x: 341
@@ -3044,7 +3044,7 @@ TextureImporter:
       alignment: 0
       pivot: {x: .5, y: .5}
       border: {x: 0, y: 0, z: 0, w: 0}
-    - name: NES - Super Mario Bros 3 - Mario Luigi_261
+    - name: Mario_tanooki_run_2
       rect:
         serializedVersion: 2
         x: 367
@@ -3054,7 +3054,7 @@ TextureImporter:
       alignment: 0
       pivot: {x: .5, y: .5}
       border: {x: 0, y: 0, z: 0, w: 0}
-    - name: NES - Super Mario Bros 3 - Mario Luigi_262
+    - name: Mario_tanooki_run_3
       rect:
         serializedVersion: 2
         x: 393
@@ -3074,7 +3074,7 @@ TextureImporter:
       alignment: 0
       pivot: {x: .5, y: .5}
       border: {x: 0, y: 0, z: 0, w: 0}
-    - name: NES - Super Mario Bros 3 - Mario Luigi_264
+    - name: Mario_tanooki_run_jump
       rect:
         serializedVersion: 2
         x: 446
@@ -3094,13 +3094,13 @@ TextureImporter:
       alignment: 0
       pivot: {x: .5, y: .5}
       border: {x: 0, y: 0, z: 0, w: 0}
-    - name: NES - Super Mario Bros 3 - Mario Luigi_266
+    - name: Mario_tanooki_crouch
       rect:
         serializedVersion: 2
         x: 500
         y: 127
         width: 21
-        height: 18
+        height: 29
       alignment: 0
       pivot: {x: .5, y: .5}
       border: {x: 0, y: 0, z: 0, w: 0}
