@@ -4,6 +4,7 @@ using System.Collections;
 public class ManagerScript : MonoBehaviour {
 	public bool IsMenuActive  = false;
 	public bool Main = false;
+
 	void Awake () {
 		// DontDestroyOnLoad(gameObject);
 	}

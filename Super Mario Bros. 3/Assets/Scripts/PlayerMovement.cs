@@ -7,6 +7,7 @@ public class PlayerMovement : MonoBehaviour {
 	public AudioClip TurnSound;
 	public AudioClip RunSound;
 	public AudioClip HitSound;
+	public GUIText RunMeter;
 	public bool canJump;
 	public bool canJump2;
 	private Animator mario_anim;
@@ -238,6 +239,10 @@ public class PlayerMovement : MonoBehaviour {
 					runmeter++;
 				hover = true;
 			}
+			else {
+				mario_anim.SetBool("Fly",false);
+				mario_anim.SetBool("Hover",false);
+			}
 		}
 		if (HitJump || Hit) {
 			GetComponent<PE_Obj2D>().vel.y = 10.0f;
@@ -311,5 +316,6 @@ public class PlayerMovement : MonoBehaviour {
 		if (this.gameObject.transform.position.y <= mainCamera.transform.position.y - 12) {
 			mainCamera.GetComponent<Health>().felloff = true;
 		}
+		RunMeter.text = "Run Meter: " + runmeter;
 	}
 }

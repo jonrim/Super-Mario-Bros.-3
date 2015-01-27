@@ -6,7 +6,6 @@ public class CameraFollow : MonoBehaviour {
 	public GameObject mario_small;
 	public GameObject mario_big;
 	public GameObject mario_tanooki;
-	
 	public float bound;
 	public bool right_bound = false;
 	public  bool left_bound = false;
