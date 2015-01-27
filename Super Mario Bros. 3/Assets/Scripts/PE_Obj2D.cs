@@ -78,7 +78,7 @@ public class PE_Obj2D : MonoBehaviour {
 		else if ((this.gameObject.tag == "Enemy") && (that.gameObject.tag == "Player")) {
 			
 			// print ("ResolveCollisionWith 3");
-			print ("Hit");
+			// print ("Hit");
 			//Time.timeScale = 0;
 
 			if (this.gameObject.GetComponent<Enemy_Death>().dead == false) {
@@ -325,15 +325,15 @@ public class PE_Obj2D : MonoBehaviour {
 		if ((this.gameObject.tag == "Player") && (that.gameObject.tag == "Item")) {
 			// mainCamera = GameObject.Find ("Main mainCamera");
 			if (that.gameObject.GetComponent<ItemBehavior>().mushroom) {
-				camera.GetComponent<Health>().item_number = 1;
-				camera.GetComponent<Health>().type = PowerUp.mushroom;
+				mainCamera.GetComponent<Health>().item_number = 1;
+				mainCamera.GetComponent<Health>().type = PowerUp.mushroom;
 			}
 			else if (that.gameObject.GetComponent<ItemBehavior>().tanooki) {
-				camera.GetComponent<Health>().item_number = 2;
-				camera.GetComponent<Health>().type = PowerUp.tanooki;
+				mainCamera.GetComponent<Health>().item_number = 2;
+				mainCamera.GetComponent<Health>().type = PowerUp.tanooki;
 			}
 			else if (that.gameObject.GetComponent<ItemBehavior>().go_multiplier) {
-				camera.GetComponent<Health>().item_number = 3;
+				mainCamera.GetComponent<Health>().item_number = 3;
 			}
 		}
 	}

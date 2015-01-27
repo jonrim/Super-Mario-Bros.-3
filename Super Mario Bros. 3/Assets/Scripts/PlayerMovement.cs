@@ -51,11 +51,11 @@ public class PlayerMovement : MonoBehaviour {
 			mario_anim.SetBool("Crouch",false);
 			coll.size = new Vector2(coll.size.x, normalHeight);
 		}
-		if (Input.GetButtonDown ("Run") && camera.GetComponent<Health>().tanooki) {
+		if (Input.GetButtonDown ("Run") && mainCamera.GetComponent<Health>().tanooki) {
 			mario_anim.SetBool("Attack", true);
 			// mario_anim.SetBool("Attack", false);
 		}
-		else if ((Input.GetButton ("Run") || Input.GetButtonUp ("Run")) && camera.GetComponent<Health>().tanooki) {
+		else if ((Input.GetButton ("Run") || Input.GetButtonUp ("Run")) && mainCamera.GetComponent<Health>().tanooki) {
 			mario_anim.SetBool("Attack", false);
 		}
 		if (Input.GetButton ("Run")) {

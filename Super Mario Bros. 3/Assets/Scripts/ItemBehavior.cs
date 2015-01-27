@@ -24,7 +24,7 @@ public class ItemBehavior : PE_Obj2D {
 		anim = GetComponent<Animator>();
 //Jrim
 		if (tanooki) {
-			GetComponent<PE_Obj2D>().vel.y = 15.0f;
+			vel.y = 15.0f;
 		}
 ///Josh
 		base.Start ();
@@ -33,7 +33,7 @@ public class ItemBehavior : PE_Obj2D {
 	// Update is called once per frame
 	void FixedUpdate () {
 		if (mushroom && timer >= 1.0f && !spawned) {
-			GetComponent<PE_Obj2D>().vel.x = -3.0f;
+			vel.x = -3.0f;
 			// transform.FindChild("IsOnGround").GetComponent<PE_Obj2D>().vel.x = -3.0f;
 			timer = 0;
 			spawned = true;
@@ -55,11 +55,11 @@ public class ItemBehavior : PE_Obj2D {
 		canJump2 = Physics2D.OverlapPoint(is_on_ground.position, GroundLayers);
 
 		if (!canJump2) {
-			GetComponent<PE_Obj2D>().acc.y = -60.0f;
+			acc.y = -60.0f;
 			// terminal velocity
-			if (GetComponent<PE_Obj2D>().vel.y <= -15.0f) {
-				GetComponent<PE_Obj2D>().acc.y = 0;
-				GetComponent<PE_Obj2D>().vel.y = -15.0f;
+			if (vel.y <= -15.0f) {
+				acc.y = 0;
+				vel.y = -15.0f;
 			}
 		}
 		timer += Time.fixedDeltaTime;
@@ -70,7 +70,8 @@ public class ItemBehavior : PE_Obj2D {
 		if (other == null) {
 			return;
 		}
-		else if (other.gameObject.tag == "Block_item" || other.gameObject.tag == "Block_empty") {
+		else if ((other.gameObject.tag == "Block_item" || other.gameObject.tag == "Block_empty") && 
+		         (transform.position.y < otherColl.transform.position.y + otherColl.collider2D.bounds.size.y/2)) {
 			vel.x = -vel.x;
 			float sign = Mathf.Sign (vel.x);
 			transform.position = new Vector2(transform.position.x + sign * 0.1f, transform.position.y);
