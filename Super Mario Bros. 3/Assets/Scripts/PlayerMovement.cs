@@ -55,6 +55,9 @@ public class PlayerMovement : MonoBehaviour {
 			mario_anim.SetBool("Attack", true);
 			// mario_anim.SetBool("Attack", false);
 		}
+		else if ((Input.GetButton ("Run") || Input.GetButtonUp ("Run")) && camera.GetComponent<Health>().tanooki) {
+			mario_anim.SetBool("Attack", false);
+		}
 		if (Input.GetButton ("Run")) {
 			run = true;
 		}
