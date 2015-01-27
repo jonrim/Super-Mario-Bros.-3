@@ -9,9 +9,9 @@ public class PE_Obj2D : MonoBehaviour {
 	public PE_Collider2D	coll = PE_Collider2D.aabb;
 	public PE_GravType2D	grav = PE_GravType2D.constant;
 	public GameObject mainCamera;
-	public GameObject mushroom;
-	public GameObject tanooki;
-	public GameObject multiplier;
+	public GameObject go_mushroom;
+	public GameObject go_tanooki;
+	public GameObject go_multiplier;
 	public bool MakeTanooki;
 	public bool MakeClone;
 	public Vector2		acc = Vector2.zero;
@@ -304,18 +304,18 @@ public class PE_Obj2D : MonoBehaviour {
 					blockhit = true;
 					block_anim.SetBool ("BlockHit", blockhit);
 					if (MakeClone) {
-						Instantiate(multiplier, new Vector2(this.transform.position.x,
+						Instantiate(go_multiplier, new Vector2(this.transform.position.x,
 						                                    this.transform.position.y + this.collider2D.bounds.size.y/2 + 0.5f), 
 						            this.transform.rotation);
 					}
 					else if (!that.gameObject.GetComponent<PlayerMovement>().big) {
-						Instantiate(mushroom, new Vector2(this.transform.position.x,
+						Instantiate(go_mushroom, new Vector2(this.transform.position.x,
 						                                  this.transform.position.y + this.collider2D.bounds.size.y/2 + 0.5f), 
 						            this.transform.rotation);
 
 					}
 					else if (MakeTanooki) {
-						Instantiate(tanooki, new Vector2(this.transform.position.x,
+						Instantiate(go_tanooki, new Vector2(this.transform.position.x,
 						                                  this.transform.position.y + this.collider2D.bounds.size.y/2 + 0.5f), 
 						            this.transform.rotation);
 					}
@@ -332,7 +332,7 @@ public class PE_Obj2D : MonoBehaviour {
 				camera.GetComponent<Health>().item_number = 2;
 				camera.GetComponent<Health>().type = PowerUp.tanooki;
 			}
-			else if (that.gameObject.GetComponent<ItemBehavior>().multiplier) {
+			else if (that.gameObject.GetComponent<ItemBehavior>().go_multiplier) {
 				camera.GetComponent<Health>().item_number = 3;
 			}
 		}

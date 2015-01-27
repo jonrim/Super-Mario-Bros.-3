@@ -39,14 +39,15 @@ public class Enemy_AI : PE_Obj2D {
 		if (wingedGoomba) {
 			Health = 2;
 		}
-//Josh
-	public override void Start () {
-		GetComponent<PE_Obj2D>().vel.x = -2.0f;
-		transform.localScale = new Vector3(-1, 1, 1);
-		is_on_ground = transform.FindChild("IsOnGround");
 		base.Start ();
-//////>>>>>>>>>>>>>
 	}
+//Josh
+//	public override void Start () {
+//		GetComponent<PE_Obj2D>().vel.x = -2.0f;
+//		transform.localScale = new Vector3(-1, 1, 1);
+//		is_on_ground = transform.FindChild("IsOnGround");
+//		base.Start ();
+//////>>>>>>>>>>>>>
 	// Update is called once per frame
 	void FixedUpdate () {
 		if (camera.GetComponent<Health>().type == PowerUp.none)

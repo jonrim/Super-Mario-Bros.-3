@@ -13,13 +13,7 @@ public class Level_bounds : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
-//jrim
-		camera = GameObject.Find ("Main Camera").GetComponent<CameraFollow>();
-		camera.left_bound = false;
-		camera.right_bound = false;
-//jos
 		mainCamera = GameObject.Find ("Main Camera").GetComponent<CameraFollow>();
-//>>>>>>> origin/master
 	}
 	
 	// Update is called once per frame
