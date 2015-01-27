@@ -332,7 +332,7 @@ public class PE_Obj2D : MonoBehaviour {
 				mainCamera.GetComponent<Health>().item_number = 2;
 				mainCamera.GetComponent<Health>().type = PowerUp.tanooki;
 			}
-			else if (that.gameObject.GetComponent<ItemBehavior>().go_multiplier) {
+			else if (that.gameObject.GetComponent<ItemBehavior>().multiplier) {
 				mainCamera.GetComponent<Health>().item_number = 3;
 			}
 		}
