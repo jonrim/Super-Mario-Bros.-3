@@ -31,7 +31,7 @@ public class Enemy_AI : PE_Obj2D {
 			mario = GameObject.Find ("Mario_Tanooki");
 			
 		anim = GetComponent<Animator>();
-		// GetComponent<PE_Obj2D>().vel.x = -2.0f;
+		// vel.x = -2.0f;
 		startingPos = this.transform.position;
 		transform.localScale = new Vector3(-1, 1, 1);
 		is_on_ground = transform.FindChild("IsOnGround");
@@ -43,7 +43,7 @@ public class Enemy_AI : PE_Obj2D {
 	}
 //Josh
 //	public override void Start () {
-//		GetComponent<PE_Obj2D>().vel.x = -2.0f;
+//		vel.x = -2.0f;
 //		transform.localScale = new Vector3(-1, 1, 1);
 //		is_on_ground = transform.FindChild("IsOnGround");
 //		base.Start ();
@@ -60,7 +60,7 @@ public class Enemy_AI : PE_Obj2D {
 			return;
 		}
 		if ((Mathf.Abs(mario.transform.position.x - startingPos.x) <= 20) && set_direction){
-			GetComponent<PE_Obj2D>().vel.x = 2.0f*Mathf.Sign(mario.transform.position.x - startingPos.x);
+			vel.x = 2.0f*Mathf.Sign(mario.transform.position.x - startingPos.x);
 			set_direction = false;
 		}
 		else if ((Mathf.Abs(mario.transform.position.x - startingPos.x) > 20) && (Mathf.Abs(mario.transform.position.x - this.transform.position.x) > 20)) {
@@ -86,12 +86,12 @@ public class Enemy_AI : PE_Obj2D {
 				anim.SetBool("Jump", false);
 				if ((counter < 3) && (jumpTimer > 1.0f)) {
 					anim.SetBool("Jump", true);
-					GetComponent<PE_Obj2D>().vel.y = 10.0f;
+					vel.y = 10.0f;
 					counter++;
 				}
 				else if (counter == 3) {
 					anim.SetBool("Jump", true);
-					GetComponent<PE_Obj2D>().vel.y = 17.0f;
+					vel.y = 17.0f;
 					jumpTimer = 0;
 					counter = 0;
 				}
@@ -99,22 +99,22 @@ public class Enemy_AI : PE_Obj2D {
 			}
 		}
 		if (!canJump){
-			if ((GetComponent<PE_Obj2D>().vel.y > 0) && (timer < 0.005f)) {
-				GetComponent<PE_Obj2D>().acc.y = 0;
+			if ((vel.y > 0) && (timer < 0.005f)) {
+				acc.y = 0;
 			}
 			else
-				GetComponent<PE_Obj2D>().acc.y = -60.0f;
+				acc.y = -60.0f;
 			// terminal velocity
-			if (GetComponent<PE_Obj2D>().vel.y <= -15.0f) {
-				GetComponent<PE_Obj2D>().acc.y = 0;
-				GetComponent<PE_Obj2D>().vel.y = -15.0f;
+			if (vel.y <= -15.0f) {
+				acc.y = 0;
+				vel.y = -15.0f;
 			}
 		}
-		if (!canJump2 && GetComponent<PE_Obj2D>().vel.y == 0) {
-			GetComponent<PE_Obj2D>().vel.x = -GetComponent<PE_Obj2D>().vel.x;
-			transform.localScale = new Vector3(Mathf.Sign(GetComponent<PE_Obj2D>().vel.x), 1, 1);
+		if (!canJump2 && vel.y == 0) {
+			vel.x = -vel.x;
+			transform.localScale = new Vector3(Mathf.Sign(vel.x), 1, 1);
 		}
-		// canJump2 = canJump2 || (Mathf.Abs (GetComponent<PE_Obj2D>().acc.y) < 0.1f);
+		// canJump2 = canJump2 || (Mathf.Abs (acc.y) < 0.1f);
 		jumpTimer += Time.fixedDeltaTime;
 		timer += Time.fixedDeltaTime;
 	}
