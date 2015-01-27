@@ -1,0 +1,25 @@
+﻿using UnityEngine;
+using System.Collections;
+
+public class Tail : PE_Obj2D {
+
+	// Use this for initialization
+
+	
+	// Update is called once per frame
+
+
+	public override void OnTriggerEnter2D(Collider2D otherColl){
+		PE_Obj2D other = otherColl.gameObject.GetComponent<PE_Obj2D>();
+		if (other == null) {
+			return;
+		}
+		else if (other.gameObject.tag == "Enemy") {
+			other.gameObject.transform.GetComponent<Enemy_Death>().taildead = true;
+		}
+	}
+
+	public override void OnTriggerStay2D(Collider2D other){
+		OnTriggerEnter2D(other);
+	}
+}

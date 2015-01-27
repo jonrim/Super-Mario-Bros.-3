@@ -5,7 +5,7 @@ public class Enemy_AI : PE_Obj2D {
 	public LayerMask GroundLayers;
 	private Transform is_on_ground;
 	private Animator anim;
-	private GameObject camera;
+	public GameObject camera;
 	private GameObject mario;
 	public bool set_direction = true;
 	public bool canJump;
@@ -21,7 +21,7 @@ public class Enemy_AI : PE_Obj2D {
 /// <summary>
 /// /Jrim
 /// </summary>
-	void Start () {
+	public override void Start () {
 		camera = GameObject.Find ("Main Camera");
 		if (camera.GetComponent<Health>().type == PowerUp.none)
 			mario = GameObject.Find ("Mario");
@@ -56,7 +56,7 @@ public class Enemy_AI : PE_Obj2D {
 			mario = GameObject.Find ("Mario_Big");
 		else if (camera.GetComponent<Health>().type == PowerUp.tanooki)
 			mario = GameObject.Find ("Mario_Tanooki");
-		if (mario == null) {
+		if ((mario == null) || (GetComponent<Enemy_Death>().deadbytail)){
 			return;
 		}
 		if ((Mathf.Abs(mario.transform.position.x - startingPos.x) <= 20) && set_direction){

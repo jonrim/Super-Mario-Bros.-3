@@ -292,11 +292,11 @@ public class PE_Obj2D : MonoBehaviour {
 				break;
 			}
 		}
-		else if ((this.gameObject.tag == "Block_item") && (that.gameObject.tag == "Player") && (!blockhit)){
+		else if ((this.gameObject.tag == "Block_item") && (that.gameObject.tag == "Player" || that.gameObject.tag == "Tail") && (!blockhit)){
 			thatP = that.transform.position;
-			if ((thatP.x <= this.transform.position.x + this.collider2D.bounds.size.x/2 ) &&
-			    (thatP.x >= this.transform.position.x - this.collider2D.bounds.size.x/2 )) { // if the center of this obj is between the x-bounds of that obj
-				if (thatP.y < this.transform.position.y) {
+			if (((thatP.x <= this.transform.position.x + this.collider2D.bounds.size.x/2 ) &&
+			    (thatP.x >= this.transform.position.x - this.collider2D.bounds.size.x/2 )) || that.gameObject.tag == "Tail") { // if the center of this obj is between the x-bounds of that obj
+				if ((thatP.y < this.transform.position.y) || that.gameObject.tag == "Tail") {
 //					float dist = this.collider2D.bounds.size.y/2 + that.collider2D.bounds.size.y/2;
 //					Vector2 pos = new Vector2(that.transform.position.x, this.transform.position.y - dist-0.03f);
 //					that.transform.position = pos;
@@ -308,7 +308,7 @@ public class PE_Obj2D : MonoBehaviour {
 						                                    this.transform.position.y + this.collider2D.bounds.size.y/2 + 0.5f), 
 						            this.transform.rotation);
 					}
-					else if (!that.gameObject.GetComponent<PlayerMovement>().big) {
+					else if (that.gameObject.tag == "Player" && !that.gameObject.GetComponent<PlayerMovement>().big && MakeTanooki) {
 						Instantiate(go_mushroom, new Vector2(this.transform.position.x,
 						                                  this.transform.position.y + this.collider2D.bounds.size.y/2 + 0.5f), 
 						            this.transform.rotation);

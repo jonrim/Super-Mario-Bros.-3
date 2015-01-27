@@ -19,6 +19,7 @@ public class CameraFollow : MonoBehaviour {
 	// Update is called once per frame
 	void Update () {
 		float dist = character.transform.position.x - this.transform.position.x;
+		float vertdist = character.transform.position.y - this.transform.position.y;
 		if (GetComponent<Health>().type == PowerUp.none) {
 			character = mario_small;
 		}
@@ -41,6 +42,19 @@ public class CameraFollow : MonoBehaviour {
 			Vector3 pos = new Vector3(character.transform.position.x + bound, this.transform.position.y, -10);
 			this.transform.position = pos;
 		}
+//		if (vertdist > bound + 5.0f) {
+//			if (this.transform.position.y < 2.14f)
+//				return;
+//			Vector3 pos = new Vector3(this.transform.position.x, character.transform.position.y - bound - 5.0f, -10);
+//			this.transform.position = pos;
+//		}
+//		else if (vertdist < -bound - 5.0f) {
+//			if (this.transform.position.y < 2.14f) {
+//				return;
+//			}
+//			Vector3 pos = new Vector3(this.transform.position.x, character.transform.position.y + bound + 5.0f, -10);
+//			this.transform.position = pos;
+//		}
 	}
 }
 
