@@ -9,6 +9,7 @@ public class CameraFollow : MonoBehaviour {
 	public float bound;
 	public bool right_bound = false;
 	public  bool left_bound = false;
+	public float camera_ground; //lowest legal position of camera
 
 	// Use this for initialization
 	void Start () {
@@ -52,6 +53,10 @@ public class CameraFollow : MonoBehaviour {
 			Vector3 pos = new Vector3(this.transform.position.x, character.transform.position.y + bound, -10);
 			if (character.transform.position.y + bound > 14.79f) {
 				pos = new Vector3(this.transform.position.x, 14.79f, -10);
+			}
+
+			if (pos.y < camera_ground) {
+				pos.y = camera_ground;
 			}
 			this.transform.position = pos;
 		}
