@@ -26,12 +26,12 @@ public class Winged_Goomba : Enemy_AI {
 		if (canJump) {
 			anim.SetBool("Jump", false);
 
-			if (counter < 2) {
+			if (counter < 3) {
 				anim.SetBool("Jump", true);
 				vel.y = 5.0f;
 				counter++;
 			}
-			else if (counter == 2) {
+			else if (counter == 3) {
 				anim.SetBool("Jump", true);
 				vel.y = 9.0f;
 				counter = 0;

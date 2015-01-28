@@ -41,19 +41,20 @@ public class CameraFollow : MonoBehaviour {
 			Vector3 pos = new Vector3(character.transform.position.x + bound, this.transform.position.y, -10);
 			this.transform.position = pos;
 		}
-//		if (vertdist > bound + 5.0f) {
-//			if (this.transform.position.y < 2.14f)
-//				return;
-//			Vector3 pos = new Vector3(this.transform.position.x, character.transform.position.y - bound - 5.0f, -10);
-//			this.transform.position = pos;
-//		}
-//		else if (vertdist < -bound - 5.0f) {
-//			if (this.transform.position.y < 2.14f) {
-//				return;
-//			}
-//			Vector3 pos = new Vector3(this.transform.position.x, character.transform.position.y + bound + 5.0f, -10);
-//			this.transform.position = pos;
-//		}
+		if (vertdist > bound) {
+			Vector3 pos = new Vector3(this.transform.position.x, character.transform.position.y - bound - 3.0f, -10);
+			if (character.transform.position.y - bound - 3.0f < 2.14f) {
+				pos = new Vector3(this.transform.position.x, 2.14f, -10);
+			}
+			this.transform.position = pos;
+		}
+		else if (vertdist < -bound) {
+			Vector3 pos = new Vector3(this.transform.position.x, character.transform.position.y + bound, -10);
+			if (character.transform.position.y + bound > 14.79f) {
+				pos = new Vector3(this.transform.position.x, 14.79f, -10);
+			}
+			this.transform.position = pos;
+		}
 	}
 }
 
