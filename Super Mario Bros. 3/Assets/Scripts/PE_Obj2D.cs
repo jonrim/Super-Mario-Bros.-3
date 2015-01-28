@@ -68,7 +68,8 @@ public class PE_Obj2D : MonoBehaviour {
 			//Time.timeScale = 0;
 
 			//if we got stomped, don't damage mario
-			if (!this.collider2D.bounds.Intersects(that.gameObject.GetComponent("IsOnGround").collider2D.bounds)) {
+			//if (!this.collider2D.bounds.Intersects(that.gameObject.GetComponent("IsOnGround").collider2D.bounds)) {
+			if (!this.GetComponent<Enemy_Death>().dead) {
 				// damage Mario
 				mainCamera = GameObject.Find ("Main Camera");
 				mainCamera.GetComponent<Health>().gothurt = true;
