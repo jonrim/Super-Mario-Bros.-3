@@ -130,7 +130,9 @@ public class Piranha_plant : MonoBehaviour {
 			
 			break;
 
-		case Piranha_state.WAITING: 
+		case Piranha_state.WAITING:
+			if (!player_seen)
+				state = Piranha_state.INACTIVE;
 			if (timer <= 0.0f)
 				state = Piranha_state.MOVING_UP;
 

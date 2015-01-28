@@ -91,6 +91,14 @@ public virtual void Update () {
 			else {
 				turnAround();
 			}
+		} else if (other.gameObject.tag == "Tail") {
+			print ("hit by tail");
+			transform.localScale = new Vector3(1, -1, 1);
+			vel.y = 4f;
+			transform.position = new Vector3(transform.position.x, transform.position.y + .04f, transform.position.z);
+			this.gameObject.layer = 0;
+			audio.Play ();
+			audio.PlayOneShot(hit_by_shell);
 		}
 		else if (other.gameObject.tag == "Block_item" || other.gameObject.tag == "Block_empty") {
 			turnAround();
