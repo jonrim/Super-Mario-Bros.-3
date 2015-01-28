@@ -31,9 +31,9 @@ public class Health : MonoBehaviour {
 		anim = mario_small.GetComponent<Animator>();
 		big = false;
 		tanooki = false;
-		mario_small.active = true;
-		mario_big.active = false;
-		mario_tanooki.active = false;
+		mario_small.gameObject.SetActive(true);
+		mario_big.gameObject.SetActive(false);
+		mario_tanooki.gameObject.SetActive(false);
 		timer = 10.0f;
 		holderPos = new Vector2(-10.0f,50.0f);
 	}
@@ -66,10 +66,10 @@ public class Health : MonoBehaviour {
 			                         mario_big.transform.localScale.z);
 			Vector3 loc = new Vector2(mario_big.transform.position.x, mario_big.transform.position.y);
 			mario_small.GetComponent<PE_Obj2D>().vel = mario_big.GetComponent<PE_Obj2D>().vel;
-			mario_big.active = false;
+			mario_big.gameObject.SetActive(false);
 			mario_small.transform.localScale = facingDirection;
 			mario_small.transform.position = loc;
-			mario_small.active = true;
+			mario_small.gameObject.SetActive(true);
 			timer = 0;
 			invincible = true;
 			// PhysEngine2D.objs.Remove(mario_big.GetComponent<PE_Obj2D>());
@@ -99,10 +99,10 @@ public class Health : MonoBehaviour {
 			                                      mario_tanooki.transform.localScale.z);
 			mario_big.GetComponent<PE_Obj2D>().vel = mario_tanooki.GetComponent<PE_Obj2D>().vel;
 			Vector3 loc = new Vector2(mario_tanooki.transform.position.x, mario_tanooki.transform.position.y);
-			mario_tanooki.active = false;
+			mario_tanooki.gameObject.SetActive(false);
 			mario_big.transform.localScale = facingDirection;
 			mario_big.transform.position = loc;
-			mario_big.active = true;
+			mario_big.gameObject.SetActive(true);
 			timer = 0;
 			invincible = true;
 			// PhysEngine2D.objs.Remove(mario_big.GetComponent<PE_Obj2D>());
@@ -132,10 +132,10 @@ public class Health : MonoBehaviour {
 				Vector3 facingDirection = new Vector3(mario_small.transform.localScale.x, mario_small.transform.localScale.y, mario_small.transform.localScale.z);
 				Vector2 loc = new Vector2(mario_small.transform.position.x, mario_small.transform.position.y);
 				mario_big.GetComponent<PE_Obj2D>().vel = mario_small.GetComponent<PE_Obj2D>().vel;
-				mario_small.active = false;
+				mario_small.gameObject.SetActive(false);
 				mario_big.transform.localScale = facingDirection;
 				mario_big.transform.position = loc;
-				mario_big.active = true;
+				mario_big.gameObject.SetActive(true);
 				// Instantiate(mario_big, mario_small.transform.position, mario_small.transform.rotation);
 				//mario_big.transform.localScale = new Vector3 (mario_small.transform.localScale.x, mario_small.transform.localScale.y,
 				                                             // mario_small.transform.localScale.z);
@@ -163,13 +163,23 @@ public class Health : MonoBehaviour {
 				Time.timeScale = 0.001f;
 				float pauseEndTime = Time.realtimeSinceStartup + 0.01f;
 				// delete small mario and add big mario
-				mario_big.active = false;
-				Vector3 facingDirection = new Vector3(mario_big.transform.localScale.x, mario_big.transform.localScale.y, mario_big.transform.localScale.z);
-				Vector2 loc = new Vector2(mario_big.transform.position.x, mario_big.transform.position.y);
-				mario_tanooki.GetComponent<PE_Obj2D>().vel = mario_big.GetComponent<PE_Obj2D>().vel;
+				Vector3 facingDirection;
+				Vector2 loc;
+				if (mario_big.activeSelf) {
+					mario_big.gameObject.SetActive(false);
+					facingDirection = new Vector3(mario_big.transform.localScale.x, mario_big.transform.localScale.y, mario_big.transform.localScale.z);
+					loc = new Vector2(mario_big.transform.position.x, mario_big.transform.position.y);
+					mario_tanooki.GetComponent<PE_Obj2D>().vel = mario_big.GetComponent<PE_Obj2D>().vel;
+				}
+				else {
+					mario_small.gameObject.SetActive(false);
+					facingDirection = new Vector3(mario_small.transform.localScale.x, mario_small.transform.localScale.y, mario_small.transform.localScale.z);
+					loc = new Vector2(mario_small.transform.position.x, mario_small.transform.position.y);
+					mario_tanooki.GetComponent<PE_Obj2D>().vel = mario_small.GetComponent<PE_Obj2D>().vel;
+				}
 				mario_tanooki.transform.localScale = facingDirection;
 				mario_tanooki.transform.position = loc;
-				mario_tanooki.active = true;
+				mario_tanooki.gameObject.SetActive(true);
 				// Instantiate(mario_big, mario_small.transform.position, mario_small.transform.rotation);
 				//mario_big.transform.localScale = new Vector3 (mario_small.transform.localScale.x, mario_small.transform.localScale.y,
 				// mario_small.transform.localScale.z);
@@ -191,8 +201,8 @@ public class Health : MonoBehaviour {
 			item_number = 0;
 		}
 		else if (item_number == 3) {
-			// Vector2 pos = new Vector2( mario_small.transform.position.x, mario_small.transform.position.y + 5.0f);
-			Vector2 pos = new Vector2( mario_small.transform.position.x + 1.0f, mario_small.transform.position.y);
+			Vector2 pos = new Vector2( mario_small.transform.position.x, mario_small.transform.position.y + 5.0f);
+			// Vector2 pos = new Vector2( mario_small.transform.position.x + 1.0f, mario_small.transform.position.y);
 			Instantiate(mario, pos, mario_small.transform.rotation);
 			item_number = 0;
 		}

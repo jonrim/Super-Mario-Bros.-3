@@ -5,7 +5,9 @@ public class Enemy_Death : MonoBehaviour {
 	private Animator enemy_anim;
 	public float timer;
 	public bool dead = false;
+	public bool taildead = false;
 	public bool dead_anim = false;
+	public bool deadbytail = false;
 	// Use this for initialization
 	void Start () {
 		enemy_anim = transform.GetComponent<Animator>();
@@ -17,11 +19,21 @@ public class Enemy_Death : MonoBehaviour {
 		if (dead && !dead_anim) {
 			enemy_anim.SetBool ("Dead", dead);
 			timer = 0;
-			PhysEngine2D.objs.Remove(transform.gameObject.GetComponent<PE_Obj2D>());
+			PhysEngine2D.objs.Remove(transform.GetComponent<Enemy_AI>());
 			transform.gameObject.GetComponent<PE_Obj2D>().still = true;
 			dead_anim = true;
 		}
-		if (timer >= 0.2f && timer <= 5.0f && dead_anim) {
+		if (taildead && !deadbytail) {
+			timer = 0;
+			GetComponent<Enemy_AI>().vel.y = 15;
+			GetComponent<Enemy_AI>().vel.x = 3;
+			rigidbody2D.isKinematic = false;
+			transform.localScale = new Vector3(-1, -1, 1);
+			PhysEngine2D.objs.Remove(transform.GetComponent<Enemy_AI>());
+			transform.gameObject.GetComponent<PE_Obj2D>().still = true;
+			deadbytail = true;
+		}
+		if ((timer >= 0.2f && timer <= 5.0f && dead_anim) || (timer >= 3.0f && timer <= 5.0f && deadbytail)) {
 			// PhysEngine2D.objs.Remove(transform.parent.gameObject.GetComponent<PE_Obj2D>());
 			Destroy (transform.gameObject);
 		}

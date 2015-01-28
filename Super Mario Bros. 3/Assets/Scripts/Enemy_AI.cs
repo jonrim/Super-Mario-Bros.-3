@@ -42,7 +42,8 @@ public class Enemy_AI : PE_Obj2D {
 //		base.Start ();
 //////>>>>>>>>>>>>>
 	// Update is called once per frame
-	public virtual void Update () {
+
+public virtual void Update () {
 
 		Vector2 point1 = new Vector2(is_on_ground.transform.position.x - is_on_ground.collider2D.bounds.size.x/2, 
 		                             is_on_ground.transform.position.y - is_on_ground.collider2D.bounds.size.y/2);
