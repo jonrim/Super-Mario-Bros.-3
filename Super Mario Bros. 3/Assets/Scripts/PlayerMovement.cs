@@ -80,6 +80,10 @@ public class PlayerMovement : MonoBehaviour {
 		}
 		if (mainCamera.GetComponent<Health>().tanooki) {
 			if (tailtimer >= 0.05f && tailtimer <= 0.35f) {
+				Vector3 parentPos = tail.parent.transform.position;
+				float sign = Mathf.Sign (tail.parent.localScale.x);
+
+				tail.position = new Vector3(parentPos.x + (sign *.91f), parentPos.y - .49f, parentPos.z);
 				tail.gameObject.SetActive(true);
 			}
 			else {

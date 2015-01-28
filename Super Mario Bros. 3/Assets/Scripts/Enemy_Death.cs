@@ -23,16 +23,16 @@ public class Enemy_Death : MonoBehaviour {
 			transform.gameObject.GetComponent<PE_Obj2D>().still = true;
 			dead_anim = true;
 		}
-		if (taildead && !deadbytail) {
-			timer = 0;
-			GetComponent<Enemy_AI>().vel.y = 15;
-			GetComponent<Enemy_AI>().vel.x = 3;
-			rigidbody2D.isKinematic = false;
-			transform.localScale = new Vector3(-1, -1, 1);
-			PhysEngine2D.objs.Remove(transform.GetComponent<Enemy_AI>());
-			transform.gameObject.GetComponent<PE_Obj2D>().still = true;
-			deadbytail = true;
-		}
+//		if (taildead && !deadbytail) {
+//			timer = 0;
+//			GetComponent<Enemy_AI>().vel.y = 15;
+//			GetComponent<Enemy_AI>().vel.x = 3;
+//			rigidbody2D.isKinematic = false;
+//			transform.localScale = new Vector3(-1, -1, 1);
+//			PhysEngine2D.objs.Remove(transform.GetComponent<Enemy_AI>());
+//			transform.gameObject.GetComponent<PE_Obj2D>().still = true;
+//			deadbytail = true;
+//		}
 		if ((timer >= 0.2f && timer <= 5.0f && dead_anim) || (timer >= 3.0f && timer <= 5.0f && deadbytail)) {
 			// PhysEngine2D.objs.Remove(transform.parent.gameObject.GetComponent<PE_Obj2D>());
 			Destroy (transform.gameObject);
