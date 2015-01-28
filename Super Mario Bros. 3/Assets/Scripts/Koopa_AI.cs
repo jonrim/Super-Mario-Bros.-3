@@ -11,7 +11,7 @@ public class Koopa_AI : Enemy_AI {
 	public override void Start () {
 //		vel.x = -2.0f;
 		// transform.localScale = new Vector3(1, 1, 1);
-		transform.FindChild("Sprite").localScale = new Vector3(-Mathf.Sign (vel.x), 1, 1);
+		//transform.FindChild("Sprite").localScale = new Vector3(-Mathf.Sign (vel.x), 1, 1);
 //		is_on_ground = transform.FindChild("IsOnGround");
 
 		base.Start();

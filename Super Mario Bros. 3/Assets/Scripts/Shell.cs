@@ -9,6 +9,8 @@ public class Shell : PE_Obj2D {
 	public float timer = 0;
 	public bool moving;
 	public GameObject Koopa;
+	public AudioClip hit_by_shell;
+	public AudioClip hit_wall;
 	// Use this for initialization
 	public override void Start () {
 		is_on_ground = transform.FindChild("IsOnGround");
@@ -21,11 +23,11 @@ public class Shell : PE_Obj2D {
 	// Update is called once per frame
 	void FixedUpdate () {
 		if (!moving) {
-			if (timer > 5.0f) {
+			if (timer > 4.0f) {
 					anim.SetBool ("twitch", true);		
 				}
 				anim.speed = 1.0f + Mathf.Pow (timer / 7.0f, 7);
-			if (timer >= 10.0f) {
+			if (timer >= 7.0f) {
 					PhysEngine2D.objs.Remove (transform.gameObject.GetComponent<PE_Obj2D> ());
 					Destroy (transform.gameObject);
 					GameObject go = Instantiate (Koopa, transform.position, transform.rotation) as GameObject;
@@ -58,8 +60,9 @@ public class Shell : PE_Obj2D {
 		}
 
 		//print ("collided with " + other.gameObject.tag);
-		if (other.gameObject.tag == "Player") 
+		if (other.gameObject.tag == "Player" && !moving) 
 		{
+			print ("go");
 			// print ("player hit me");
 			if (this.transform.position.x < other.transform.position.x) {
 				GetComponent<PE_Obj2D>().vel.x = -16.0f;
@@ -68,12 +71,32 @@ public class Shell : PE_Obj2D {
 			}
 			moving = true;
 			timer = 0;
+			audio.Play ();
+			audio.PlayOneShot(hit_by_shell);
 			//this.gameObject.tag = "Shell";
+		}
+		else if (other.gameObject.tag == "PlayerFeet" && moving) {
+			print ("stop");
+			moving = false;
+			vel.x = 0;
+			timer = 0;
 		}
 		
 		else if (other.gameObject.tag == "Block_item" || other.gameObject.tag == "Block_empty") {
-			
+			//audio.Play ();
+			//audio.PlayOneShot(hit_wall);
 			GetComponent<PE_Obj2D>().vel.x = -GetComponent<PE_Obj2D>().vel.x;
+		} else if (other.gameObject.tag == "Enemy") {
+			return;
+		}
+		else if (other.gameObject.tag == "Shell") {
+			
+			if (other.gameObject.GetComponent<Shell>().moving) {
+				transform.localScale = new Vector3(1, -1, 1);
+				vel.y = 4f;
+				transform.position = new Vector3(transform.position.x, transform.position.y + .04f, transform.position.z);
+				this.gameObject.layer = 0;
+			}
 		}
 		else {
 			base.OnTriggerEnter2D(otherColl);

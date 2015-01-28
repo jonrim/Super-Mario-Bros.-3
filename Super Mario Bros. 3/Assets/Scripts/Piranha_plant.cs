@@ -138,4 +138,11 @@ public class Piranha_plant : MonoBehaviour {
 			break;
 		}
 	}
+
+	void OnTriggerEnter2D(Collider2D other) {
+		if (other.gameObject.tag == "Player") {
+			GameObject mainCamera = GameObject.Find ("Main Camera");
+			mainCamera.GetComponent<Health>().gothurt = true;
+		}
+	}
 }

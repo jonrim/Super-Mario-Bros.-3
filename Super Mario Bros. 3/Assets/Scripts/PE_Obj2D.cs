@@ -52,24 +52,10 @@ public class PE_Obj2D : MonoBehaviour {
 	}
 	
 	void ResolveCollisionWith(PE_Obj2D that) {
+
 			// print ("Collision between this: " + this.gameObject.tag + " and that: " + that.gameObject.tag);
 
-		// Assumes that "that" is still
-		if ((that.gameObject.tag != "Player") && (that.gameObject.tag != "Floor") && (that.gameObject.tag != "Platform") &&
-		    !(this.gameObject.tag == "Enemy" && that.gameObject.tag == "Enemy")
-		    && (that.gameObject.tag != "Item") && ((this.gameObject.tag == "Item")
-		    || (this.gameObject.tag == "Enemy")) && (acc.y == 0) && (that.gameObject.tag != "Platform") &&
-		    (transform.position.y < that.gameObject.transform.position.y + that.collider2D.bounds.size.y / 2)) {
-
-				// print ("ResolveCollisionWith 1");
-		
-
-			//vel.x = -vel.x;
-			//float sign = Mathf.Sign (vel.x);
-			//transform.position = new Vector2(transform.position.x + sign * 0.1f, transform.position.y);
-			//transform.localScale = new Vector3(sign, 1, 1);
-		}
-		else if ((this.gameObject.tag == "Item") && (that.gameObject.tag == "Player")) {
+		if ((this.gameObject.tag == "Item") && (that.gameObject.tag == "Player")) {
 			
 				// print ("ResolveCollisionWith 2");
 			
@@ -81,7 +67,8 @@ public class PE_Obj2D : MonoBehaviour {
 			// print ("Hit");
 			//Time.timeScale = 0;
 
-			if (this.gameObject.GetComponent<Enemy_Death>().dead == false) {
+			//if we got stomped, don't damage mario
+			if (!this.collider2D.bounds.Intersects(that.gameObject.GetComponent("IsOnGround").collider2D.bounds)) {
 				// damage Mario
 				mainCamera = GameObject.Find ("Main Camera");
 				mainCamera.GetComponent<Health>().gothurt = true;
@@ -120,7 +107,7 @@ public class PE_Obj2D : MonoBehaviour {
 							float dist = this.collider2D.bounds.size.y/2 + that.collider2D.bounds.size.y/2;
 							vel.y = 0;
 							acc.y = 0;
-							Vector2 pos = new Vector2(this.transform.position.x, that.collider2D.transform.position.y + dist+0.01f);
+							Vector2 pos = new Vector2(this.transform.position.x, that.collider2D.transform.position.y + dist+0.03f);
 							this.transform.position = pos;
 						}
 						else if (that.gameObject.tag != "Platform") { // hit the bottom
