@@ -30,30 +30,28 @@ public class CameraFollow : MonoBehaviour {
 			character = mario_tanooki;
 		}
 		if (dist > bound){
-			if (right_bound)
-				return;
-
-			Vector3 pos = new Vector3(character.transform.position.x - bound, this.transform.position.y, -10);
-			this.transform.position = pos;
+			if (!right_bound) {
+				Vector3 pos = new Vector3(character.transform.position.x - bound, this.transform.position.y, -10);
+				this.transform.position = pos;
+			}
 		} else if (dist < -bound) {
-			if (left_bound)
-				return;
-
-			Vector3 pos = new Vector3(character.transform.position.x + bound, this.transform.position.y, -10);
-			this.transform.position = pos;
+			if (!left_bound) {
+				Vector3 pos = new Vector3(character.transform.position.x + bound, this.transform.position.y, -10);
+				this.transform.position = pos;
+			}
 		}
 		if (vertdist > bound) {
-			Vector3 pos = new Vector3(this.transform.position.x, character.transform.position.y - bound - 3.0f, -10);
-			if (character.transform.position.y - bound - 3.0f < 2.14f) {
-				pos = new Vector3(this.transform.position.x, 2.14f, -10);
+			Vector3 pos = new Vector3(this.transform.position.x, character.transform.position.y - bound, -10);
+			if (character.transform.position.y - bound < camera_ground) {
+				pos = new Vector3(this.transform.position.x, camera_ground, -10);
 			}
 			this.transform.position = pos;
 		}
 		else if (vertdist < -bound) {
 			Vector3 pos = new Vector3(this.transform.position.x, character.transform.position.y + bound, -10);
-			if (character.transform.position.y + bound > 14.79f) {
-				pos = new Vector3(this.transform.position.x, 14.79f, -10);
-			}
+//			if (character.transform.position.y + bound > 12.79f) {
+//				pos = new Vector3(this.transform.position.x, 12.79f, -10);
+//			}
 
 			if (pos.y < camera_ground) {
 				pos.y = camera_ground;

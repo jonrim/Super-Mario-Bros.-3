@@ -35,7 +35,7 @@ public class Health : MonoBehaviour {
 		mario_big.gameObject.SetActive(false);
 		mario_tanooki.gameObject.SetActive(false);
 		timer = 10.0f;
-		holderPos = new Vector2(-10.0f,50.0f);
+		holderPos = new Vector2(-13.0f,0.0f);
 	}
 	
 	// Update is called once per frame
@@ -132,10 +132,11 @@ public class Health : MonoBehaviour {
 				Vector3 facingDirection = new Vector3(mario_small.transform.localScale.x, mario_small.transform.localScale.y, mario_small.transform.localScale.z);
 				Vector2 loc = new Vector2(mario_small.transform.position.x, mario_small.transform.position.y);
 				mario_big.GetComponent<PE_Obj2D>().vel = mario_small.GetComponent<PE_Obj2D>().vel;
-				mario_small.gameObject.SetActive(false);
+
 				mario_big.transform.localScale = facingDirection;
 				mario_big.transform.position = loc;
 				mario_big.gameObject.SetActive(true);
+				mario_small.gameObject.SetActive(false);
 				// Instantiate(mario_big, mario_small.transform.position, mario_small.transform.rotation);
 				//mario_big.transform.localScale = new Vector3 (mario_small.transform.localScale.x, mario_small.transform.localScale.y,
 				                                             // mario_small.transform.localScale.z);
