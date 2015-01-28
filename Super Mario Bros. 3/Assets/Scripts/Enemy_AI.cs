@@ -10,6 +10,7 @@ public class Enemy_AI : PE_Obj2D {
 	public bool canJump;
 	public bool canJump2;
 	public AudioClip hit_by_shell;
+	public bool dead = false;
 	
 	// Use this for initialization
 /// <summary>
@@ -53,7 +54,7 @@ public virtual void Update () {
 		// next bool needed so that you can't jump off walls
 		canJump2 = Physics2D.OverlapPoint(is_on_ground.position, GroundLayers);
 		// go in opposite direction if the enemy approaches a cliff
-		if (this.gameObject.transform.position.y <= camera.transform.position.y - 12) {
+		if (this.gameObject.transform.position.y <= camera.transform.position.y - 12 && dead) {
 			Destroy(this.gameObject);
 		}
 
@@ -88,6 +89,7 @@ public virtual void Update () {
 				this.gameObject.layer = 0;
 				audio.Play ();
 				audio.PlayOneShot(hit_by_shell);
+				dead = true;
 			}
 			else {
 				turnAround();
@@ -100,6 +102,7 @@ public virtual void Update () {
 			this.gameObject.layer = 0;
 			audio.Play ();
 			audio.PlayOneShot(hit_by_shell);
+			dead = true;
 		}
 		else if (otherColl.gameObject.tag == "Block_item" || otherColl.gameObject.tag == "Block_empty") {
 			turnAround();

@@ -6,7 +6,7 @@ public class Spawner : MonoBehaviour {
 	public GameObject myObject;
 	public bool respawn = true;
 	public float timer = 3f;
-	public bool coroutineRunning = false;
+	public bool dead = true;
 
 	// Use this for initialization
 	void Start () {
@@ -18,6 +18,7 @@ public class Spawner : MonoBehaviour {
 		if (myObject == null && respawn == true) {
 			myObject = Instantiate(go, this.transform.position, Quaternion.identity) as GameObject;
 			respawn = false;
+			dead = false;
 		}
 	}
 
@@ -25,10 +26,10 @@ public class Spawner : MonoBehaviour {
 	}
 
 	void Update() {
-		if (!respawn) {
-			if (myObject == null) ;
-
-			else if (myObject.renderer.isVisible)
+		if (myObject == null) 
+			dead = true;
+		if (!respawn && !dead) {
+			if (myObject.renderer.isVisible)
 					timer = 3f;
 			else if (renderer.isVisible)
 					timer = 3f;

@@ -16,7 +16,7 @@ public class Winged_koopa : Enemy_AI {
 		                             is_on_ground.transform.position.y + is_on_ground.collider2D.bounds.size.y/2);
 		canJump = Physics2D.OverlapArea(point1, point2, GroundLayers, 0, 0);
 
-		if (canJump) {
+		if (canJump && !dead) {
 			vel.y = 12.0f;
 		}
 
