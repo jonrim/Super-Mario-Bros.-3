@@ -44,9 +44,9 @@ public class Shell : PE_Obj2D {
 		if (!canJump) {
 			GetComponent<PE_Obj2D>().acc.y = -60.0f;
 			// terminal velocity
-			if (GetComponent<PE_Obj2D>().vel.y <= -20.0f) {
+			if (GetComponent<PE_Obj2D>().vel.y <= -15.0f) {
 				GetComponent<PE_Obj2D>().acc.y = 0;
-				GetComponent<PE_Obj2D>().vel.y = -20.0f;
+				GetComponent<PE_Obj2D>().vel.y = -15.0f;
 			}
 		}
 
@@ -65,9 +65,9 @@ public class Shell : PE_Obj2D {
 			print ("go");
 			// print ("player hit me");
 			if (this.transform.position.x < other.transform.position.x) {
-				GetComponent<PE_Obj2D>().vel.x = -16.0f;
+				GetComponent<PE_Obj2D>().vel.x = -12.0f;
 			} else {
-				GetComponent<PE_Obj2D>().vel.x = 16.0f;
+				GetComponent<PE_Obj2D>().vel.x = 12.0f;
 			}
 			moving = true;
 			timer = 0;

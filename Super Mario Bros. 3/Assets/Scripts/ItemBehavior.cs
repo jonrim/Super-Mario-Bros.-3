@@ -6,32 +6,42 @@ public class ItemBehavior : PE_Obj2D {
 	private Transform is_on_ground;
 	public bool canJump;
 	public bool canJump2;
-//Jrim
 	public bool mushroom;
 	public bool tanooki;
+	public bool coin;
 	public bool multiplier;
-//Josh
-/// <summary>
-/// >>>>>>>>>>>>>>>>>
-/// </summary>
 	public bool destroyed = false;
 	public bool spawned = false;
+	public float end_pos= 1000.0f;
 	private Animator anim;
-	private float timer = 0;
+	public float timer = 0;
 	// Use this for initialization
 	public override void Start () {
 		is_on_ground = transform.FindChild("IsOnGround");
 		anim = GetComponent<Animator>();
-//Jrim
+		timer = 0;
 		if (tanooki) {
 			vel.y = 15.0f;
 		}
-///Josh
 		base.Start ();
-////>>>>>>> origin/master
 	}
 	// Update is called once per frame
 	void FixedUpdate () {
+		if (coin) {
+			Vector3 newPos = new Vector3(transform.position.x, transform.position.y + .3f, transform.position.z);
+			if (newPos.y >= end_pos) {
+				Destroy (transform.gameObject);
+			}
+			transform.position = newPos;
+			return;
+		}
+		if (!tanooki && !coin && timer <= 1.0f) {
+			Vector3 newPos = new Vector3(transform.position.x, transform.position.y + .08f, transform.position.z);
+			if (newPos.y >= end_pos) {
+				newPos.y = end_pos;
+			}
+			transform.position = newPos;
+		}
 		if (mushroom && timer >= 1.0f && !spawned) {
 			vel.x = -3.0f;
 			// transform.FindChild("IsOnGround").GetComponent<PE_Obj2D>().vel.x = -3.0f;
@@ -54,13 +64,17 @@ public class ItemBehavior : PE_Obj2D {
 		// next bool needed so that you can't jump off walls
 		canJump2 = Physics2D.OverlapPoint(is_on_ground.position, GroundLayers);
 
-		if (!canJump2) {
+		if (!canJump2 && !tanooki) {
 			acc.y = -60.0f;
 			// terminal velocity
 			if (vel.y <= -15.0f) {
 				acc.y = 0;
 				vel.y = -15.0f;
 			}
+		}
+		if (tanooki) {
+
+			timer = 0;
 		}
 		timer += Time.fixedDeltaTime;
 	}
@@ -70,14 +84,17 @@ public class ItemBehavior : PE_Obj2D {
 		if (other == null) {
 			return;
 		}
-		else if ((other.gameObject.tag == "Block_item" || other.gameObject.tag == "Block_empty") && 
+		else if (((other.gameObject.tag == "Block_item" && timer > 1.0f) || other.gameObject.tag == "Block_empty") && 
 		         (transform.position.y < otherColl.transform.position.y + otherColl.collider2D.bounds.size.y/2)) {
 			vel.x = -vel.x;
 			float sign = Mathf.Sign (vel.x);
 			transform.position = new Vector2(transform.position.x + sign * 0.1f, transform.position.y);
 			transform.localScale = new Vector3(sign, 1, 1);
 			base.OnTriggerEnter2D(otherColl);
-		} else {
+		}
+		else if (other.gameObject.tag == "Block_item" && (transform.position.y < end_pos - 0.1f) && !tanooki) {}
+		else if (tanooki && other.gameObject.tag != "Player") {}
+		else {
 			base.OnTriggerEnter2D(otherColl);
 		}
 	}

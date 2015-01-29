@@ -12,8 +12,11 @@ public class PE_Obj2D : MonoBehaviour {
 	public GameObject go_mushroom;
 	public GameObject go_tanooki;
 	public GameObject go_multiplier;
+	public GameObject go_coin;
 	public bool MakeTanooki;
 	public bool MakeClone;
+	public bool BlockOnLeft;
+	public bool BlockOnRight;
 	public Vector2		acc = Vector2.zero;
 
 	public Vector2		vel = Vector2.zero;
@@ -52,9 +55,14 @@ public class PE_Obj2D : MonoBehaviour {
 	}
 	
 	void ResolveCollisionWith(PE_Obj2D that) {
-
 			// print ("Collision between this: " + this.gameObject.tag + " and that: " + that.gameObject.tag);
-
+		if ((this.gameObject.tag == "Block_item" || this.gameObject.tag == "Block_empty") &&
+			(that.gameObject.tag == "Block_item" || that.gameObject.tag == "Block_empty")) {
+			if (transform.position.x < that.gameObject.transform.position.x)
+				BlockOnRight = true;
+			else
+				BlockOnLeft = true;
+		}
 		if ((this.gameObject.tag == "Item") && (that.gameObject.tag == "Player")) {
 			
 				// print ("ResolveCollisionWith 2");
@@ -144,7 +152,7 @@ public class PE_Obj2D : MonoBehaviour {
 							float dist = this.collider2D.bounds.size.x/2 + that.collider2D.bounds.size.x/2;
 							if (pos0.x > pos1.x) {
 								vel.x = 0;
-								acc.x = 0;
+								// acc.x = 0;
 							}
 							Vector2 pos = new Vector2(that.transform.position.x + dist + 0.1f, this.transform.position.y);
 							this.transform.position = pos;
@@ -158,10 +166,10 @@ public class PE_Obj2D : MonoBehaviour {
 						eX2 = thatP.x + that.collider2D.bounds.size.x / 2 ;
 						eY2 = thatP.y - that.collider2D.bounds.size.y / 2 ;
 
-						if (((Mathf.Abs(eY1 - eY2) <= 0.1) && (Mathf.Abs(eX1 - eX2) >= 0.4)) 
+						if ((Mathf.Abs(eY1 - eY2) <= 0.7) && ((Mathf.Abs(eX1 - eX2) >= 0.4) || that.gameObject.GetComponent<PE_Obj2D>().BlockOnRight) 
 						    && !((that.gameObject.tag == "Platform") && (vel.y > 0))){ // hit the bottom
 							float dist = this.collider2D.bounds.size.y/2 + that.collider2D.bounds.size.y/2;
-							vel.y = 0;
+							vel.y = -1;
 							Vector2 pos = new Vector2(this.transform.position.x, that.transform.position.y - dist - 0.03f);
 							this.transform.position = pos;
 						}
@@ -170,7 +178,7 @@ public class PE_Obj2D : MonoBehaviour {
 							float dist = this.collider2D.bounds.size.x/2 + that.collider2D.bounds.size.x/2;
 							if (pos0.x > pos1.x) {
 								vel.x = 0;
-								acc.x = 0;
+								// acc.x = 0;
 							}
 							Vector2 pos = new Vector2(that.transform.position.x + dist + 0.1f, this.transform.position.y);
 							this.transform.position = pos;
@@ -183,10 +191,10 @@ public class PE_Obj2D : MonoBehaviour {
 						eX2 = thatP.x - that.collider2D.bounds.size.x / 2 ;
 						eY2 = thatP.y - that.collider2D.bounds.size.y / 2 ;
 
-						if ((Mathf.Abs(eY1 - eY2) <= 0.1) && (Mathf.Abs(eX1 - eX2) >= 0.4) 
-						    && !((that.gameObject.tag == "Platform") && (vel.y > 0))) { // land on top
+						if ((Mathf.Abs(eY1 - eY2) <= 0.7) && ((Mathf.Abs(eX1 - eX2) >= 0.4) || that.gameObject.GetComponent<PE_Obj2D>().BlockOnLeft)
+						    && !((that.gameObject.tag == "Platform") && (vel.y > 0))) { // hit the bottom
 							float dist = this.collider2D.bounds.size.y/2 + that.collider2D.bounds.size.y/2;
-							vel.y = 0;
+							vel.y = -1;
 							Vector2 pos = new Vector2(this.transform.position.x, that.transform.position.y - dist - 0.03f);
 							this.transform.position = pos;
 						}
@@ -195,7 +203,7 @@ public class PE_Obj2D : MonoBehaviour {
 							float dist = this.collider2D.bounds.size.x/2 + that.collider2D.bounds.size.x/2;
 							if (pos0.x < pos1.x) {
 								vel.x = 0;
-								acc.x = 0;
+								// acc.x = 0;
 							}
 							Vector2 pos = new Vector2(that.transform.position.x - dist - 0.1f, this.transform.position.y);
 							this.transform.position = pos;
@@ -221,7 +229,7 @@ public class PE_Obj2D : MonoBehaviour {
 							float dist = this.collider2D.bounds.size.x/2 + that.collider2D.bounds.size.x/2;
 							if (pos0.x < pos1.x) {
 								vel.x = 0;
-								acc.x = 0;
+								// acc.x = 0;
 							}
 							Vector2 pos = new Vector2(that.transform.position.x - dist-0.1f, this.transform.position.y);
 							this.transform.position = pos;
@@ -280,11 +288,11 @@ public class PE_Obj2D : MonoBehaviour {
 				break;
 			}
 		}
-		else if ((this.gameObject.tag == "Block_item") && (that.gameObject.tag == "Player" || that.gameObject.tag == "Tail") && (!blockhit)){
+		else if ((this.gameObject.tag == "Block_item") && (that.gameObject.tag == "Player" || that.gameObject.tag == "Tail" || that.gameObject.tag == "Shell") && (!blockhit)){
 			thatP = that.transform.position;
 			if (((thatP.x <= this.transform.position.x + this.collider2D.bounds.size.x/2 ) &&
-			    (thatP.x >= this.transform.position.x - this.collider2D.bounds.size.x/2 )) || that.gameObject.tag == "Tail") { // if the center of this obj is between the x-bounds of that obj
-				if ((thatP.y < this.transform.position.y) || that.gameObject.tag == "Tail") {
+			     (thatP.x >= this.transform.position.x - this.collider2D.bounds.size.x/2 )) || that.gameObject.tag == "Tail" || that.gameObject.tag == "Shell") { // if the center of this obj is between the x-bounds of that obj
+				if ((thatP.y < this.transform.position.y) || that.gameObject.tag == "Tail" || that.gameObject.tag == "Shell") {
 //					float dist = this.collider2D.bounds.size.y/2 + that.collider2D.bounds.size.y/2;
 //					Vector2 pos = new Vector2(that.transform.position.x, this.transform.position.y - dist-0.03f);
 //					that.transform.position = pos;
@@ -292,19 +300,27 @@ public class PE_Obj2D : MonoBehaviour {
 					blockhit = true;
 					block_anim.SetBool ("BlockHit", blockhit);
 					if (MakeClone) {
+						go_multiplier.GetComponent<ItemBehavior>().end_pos = this.transform.position.y + this.collider2D.bounds.size.y/2 + 0.5f;
 						Instantiate(go_multiplier, new Vector2(this.transform.position.x,
-						                                    this.transform.position.y + this.collider2D.bounds.size.y/2 + 0.5f), 
+						                                    this.transform.position.y), 
 						            this.transform.rotation);
 					}
 					else if (that.gameObject.tag == "Player" && !that.gameObject.GetComponent<PlayerMovement>().big && MakeTanooki) {
+						go_mushroom.GetComponent<ItemBehavior>().end_pos = this.transform.position.y + this.collider2D.bounds.size.y/2 + 0.5f;
 						Instantiate(go_mushroom, new Vector2(this.transform.position.x,
-						                                  this.transform.position.y + this.collider2D.bounds.size.y/2 + 0.5f), 
+						                                  this.transform.position.y), 
 						            this.transform.rotation);
 
 					}
 					else if (MakeTanooki) {
 						Instantiate(go_tanooki, new Vector2(this.transform.position.x,
 						                                  this.transform.position.y + this.collider2D.bounds.size.y/2 + 0.5f), 
+						            this.transform.rotation);
+					}
+					else {
+						go_coin.GetComponent<ItemBehavior>().end_pos = this.transform.position.y + 5.0f;
+						Instantiate(go_coin, new Vector2(this.transform.position.x,
+						                                    this.transform.position.y + this.collider2D.bounds.size.y/2 + 0.5f), 
 						            this.transform.rotation);
 					}
 				}

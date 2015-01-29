@@ -21,8 +21,8 @@ public class PlayerMovement : MonoBehaviour {
 	private float normalHeight = 0;
 	public bool HitJump = false;
 	public bool Hit = false;
-	private bool turn = false;
-	private bool run = false;
+	public bool turn = false;
+	public bool run = false;
 	public bool big = false;
 	public bool hover = false;
 	public float pauseEndTime;
@@ -45,13 +45,14 @@ public class PlayerMovement : MonoBehaviour {
 	}
 	// Update is called once per frame
 	void Update () {
-		if (run && runmeter < 7 && runtimer < Time.realtimeSinceStartup && !turn) {
+		if (run && runmeter < 7 && runtimer < Time.realtimeSinceStartup && !turn && 
+		    (Input.GetButton("Left") || Input.GetButton("Right"))) {
 			runmeter++;
 			runtimer = Time.realtimeSinceStartup + 0.2f;
 		}
 		else if ((!run || turn) && runmeter > 0 && runtimer < Time.realtimeSinceStartup) {
 			runmeter--;
-			runtimer = Time.realtimeSinceStartup + 0.6f;
+			runtimer = Time.realtimeSinceStartup + 0.4f;
 		}
 		mario_anim.speed = Mathf.Abs (GetComponent<PE_Obj2D>().vel.x) * 0.1f + 0.5f;
 		Vector2 point1 = new Vector2(is_on_ground.transform.position.x - is_on_ground.collider2D.bounds.size.x/2, 
@@ -94,9 +95,9 @@ public class PlayerMovement : MonoBehaviour {
 			runtimer = Time.realtimeSinceStartup + 0.2f;
 		}
 		if (Input.GetButtonUp ("Run")) {
-			runtimer = Time.realtimeSinceStartup + 0.6f;
+			runtimer = Time.realtimeSinceStartup + 0.4f;
 		}
-		if (Input.GetButton ("Run") && canJump2) {
+		if (Input.GetButton ("Run") && canJump2 && (Input.GetButton ("Left") || Input.GetButton("Right"))) {
 			run = true;
 		}
 		else {
@@ -105,7 +106,7 @@ public class PlayerMovement : MonoBehaviour {
 
 		mario_anim.SetFloat("Speed", Mathf.Abs(GetComponent<PE_Obj2D>().vel.x));
 		// decelerate if you're holding both right and left buttons
-		if (Input.GetButton("Right") && Input.GetButton("Left")) {
+		if (Input.GetButton("Right") && Input.GetButton("Left") && canJump) {
 			GetComponent<PE_Obj2D>().acc.x = -GetComponent<PE_Obj2D>().vel.x * 4.0f;
 			run = false;
 			turn = false;
@@ -114,27 +115,32 @@ public class PlayerMovement : MonoBehaviour {
 		}
 		else if (Input.GetButton ("Right")) {
 			transform.localScale = new Vector3(1, 1, 1);
-			if ((GetComponent<PE_Obj2D>().vel.x < -0.1f) && (GetComponent<PE_Obj2D>().acc.y == 0)) {
-				turn = true;
+			if (GetComponent<PE_Obj2D>().vel.x < -0.1f) {
+				if (canJump)
+					turn = true;
 				transform.localScale = new Vector3(-1, 1, 1);
-				GetComponent<PE_Obj2D>().acc.x = 30.0f;
+				GetComponent<PE_Obj2D>().acc.x = 20.0f;
 			}
-			else {
+			else if (canJump) {
 				turn = false;
-				GetComponent<PE_Obj2D>().acc.x = 6.0f + 2.0f * runmeter;
+				transform.localScale = new Vector3(1, 1, 1);
+				GetComponent<PE_Obj2D>().acc.x = 6.0f + 4.0f * runmeter;
 			}
+			
 			mario_anim.SetBool ("Turn", turn);
 		}
 		else if (Input.GetButton ("Left")) {
 			transform.localScale = new Vector3(-1, 1, 1);
-			if ((GetComponent<PE_Obj2D>().vel.x > 0.1f) && (GetComponent<PE_Obj2D>().acc.y == 0)){
-				turn = true;
+			if (GetComponent<PE_Obj2D>().vel.x > 0.1f) {
+				if (canJump)
+					turn = true;
 				transform.localScale = new Vector3(1, 1, 1);
-				GetComponent<PE_Obj2D>().acc.x = -30.0f;
+				GetComponent<PE_Obj2D>().acc.x = -20.0f;
 			}
-			else {
+			else if (canJump){
 				turn = false;
-				GetComponent<PE_Obj2D>().acc.x = -6.0f - 2.0f * runmeter;
+				transform.localScale = new Vector3(-1, 1, 1);
+				GetComponent<PE_Obj2D>().acc.x = -6.0f - 4.0f * runmeter;
 			}
 			mario_anim.SetBool ("Turn", turn);
 		}
@@ -142,7 +148,10 @@ public class PlayerMovement : MonoBehaviour {
 			turn = false;
 			mario_anim.SetBool ("Turn", turn);
 			if ((GetComponent<PE_Obj2D>().vel.x < -0.01f) || (GetComponent<PE_Obj2D>().vel.x > 0.01f)) {
-				GetComponent<PE_Obj2D>().acc.x = -GetComponent<PE_Obj2D>().vel.x * 4.5f;			
+				if (Mathf.Abs(GetComponent<PE_Obj2D>().vel.x) < 5.0f)
+					GetComponent<PE_Obj2D>().acc.x = -GetComponent<PE_Obj2D>().vel.x * 4.0f;		
+				else
+					GetComponent<PE_Obj2D>().acc.x = -Mathf.Sign(GetComponent<PE_Obj2D>().vel.x) * 15.0f;
 			}
 		}
 		if (turn) {
@@ -196,13 +205,16 @@ public class PlayerMovement : MonoBehaviour {
 		else {
 			mario_anim.SetBool ("Run", false);
 		}
-		if (Mathf.Abs (GetComponent<PE_Obj2D>().vel.x) >= 11.0f && !turn) {
-			GetComponent<PE_Obj2D>().vel.x = Mathf.Sign (GetComponent<PE_Obj2D>().vel.x) * 11.0f;
-			GetComponent<PE_Obj2D>().acc.x = 0;
+		if (Mathf.Abs(GetComponent<PE_Obj2D>().vel.x) >= 11.0f) {
+			GetComponent<PE_Obj2D>().vel.x = Mathf.Sign(GetComponent<PE_Obj2D>().vel.x) * 11.0f;
 		}
-		if (((Mathf.Abs (GetComponent<PE_Obj2D>().vel.x) < 12.0f) || (GetComponent<PE_Obj2D>().acc.y != 0)) && (audio.clip == RunSound)){
-			audio.Stop();
-		}
+//		if (Mathf.Abs (GetComponent<PE_Obj2D>().vel.x) >= 11.0f && !turn) {
+//			GetComponent<PE_Obj2D>().vel.x = Mathf.Sign (GetComponent<PE_Obj2D>().vel.x) * 11.0f;
+//			GetComponent<PE_Obj2D>().acc.x = 0;
+//		}
+//		if (((Mathf.Abs (GetComponent<PE_Obj2D>().vel.x) < 12.0f) || (GetComponent<PE_Obj2D>().acc.y != 0)) && (audio.clip == RunSound)){
+//			audio.Stop();
+//		}
 		canJump2 = Mathf.Abs (GetComponent<PE_Obj2D>().acc.y) < 0.1f && (canJump2 || canJump);
 //		if (Input.GetButtonDown ("Jump") && mainCamera.GetComponent<Health>().tanooki && !canJump2) {
 //			pauseEndTime = Time.realtimeSinceStartup + 2.0f;
