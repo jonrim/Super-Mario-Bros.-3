@@ -38,6 +38,7 @@ public class PlayerMovement : MonoBehaviour {
 		mainCamera = GameObject.Find ("Main Camera");
 		if (mainCamera.GetComponent<Health>().tanooki) {
 			tail = transform.FindChild("Tail");
+			tail.gameObject.SetActive(false);
 		}
 		runtimer = Time.realtimeSinceStartup + 0.2f;
 		coll = this.transform.GetComponent<BoxCollider2D>() as BoxCollider2D;
@@ -46,11 +47,11 @@ public class PlayerMovement : MonoBehaviour {
 	// Update is called once per frame
 	void Update () {
 		if (run && runmeter < 7 && runtimer < Time.realtimeSinceStartup && !turn && 
-		    (Input.GetButton("Left") || Input.GetButton("Right"))) {
+		    (Input.GetButton("Left") || Input.GetButton("Right")) && Mathf.Abs(GetComponent<PE_Obj2D>().vel.x) >= 3.0f) {
 			runmeter++;
 			runtimer = Time.realtimeSinceStartup + 0.2f;
 		}
-		else if ((!run || turn) && runmeter > 0 && runtimer < Time.realtimeSinceStartup) {
+		else if (((!run || turn || (Mathf.Abs(GetComponent<PE_Obj2D>().vel.x) < 3.0f )) && runmeter > 0 && runtimer < Time.realtimeSinceStartup)) {
 			runmeter--;
 			runtimer = Time.realtimeSinceStartup + 0.4f;
 		}

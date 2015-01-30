@@ -313,6 +313,7 @@ public class PE_Obj2D : MonoBehaviour {
 
 					}
 					else if (MakeTanooki) {
+						go_tanooki.GetComponent<ItemBehavior>().end_pos = this.transform.position.y + 5.0f;
 						Instantiate(go_tanooki, new Vector2(this.transform.position.x,
 						                                  this.transform.position.y + this.collider2D.bounds.size.y/2 + 0.5f), 
 						            this.transform.rotation);

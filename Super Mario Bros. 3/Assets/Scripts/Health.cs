@@ -180,6 +180,7 @@ public class Health : MonoBehaviour {
 				}
 				mario_tanooki.transform.localScale = facingDirection;
 				mario_tanooki.transform.position = loc;
+				mario_tanooki.gameObject.GetComponent<PlayerMovement>().tail.gameObject.SetActive(false);
 				mario_tanooki.gameObject.SetActive(true);
 				// Instantiate(mario_big, mario_small.transform.position, mario_small.transform.rotation);
 				//mario_big.transform.localScale = new Vector3 (mario_small.transform.localScale.x, mario_small.transform.localScale.y,

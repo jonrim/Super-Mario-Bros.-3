@@ -12,7 +12,8 @@ public class ItemBehavior : PE_Obj2D {
 	public bool multiplier;
 	public bool destroyed = false;
 	public bool spawned = false;
-	public float end_pos= 1000.0f;
+	public float end_pos;
+	private float tanooki_speed = 5.0f;
 	private Animator anim;
 	public float timer = 0;
 	// Use this for initialization
@@ -72,8 +73,21 @@ public class ItemBehavior : PE_Obj2D {
 				vel.y = -15.0f;
 			}
 		}
-		if (tanooki) {
-
+		if (tanooki && transform.position.y >= end_pos) {
+			vel.y = -1.5f;
+			vel.x = tanooki_speed;
+			transform.localScale = new Vector3(-Mathf.Sign(tanooki_speed), 1, 1);
+			timer = 0;
+		}
+		if (tanooki && timer > 0.4f) {
+			vel.x = 0;
+			vel.y = 0;
+		}
+		if (tanooki && timer > 0.5f) {
+			tanooki_speed = -tanooki_speed;
+			vel.y = -1.5f;
+			transform.localScale = new Vector3(-Mathf.Sign(tanooki_speed), 1, 1);
+			vel.x = tanooki_speed;
 			timer = 0;
 		}
 		timer += Time.fixedDeltaTime;
@@ -92,7 +106,7 @@ public class ItemBehavior : PE_Obj2D {
 			transform.localScale = new Vector3(sign, 1, 1);
 			base.OnTriggerEnter2D(otherColl);
 		}
-		else if (other.gameObject.tag == "Block_item" && (transform.position.y < end_pos - 0.1f) && !tanooki) {}
+		else if (other.gameObject.tag == "Block_item" && (transform.position.y < end_pos) && !tanooki) {}
 		else if (tanooki && other.gameObject.tag != "Player") {}
 		else {
 			base.OnTriggerEnter2D(otherColl);
