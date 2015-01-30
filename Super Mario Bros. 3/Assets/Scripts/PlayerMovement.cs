@@ -127,6 +127,9 @@ public class PlayerMovement : MonoBehaviour {
 				transform.localScale = new Vector3(1, 1, 1);
 				GetComponent<PE_Obj2D>().acc.x = 6.0f + 4.0f * runmeter;
 			}
+			else {
+				GetComponent<PE_Obj2D>().acc.x = 6.0f;
+			}
 			
 			mario_anim.SetBool ("Turn", turn);
 		}
@@ -142,6 +145,9 @@ public class PlayerMovement : MonoBehaviour {
 				turn = false;
 				transform.localScale = new Vector3(-1, 1, 1);
 				GetComponent<PE_Obj2D>().acc.x = -6.0f - 4.0f * runmeter;
+			}
+			else {
+				GetComponent<PE_Obj2D>().acc.x = -6.0f;
 			}
 			mario_anim.SetBool ("Turn", turn);
 		}

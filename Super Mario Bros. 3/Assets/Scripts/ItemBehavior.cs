@@ -22,7 +22,7 @@ public class ItemBehavior : PE_Obj2D {
 		anim = GetComponent<Animator>();
 		timer = 0;
 		if (tanooki) {
-			vel.y = 15.0f;
+			vel.y = 10.0f;
 		}
 		base.Start ();
 	}
@@ -36,8 +36,8 @@ public class ItemBehavior : PE_Obj2D {
 			transform.position = newPos;
 			return;
 		}
-		if (!tanooki && !coin && timer <= 1.0f) {
-			Vector3 newPos = new Vector3(transform.position.x, transform.position.y + .08f, transform.position.z);
+		if (!tanooki && !coin) {
+			Vector3 newPos = new Vector3(transform.position.x, transform.position.y + .07f, transform.position.z);
 			if (newPos.y >= end_pos) {
 				newPos.y = end_pos;
 			}

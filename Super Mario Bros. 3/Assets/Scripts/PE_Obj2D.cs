@@ -13,6 +13,11 @@ public class PE_Obj2D : MonoBehaviour {
 	public GameObject go_tanooki;
 	public GameObject go_multiplier;
 	public GameObject go_coin;
+	public Sprite item_block_hit;
+	private SpriteRenderer spriteRenderer;
+	public bool spawn_multiplier;
+	public bool spawn_mushroom;
+	public bool spawn_tanooki;
 	public bool MakeTanooki;
 	public bool MakeClone;
 	public bool BlockOnLeft;
@@ -27,10 +32,18 @@ public class PE_Obj2D : MonoBehaviour {
 	public Vector2		delta = Vector2.zero;
 	// public GameObject Block_empty;
 	private bool blockhit = false;
-	private Animator block_anim;
+	public Animator block_anim;
+	private float startingpos;
+	private float endingpos;
+	private bool end;
+	private bool start;
+	private float blocktimer = 0;
 	virtual public void Start() {
 		if (this.gameObject.tag == "Block_item") {
-			block_anim = this.gameObject.GetComponentInParent<Animator>();
+			spriteRenderer = GetComponent<SpriteRenderer>();
+			block_anim = GetComponent<Animator>();
+			startingpos = transform.position.y;
+			endingpos = transform.position.y + 0.8f;
 		}
 		if (PhysEngine2D.objs.IndexOf(this) == -1) {
 			PhysEngine2D.objs.Add(this);
@@ -38,7 +51,50 @@ public class PE_Obj2D : MonoBehaviour {
 		mainCamera = GameObject.Find ("Main Camera");
 		// Block_empty = GameObject.FindWithTag("Block_empty");
 	}
-	
+
+	virtual public void FixedUpdate() {
+		if ((this.gameObject.tag == "Block_item") && (blockhit) && !start) {
+			spriteRenderer.sprite = item_block_hit;
+			if (!end) {
+				Vector2 pos = new Vector2(transform.position.x, transform.position.y + 0.2f);
+				transform.position = pos;
+				if (transform.position.y >= endingpos)
+					end = true;
+			}
+			else {
+				Vector2 pos = new Vector2(transform.position.x, transform.position.y - 0.2f);
+				transform.position = pos;
+				if (transform.position.y <= startingpos)
+					start = true;
+			}
+		}
+		if (start)
+			blocktimer += Time.fixedDeltaTime;
+		if (spawn_tanooki) {
+			spawn_tanooki = false;
+			go_tanooki.GetComponent<ItemBehavior>().end_pos = this.transform.position.y + 3.0f;
+			Instantiate(go_tanooki, new Vector2(this.transform.position.x,
+			                                    this.transform.position.y + this.collider2D.bounds.size.y/2 + 0.5f), 
+			            this.transform.rotation);
+		}
+		else if (blocktimer >= 0.25f) {
+			if (spawn_multiplier) {
+				spawn_multiplier = false;
+				go_multiplier.GetComponent<ItemBehavior>().end_pos = this.transform.position.y + this.collider2D.bounds.size.y/2 + 0.5f;
+				Instantiate(go_multiplier, new Vector2(this.transform.position.x,
+				                                       this.transform.position.y), 
+				            this.transform.rotation);
+			}
+			else if (spawn_mushroom) {
+				spawn_mushroom = false;
+				go_mushroom.GetComponent<ItemBehavior>().end_pos = this.transform.position.y + this.collider2D.bounds.size.y/2 + 0.5f;
+				Instantiate(go_mushroom, new Vector2(this.transform.position.x,
+				                                     this.transform.position.y), 
+				            this.transform.rotation);
+				
+			}
+		}
+	}
 
 	virtual public void OnTriggerEnter2D(Collider2D other) {
 		// Ignore collisions of still objects
@@ -86,7 +142,7 @@ public class PE_Obj2D : MonoBehaviour {
 		if ((that.gameObject.tag != "Player") && (this.gameObject.tag != "ItemBottom") &&
 		    !(this.gameObject.tag == "Item" && that.gameObject.tag == "Item") && 
 		    !(this.gameObject.tag == "Enemy" && that.gameObject.tag == "Enemy") && 
-		    (this.gameObject.tag != "Block_item") && !(that.gameObject.tag == "Enemy" &&
+		    (this.gameObject.tag != "Block_item") && !(that.gameObject.tag == "Item" && this.gameObject.tag == "Player") && !(that.gameObject.tag == "Enemy" &&
 		     this.gameObject.tag == "Player" && mainCamera.GetComponent<Health>().invincible == true)){
 
 			if (this.gameObject.tag == "Shell" && that.gameObject.tag == "Player") {
@@ -290,33 +346,22 @@ public class PE_Obj2D : MonoBehaviour {
 		}
 		else if ((this.gameObject.tag == "Block_item") && (that.gameObject.tag == "Player" || that.gameObject.tag == "Tail" || that.gameObject.tag == "Shell") && (!blockhit)){
 			thatP = that.transform.position;
-			if (((thatP.x <= this.transform.position.x + this.collider2D.bounds.size.x/2 ) &&
-			     (thatP.x >= this.transform.position.x - this.collider2D.bounds.size.x/2 )) || that.gameObject.tag == "Tail" || that.gameObject.tag == "Shell") { // if the center of this obj is between the x-bounds of that obj
+			if (((thatP.x <= this.transform.position.x + this.collider2D.bounds.size.x/2 - 0.1f ) &&
+			     (thatP.x >= this.transform.position.x - this.collider2D.bounds.size.x/2 + 0.1f)) || that.gameObject.tag == "Tail" || that.gameObject.tag == "Shell") { // if the center of this obj is between the x-bounds of that obj
 				if ((thatP.y < this.transform.position.y) || that.gameObject.tag == "Tail" || that.gameObject.tag == "Shell") {
 //					float dist = this.collider2D.bounds.size.y/2 + that.collider2D.bounds.size.y/2;
 //					Vector2 pos = new Vector2(that.transform.position.x, this.transform.position.y - dist-0.03f);
 //					that.transform.position = pos;
 //					that.gameObject.GetComponent<PE_Obj2D>().vel.y = -1;
-					blockhit = true;
-					block_anim.SetBool ("BlockHit", blockhit);
 					if (MakeClone) {
-						go_multiplier.GetComponent<ItemBehavior>().end_pos = this.transform.position.y + this.collider2D.bounds.size.y/2 + 0.5f;
-						Instantiate(go_multiplier, new Vector2(this.transform.position.x,
-						                                    this.transform.position.y), 
-						            this.transform.rotation);
+						spawn_multiplier = true;
 					}
 					else if (that.gameObject.tag == "Player" && !that.gameObject.GetComponent<PlayerMovement>().big && MakeTanooki) {
-						go_mushroom.GetComponent<ItemBehavior>().end_pos = this.transform.position.y + this.collider2D.bounds.size.y/2 + 0.5f;
-						Instantiate(go_mushroom, new Vector2(this.transform.position.x,
-						                                  this.transform.position.y), 
-						            this.transform.rotation);
+						spawn_mushroom = true;
 
 					}
 					else if (MakeTanooki) {
-						go_tanooki.GetComponent<ItemBehavior>().end_pos = this.transform.position.y + 5.0f;
-						Instantiate(go_tanooki, new Vector2(this.transform.position.x,
-						                                  this.transform.position.y + this.collider2D.bounds.size.y/2 + 0.5f), 
-						            this.transform.rotation);
+						spawn_tanooki = true;
 					}
 					else {
 						go_coin.GetComponent<ItemBehavior>().end_pos = this.transform.position.y + 5.0f;
@@ -324,6 +369,8 @@ public class PE_Obj2D : MonoBehaviour {
 						                                    this.transform.position.y + this.collider2D.bounds.size.y/2 + 0.5f), 
 						            this.transform.rotation);
 					}
+					blockhit = true;
+					block_anim.SetBool ("BlockHit", blockhit);
 				}
 			}
 		}
