@@ -104,7 +104,7 @@ public virtual void Update () {
 			audio.PlayOneShot(hit_by_shell);
 			dead = true;
 		}
-		else if (otherColl.gameObject.tag == "Block_item" || otherColl.gameObject.tag == "Block_empty") {
+		else if (otherColl.gameObject.tag == "Block_item" || otherColl.gameObject.tag == "Block_empty" || otherColl.gameObject.tag == "Block_breakable") {
 			turnAround();
 			base.OnTriggerEnter2D(otherColl);
 		} else {
