@@ -38,6 +38,15 @@ public class PE_Obj2D : MonoBehaviour {
 	private bool end;
 	private bool start;
 	private float blocktimer = 0;
+	public AudioClip BlockSound;
+	public AudioClip CoinSound;
+
+	void playSound(AudioClip sound, float vol){
+		audio.clip = sound;
+		audio.volume = vol;
+		audio.Play();
+	}
+
 	virtual public void Start() {
 		if (this.gameObject.tag == "Block_item") {
 			spriteRenderer = GetComponent<SpriteRenderer>();
@@ -55,6 +64,8 @@ public class PE_Obj2D : MonoBehaviour {
 	virtual public void FixedUpdate() {
 		if ((this.gameObject.tag == "Block_item") && (blockhit) && !start) {
 			spriteRenderer.sprite = item_block_hit;
+			if (!audio.isPlaying)
+				playSound(BlockSound, 1.0f);
 			if (!end) {
 				Vector2 pos = new Vector2(transform.position.x, transform.position.y + 0.2f);
 				transform.position = pos;
@@ -112,8 +123,12 @@ public class PE_Obj2D : MonoBehaviour {
 	
 	void ResolveCollisionWith(PE_Obj2D that) {
 			// print ("Collision between this: " + this.gameObject.tag + " and that: " + that.gameObject.tag);
-		if ((this.gameObject.tag == "Block_item" || this.gameObject.tag == "Block_empty") &&
-			(that.gameObject.tag == "Block_item" || that.gameObject.tag == "Block_empty")) {
+		if ((this.gameObject.tag == "Player") && (that.gameObject.tag == "Coin")) {
+			playSound(CoinSound, 2.0f);
+			Destroy (that.gameObject);
+		}
+		if ((this.gameObject.tag == "Block_item" || this.gameObject.tag == "Block_empty" || this.gameObject.tag == "Block_breakable") &&
+		    (that.gameObject.tag == "Block_item" || that.gameObject.tag == "Block_empty" || this.gameObject.tag == "Block_breakable")) {
 			if (transform.position.x < that.gameObject.transform.position.x)
 				BlockOnRight = true;
 			else
@@ -141,7 +156,8 @@ public class PE_Obj2D : MonoBehaviour {
 		}
 		if ((that.gameObject.tag != "Player") && (this.gameObject.tag != "ItemBottom") &&
 		    !(this.gameObject.tag == "Item" && that.gameObject.tag == "Item") && 
-		    !(this.gameObject.tag == "Enemy" && that.gameObject.tag == "Enemy") && 
+		    !(this.gameObject.tag == "Enemy" && that.gameObject.tag == "Enemy") &&
+		    !(that.gameObject.tag == "Coin" && this.gameObject.tag == "Player") &&
 		    (this.gameObject.tag != "Block_item") && !(that.gameObject.tag == "Item" && this.gameObject.tag == "Player") && !(that.gameObject.tag == "Enemy" &&
 		     this.gameObject.tag == "Player" && mainCamera.GetComponent<Health>().invincible == true)){
 
@@ -337,10 +353,8 @@ public class PE_Obj2D : MonoBehaviour {
 						vel.y = 0;
 						acc.y = 0;
 					}
-
 					break;
 				}
-
 				break;
 			}
 		}
@@ -364,6 +378,12 @@ public class PE_Obj2D : MonoBehaviour {
 						spawn_tanooki = true;
 					}
 					else {
+						if (audio.isPlaying && audio.clip == BlockSound) {
+							audio.Stop ();
+						}
+						if (!audio.isPlaying) {
+							playSound(CoinSound, 1.0f);
+						}
 						go_coin.GetComponent<ItemBehavior>().end_pos = this.transform.position.y + 5.0f;
 						Instantiate(go_coin, new Vector2(this.transform.position.x,
 						                                    this.transform.position.y + this.collider2D.bounds.size.y/2 + 0.5f), 

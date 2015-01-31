@@ -11,6 +11,14 @@ public class Shell : PE_Obj2D {
 	public GameObject Koopa;
 	public AudioClip hit_by_shell;
 	public AudioClip hit_wall;
+	public AudioClip breakSound;
+
+	void playSound(AudioClip sound, float vol){
+		audio.clip = sound;
+		audio.volume = vol;
+		audio.Play();
+	}
+
 	// Use this for initialization
 	public override void Start () {
 		is_on_ground = transform.FindChild("IsOnGround");
@@ -22,6 +30,8 @@ public class Shell : PE_Obj2D {
 	}
 	// Update is called once per frame
 	void FixedUpdate () {
+		if (vel.x == 0)
+			moving = false;
 		if (!moving) {
 			if (timer > 4.0f) {
 					anim.SetBool ("twitch", true);		
@@ -30,7 +40,8 @@ public class Shell : PE_Obj2D {
 			if (timer >= 7.0f) {
 					PhysEngine2D.objs.Remove (transform.gameObject.GetComponent<PE_Obj2D> ());
 					Destroy (transform.gameObject);
-					GameObject go = Instantiate (Koopa, transform.position, transform.rotation) as GameObject;
+					Vector2 pos = new Vector2(transform.position.x, transform.position.y + 0.5f);
+					GameObject go = Instantiate (Koopa, pos, transform.rotation) as GameObject;
 			}
 			timer += Time.fixedDeltaTime;
 		}
@@ -62,7 +73,8 @@ public class Shell : PE_Obj2D {
 		//print ("collided with " + other.gameObject.tag);
 		if (other.gameObject.tag == "Player" && !moving) 
 		{
-			print ("go");
+			Vector2 pos = new Vector2(other.gameObject.transform.position.x, other.gameObject.transform.position.y + 0.5f);
+			other.gameObject.transform.position = pos;
 			// print ("player hit me");
 			if (this.transform.position.x < other.transform.position.x) {
 				GetComponent<PE_Obj2D>().vel.x = -12.0f;
@@ -71,9 +83,11 @@ public class Shell : PE_Obj2D {
 			}
 			moving = true;
 			timer = 0;
-			audio.Play ();
-			audio.PlayOneShot(hit_by_shell);
+			playSound(hit_by_shell, 1.0f);
 			//this.gameObject.tag = "Shell";
+		}
+		else if (other.gameObject.tag == "Player" && moving) {
+			mainCamera.GetComponent<Health>().gothurt = true;
 		}
 		else if (other.gameObject.tag == "PlayerFeet" && moving) {
 			print ("stop");
@@ -82,10 +96,19 @@ public class Shell : PE_Obj2D {
 			timer = 0;
 		}
 		
-		else if (other.gameObject.tag == "Block_item" || other.gameObject.tag == "Block_empty") {
+		else if (other.gameObject.tag == "Block_item" || other.gameObject.tag == "Block_empty" || other.gameObject.tag == "Block_breakable"
+		         && moving) {
+			if (other.gameObject.tag == "Block_breakable" && moving) {
+				playSound(breakSound, 1.0f);
+				PhysEngine2D.objs.Remove(other.gameObject.GetComponent<PE_Obj2D>());	
+				Destroy(other.gameObject);
+			}
+			else if (moving) {
+				GetComponent<PE_Obj2D>().vel.x = -GetComponent<PE_Obj2D>().vel.x;
+				playSound (hit_wall, 1.0f);
+			}
 			//audio.Play ();
 			//audio.PlayOneShot(hit_wall);
-			GetComponent<PE_Obj2D>().vel.x = -GetComponent<PE_Obj2D>().vel.x;
 		} else if (other.gameObject.tag == "Enemy") {
 			return;
 		}

@@ -15,7 +15,9 @@ public class Finish : MonoBehaviour {
 
 	void OnTriggerEnter2D(Collider2D other) {
 		if (other.gameObject.tag == "Player") {
-			audio.PlayOneShot (Sound);
+			audio.clip = Sound;
+			audio.volume = 2.0f;
+			audio.Play();
 			Time.timeScale = 0;
 		}
 	}

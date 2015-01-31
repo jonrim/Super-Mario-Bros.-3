@@ -16,7 +16,15 @@ public class ItemBehavior : PE_Obj2D {
 	private float tanooki_speed = 5.0f;
 	private Animator anim;
 	public float timer = 0;
+	public AudioClip itemsound;
 	// Use this for initialization
+
+	void playSound(AudioClip sound, float vol){
+		audio.clip = sound;
+		audio.volume = vol;
+		audio.Play();
+	}
+
 	public override void Start () {
 		is_on_ground = transform.FindChild("IsOnGround");
 		anim = GetComponent<Animator>();
@@ -24,10 +32,32 @@ public class ItemBehavior : PE_Obj2D {
 		if (tanooki) {
 			vel.y = 10.0f;
 		}
+		else {
+			playSound (itemsound, 1.0f);
+		}
 		base.Start ();
 	}
 	// Update is called once per frame
-	void FixedUpdate () {
+	void Update () {
+		Vector2 point1 = new Vector2(is_on_ground.transform.position.x - is_on_ground.collider2D.bounds.size.x/2, 
+		                             is_on_ground.transform.position.y - is_on_ground.collider2D.bounds.size.y/2);
+		Vector2 point2 = new Vector2(is_on_ground.transform.position.x + is_on_ground.collider2D.bounds.size.x/2, 
+		                             is_on_ground.transform.position.y + is_on_ground.collider2D.bounds.size.y/2);
+		canJump = Physics2D.OverlapArea(point1, point2, GroundLayers, 0, 0);
+		// next bool needed so that you can't jump off walls
+		canJump2 = Physics2D.OverlapPoint(is_on_ground.position, GroundLayers);
+		if (canJump2 && !tanooki) {
+			vel.y = 0;
+			acc.y = 0;
+		}
+		else if (!canJump2 && !tanooki) {
+			acc.y = -60.0f;
+			// terminal velocity
+			if (vel.y <= -15.0f) {
+				acc.y = 0;
+				vel.y = -15.0f;
+			}
+		}
 		if (coin) {
 			Vector3 newPos = new Vector3(transform.position.x, transform.position.y + .3f, transform.position.z);
 			if (newPos.y >= end_pos) {
@@ -36,7 +66,7 @@ public class ItemBehavior : PE_Obj2D {
 			transform.position = newPos;
 			return;
 		}
-		if (!tanooki && !coin) {
+		if (!tanooki && !coin && timer < 1.0f) {
 			Vector3 newPos = new Vector3(transform.position.x, transform.position.y + .07f, transform.position.z);
 			if (newPos.y >= end_pos) {
 				newPos.y = end_pos;
@@ -56,22 +86,6 @@ public class ItemBehavior : PE_Obj2D {
 		if ((destroyed) || (timer >= 10.0f)) {
 			PhysEngine2D.objs.Remove(transform.gameObject.GetComponent<PE_Obj2D>());
 			Destroy (transform.gameObject);
-		}
-		Vector2 point1 = new Vector2(is_on_ground.transform.position.x - is_on_ground.collider2D.bounds.size.x/2, 
-		                             is_on_ground.transform.position.y - is_on_ground.collider2D.bounds.size.y/2);
-		Vector2 point2 = new Vector2(is_on_ground.transform.position.x + is_on_ground.collider2D.bounds.size.x/2, 
-		                             is_on_ground.transform.position.y + is_on_ground.collider2D.bounds.size.y/2);
-		canJump = Physics2D.OverlapArea(point1, point2, GroundLayers, 0, 0);
-		// next bool needed so that you can't jump off walls
-		canJump2 = Physics2D.OverlapPoint(is_on_ground.position, GroundLayers);
-
-		if (!canJump2 && !tanooki) {
-			acc.y = -60.0f;
-			// terminal velocity
-			if (vel.y <= -15.0f) {
-				acc.y = 0;
-				vel.y = -15.0f;
-			}
 		}
 		if (tanooki && transform.position.y >= end_pos) {
 			vel.y = -1.5f;

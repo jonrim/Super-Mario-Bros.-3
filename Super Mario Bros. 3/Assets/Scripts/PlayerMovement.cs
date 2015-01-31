@@ -28,6 +28,14 @@ public class PlayerMovement : MonoBehaviour {
 	public float pauseEndTime;
 	public BoxCollider2D coll;
 	private GameObject mainCamera;
+	public AudioClip tanooki_attack;
+
+	void playSound(AudioClip sound, float vol){
+		audio.clip = sound;
+		audio.volume = vol;
+		audio.Play();
+	}
+
 	void Awake () {
 		CameraFollow.character = this.gameObject;
 	}
@@ -37,6 +45,7 @@ public class PlayerMovement : MonoBehaviour {
 		is_on_ground = transform.FindChild("IsOnGround");
 		mainCamera = GameObject.Find ("Main Camera");
 		if (mainCamera.GetComponent<Health>().tanooki) {
+
 			tail = transform.FindChild("Tail");
 			tail.gameObject.SetActive(false);
 		}
@@ -52,6 +61,8 @@ public class PlayerMovement : MonoBehaviour {
 			runtimer = Time.realtimeSinceStartup + 0.2f;
 		}
 		else if (((!run || turn || (Mathf.Abs(GetComponent<PE_Obj2D>().vel.x) < 3.0f )) && runmeter > 0 && runtimer < Time.realtimeSinceStartup)) {
+			if (audio.clip == RunSound && audio.isPlaying)
+				audio.Stop ();
 			runmeter--;
 			runtimer = Time.realtimeSinceStartup + 0.4f;
 		}
@@ -74,6 +85,7 @@ public class PlayerMovement : MonoBehaviour {
 		}
 		if (Input.GetButtonDown ("Run") && mainCamera.GetComponent<Health>().tanooki) {
 			tailtimer = 0;
+			playSound (tanooki_attack, 0.7f);
 			mario_anim.SetBool("Attack", true);
 			// mario_anim.SetBool("Attack", false);
 		}
@@ -162,13 +174,14 @@ public class PlayerMovement : MonoBehaviour {
 			}
 		}
 		if (turn) {
-			audio.clip = TurnSound;
+			if (audio.isPlaying && audio.clip == RunSound) {
+				audio.Stop ();
+			}
 			if (!audio.isPlaying)
-				audio.Play();
+				playSound(TurnSound, 1.0f);
 		}
 		else {
-			audio.clip = TurnSound;
-			if (audio.isPlaying)
+			if (audio.isPlaying && audio.clip == TurnSound)
 				audio.Stop();
 		}
 		// terminal velocities in x-direction
@@ -200,11 +213,15 @@ public class PlayerMovement : MonoBehaviour {
 			GetComponent<PE_Obj2D>().acc.x = 0;
 		}
 		else if ((GetComponent<PE_Obj2D>().vel.x >= 9.0f) && Input.GetButton ("Right") && run && runmeter == 7) {
+			if (!audio.isPlaying && canJump)
+				playSound(RunSound, 1.0f);
 			mario_anim.SetBool ("Run", true);
 			GetComponent<PE_Obj2D>().vel.x = 11.0f;
 			GetComponent<PE_Obj2D>().acc.x = 0;
 		}
 		else if ((GetComponent<PE_Obj2D>().vel.x <= -9.0f) && Input.GetButton("Left") && run && runmeter == 7){
+			if (!audio.isPlaying && canJump)
+				playSound(RunSound, 1.0f);
 			mario_anim.SetBool ("Run", true);
 			GetComponent<PE_Obj2D>().vel.x = -11.0f;
 			GetComponent<PE_Obj2D>().acc.x = 0;
@@ -236,7 +253,7 @@ public class PlayerMovement : MonoBehaviour {
 				if (audio.isPlaying) {
 					audio.Stop ();
 				}
-				audio.PlayOneShot (JumpSound);
+				playSound (JumpSound, 1.0f);
 				// audio.Play();
 				//audio.PlayOneShot(JumpSound, 1.0f);
 				timer = 0;
@@ -247,6 +264,9 @@ public class PlayerMovement : MonoBehaviour {
 			else if (mainCamera.GetComponent<Health>().tanooki && ((Mathf.Abs(velAtTakeOff) < 11.0f) || (runmeter < 6))) {
 				mario_anim.SetBool("Hover",true);
 				mario_anim.SetBool("Fly",false);
+				audio.clip = tanooki_attack;
+				if (audio.clip == tanooki_attack && !audio.isPlaying)
+					playSound (tanooki_attack, 0.7f);
 				pauseEndTime = Time.realtimeSinceStartup + 15.0f * Time.fixedDeltaTime;
 				GetComponent<PE_Obj2D>().vel.y = -2.0f;
 				GetComponent<PE_Obj2D>().acc.y = 0;
@@ -255,6 +275,9 @@ public class PlayerMovement : MonoBehaviour {
 			else if (mainCamera.GetComponent<Health>().tanooki && (Mathf.Abs(velAtTakeOff) == 11.0f)) {
 				mario_anim.SetBool("Fly",true);
 				mario_anim.SetBool("Hover",true);
+				audio.clip = tanooki_attack;
+				if (audio.clip == tanooki_attack && !audio.isPlaying)
+					playSound (tanooki_attack, 0.7f);
 				pauseEndTime = Time.realtimeSinceStartup + 15.0f * Time.fixedDeltaTime;
 				GetComponent<PE_Obj2D>().vel.y = 5.0f;
 				GetComponent<PE_Obj2D>().acc.y = 0;
@@ -272,7 +295,7 @@ public class PlayerMovement : MonoBehaviour {
 			if (audio.isPlaying) {
 				audio.Stop ();
 			}
-			audio.PlayOneShot (HitSound);
+			playSound (HitSound, 1.0f);
 			// audio.Play();
 			//audio.PlayOneShot(JumpSound, 1.0f);
 			timer = 0;

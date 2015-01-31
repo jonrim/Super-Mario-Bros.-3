@@ -4,6 +4,15 @@ using System.Collections;
 public class ManagerScript : MonoBehaviour {
 	public bool IsMenuActive  = false;
 	public bool Main = false;
+	public AudioClip pauseSound;
+	public AudioClip levelStart;
+	public AudioClip levelMusic;
+
+	void playSound(AudioClip sound, float vol){
+		audio.clip = sound;
+		audio.volume = vol;
+		audio.Play();
+	}
 
 	void Awake () {
 		// DontDestroyOnLoad(gameObject);
@@ -11,13 +20,26 @@ public class ManagerScript : MonoBehaviour {
 	// Use this for initialization
 	void Start () {
 		Time.timeScale = 1;
+		playSound (levelStart, 0.8f);
 	}
 	
 	// Update is called once per frame
 	void Update () {
+		if (!audio.isPlaying && Time.timeScale == 1) {
+			playSound (levelMusic, 0.8f);
+		}
+		if (Time.timeScale == 0) {
+			audio.Pause ();
+		}
 		if (Input.GetKeyDown(KeyCode.Return)) {
-			if (IsMenuActive)
+			if (IsMenuActive) {
 				Time.timeScale = 1;
+				audio.Play ();
+			}
+			else {
+				audio.Pause();
+				audio.PlayOneShot(pauseSound);
+			}
 			IsMenuActive = !IsMenuActive;
 		}
 	}

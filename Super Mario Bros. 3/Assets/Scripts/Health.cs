@@ -18,16 +18,31 @@ public class Health : MonoBehaviour {
 	public GameObject mario_big;
 	public GameObject mario_tanooki;
 	public GameObject mario;
+	public Transform GameManager;
 	public Animator anim;
 	public float timer;
 	public bool invincible;
+	public AudioClip shrink_sound;
+	public AudioClip tanooki_obtained;
+	public AudioClip downed;
+	public AudioClip grow_bigger;
 	Vector2 position;
 	Vector2 holderPos;
+
+	void playSound(AudioClip sound, float vol){
+		audio.clip = sound;
+		audio.volume = vol;
+		audio.Play();
+	}
+
 	// Use this for initialization
 	void Start () {
+		GameManager = transform.FindChild("GameManager");
+		
 		mario_small = GameObject.Find ("Mario");
 		mario_big = GameObject.Find ("Mario_Big");
 		mario_tanooki = GameObject.Find ("Mario_Tanooki");
+
 		anim = mario_small.GetComponent<Animator>();
 		big = false;
 		tanooki = false;
@@ -45,17 +60,21 @@ public class Health : MonoBehaviour {
 			gothurt = false;
 		}
 		if ((gothurt && !big && !invincible) || (felloff)){
+			GameManager.audio.Stop ();
+			playSound (downed, 0.1f);
 			gothurt = false;
 			// make mario die
-			// Time.timeScale = 0.001f;
-			float pauseEndTime = Time.realtimeSinceStartup + 0.5f;
+			float pauseEndTime = Time.realtimeSinceStartup + 4.0f;
 			anim.SetBool("Dead", true);
+			
+			Time.timeScale = 0.001f;
 			while (Time.realtimeSinceStartup < pauseEndTime) {}
 			// PhysEngine2D.objs.Remove(mario_small.GetComponent<PE_Obj2D>());
 			// Time.timeScale = 1;
 			Application.LoadLevel(Application.loadedLevel);
 		}
 		else if (gothurt && !invincible && (type == PowerUp.mushroom)){
+			playSound (shrink_sound, 0.1f);
 			// make mario lose powerup
 			gothurt = false;
 			Time.timeScale = 0.001f;
@@ -89,6 +108,7 @@ public class Health : MonoBehaviour {
 			mario_small.GetComponent<PlayerMovement>().big = false;
 		}
 		else if (gothurt && !invincible && (type == PowerUp.tanooki)){
+			playSound (tanooki_obtained, 0.1f);
 			// make mario lose powerup
 			gothurt = false;
 			Time.timeScale = 0.001f;
@@ -125,8 +145,9 @@ public class Health : MonoBehaviour {
 		// mushroom
 		if (item_number == 1) {
 			if (!big) {
+				playSound (grow_bigger, 0.1f);
 				// freeze time
-				Time.timeScale = 0.001f;
+				Time.timeScale = 0.00f;
 				float pauseEndTime = Time.realtimeSinceStartup + 0.01f;
 				// delete small mario and add big mario
 				Vector3 facingDirection = new Vector3(mario_small.transform.localScale.x, mario_small.transform.localScale.y, mario_small.transform.localScale.z);
@@ -159,9 +180,10 @@ public class Health : MonoBehaviour {
 		}
 		// tanooki
 		else if (item_number == 2) {
+			playSound (tanooki_obtained, 0.1f);
 			if (!tanooki) {
 				// freeze time
-				Time.timeScale = 0.001f;
+				Time.timeScale = 0.00f;
 				float pauseEndTime = Time.realtimeSinceStartup + 0.01f;
 				// delete small mario and add big mario
 				Vector3 facingDirection;
