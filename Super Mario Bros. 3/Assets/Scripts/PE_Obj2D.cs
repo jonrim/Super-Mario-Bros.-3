@@ -88,7 +88,7 @@ public class PE_Obj2D : MonoBehaviour {
 			                                    this.transform.position.y + this.collider2D.bounds.size.y/2 + 0.5f), 
 			            this.transform.rotation);
 		}
-		else if (blocktimer >= 0.25f) {
+		else if (blocktimer >= 0.35f) {
 			if (spawn_multiplier) {
 				spawn_multiplier = false;
 				go_multiplier.GetComponent<ItemBehavior>().end_pos = this.transform.position.y + this.collider2D.bounds.size.y/2 + 0.5f;
@@ -124,7 +124,7 @@ public class PE_Obj2D : MonoBehaviour {
 	void ResolveCollisionWith(PE_Obj2D that) {
 			// print ("Collision between this: " + this.gameObject.tag + " and that: " + that.gameObject.tag);
 		if ((this.gameObject.tag == "Player") && (that.gameObject.tag == "Coin")) {
-			playSound(CoinSound, 2.0f);
+			mainCamera.GetComponent<Health>().playSound(CoinSound, 0.1f);
 			Destroy (that.gameObject);
 		}
 		if ((this.gameObject.tag == "Block_item" || this.gameObject.tag == "Block_empty" || this.gameObject.tag == "Block_breakable") &&

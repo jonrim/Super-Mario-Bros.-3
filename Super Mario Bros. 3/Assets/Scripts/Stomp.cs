@@ -21,9 +21,25 @@ public class Stomp : MonoBehaviour {
 			bounce();
 		}
 		if (other.gameObject.tag == "Shell") {
+			Shell shell = other.gameObject.GetComponent<Shell>();
 			if (other.gameObject.GetComponent<Shell>().moving) {
 				bounce ();
+//				shell.moving = false;
+//				shell.vel.x = 0;
+//				shell.timer = 0;
 			}
+//			Vector2 pos = new Vector2(other.gameObject.transform.position.x, other.gameObject.transform.position.y + 0.5f);
+//			other.gameObject.transform.position = pos;
+//			else {
+//				bounce ();
+//				if (this.transform.position.x < other.transform.position.x) {
+//					GetComponent<PE_Obj2D>().vel.x = -12.0f;
+//				} else {
+//					GetComponent<PE_Obj2D>().vel.x = 12.0f;
+//				}
+//				shell.moving = true;
+//				shell.timer = 0;
+//			}
 		}
 	}
 

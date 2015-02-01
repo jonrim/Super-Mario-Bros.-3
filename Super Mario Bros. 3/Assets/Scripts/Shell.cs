@@ -73,8 +73,6 @@ public class Shell : PE_Obj2D {
 		//print ("collided with " + other.gameObject.tag);
 		if (other.gameObject.tag == "Player" && !moving) 
 		{
-			Vector2 pos = new Vector2(other.gameObject.transform.position.x, other.gameObject.transform.position.y + 0.5f);
-			other.gameObject.transform.position = pos;
 			// print ("player hit me");
 			if (this.transform.position.x < other.transform.position.x) {
 				GetComponent<PE_Obj2D>().vel.x = -12.0f;
@@ -86,25 +84,30 @@ public class Shell : PE_Obj2D {
 			playSound(hit_by_shell, 1.0f);
 			//this.gameObject.tag = "Shell";
 		}
-		else if (other.gameObject.tag == "Player" && moving) {
-			mainCamera.GetComponent<Health>().gothurt = true;
-		}
 		else if (other.gameObject.tag == "PlayerFeet" && moving) {
+			Vector2 pos = new Vector2(other.gameObject.transform.position.x, other.gameObject.transform.position.y + 0.5f);
+			other.gameObject.transform.position = pos;
 			print ("stop");
 			moving = false;
 			vel.x = 0;
+			playSound(hit_by_shell, 1.0f);
 			timer = 0;
 		}
-		
+		else if (other.gameObject.tag == "Player" && moving && (transform.position.y < other.gameObject.transform.position.y + 2*other.collider2D.bounds.size.y - 0.3f)
+		         && (transform.position.y > other.gameObject.transform.position.y - 2*other.collider2D.bounds.size.y + 0.3f)) {
+			// mainCamera.GetComponent<Health>().gothurt = true;
+		}
 		else if (other.gameObject.tag == "Block_item" || other.gameObject.tag == "Block_empty" || other.gameObject.tag == "Block_breakable"
-		         && moving) {
+		         && moving && (transform.position.y < other.gameObject.transform.position.y + 2*other.collider2D.bounds.size.y - 0.3f)
+		         && (transform.position.y > other.gameObject.transform.position.y - 2*other.collider2D.bounds.size.y + 0.3f)) {
+			
+			GetComponent<PE_Obj2D>().vel.x = -GetComponent<PE_Obj2D>().vel.x;
 			if (other.gameObject.tag == "Block_breakable" && moving) {
 				playSound(breakSound, 1.0f);
 				PhysEngine2D.objs.Remove(other.gameObject.GetComponent<PE_Obj2D>());	
 				Destroy(other.gameObject);
 			}
 			else if (moving) {
-				GetComponent<PE_Obj2D>().vel.x = -GetComponent<PE_Obj2D>().vel.x;
 				playSound (hit_wall, 1.0f);
 			}
 			//audio.Play ();

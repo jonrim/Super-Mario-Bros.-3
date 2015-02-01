@@ -22,14 +22,15 @@ public class Health : MonoBehaviour {
 	public Animator anim;
 	public float timer;
 	public bool invincible;
+	public AudioClip CoinSound;
 	public AudioClip shrink_sound;
 	public AudioClip tanooki_obtained;
 	public AudioClip downed;
 	public AudioClip grow_bigger;
 	Vector2 position;
 	Vector2 holderPos;
-
-	void playSound(AudioClip sound, float vol){
+	public float pauseEndTime;
+	public void playSound(AudioClip sound, float vol){
 		audio.clip = sound;
 		audio.volume = vol;
 		audio.Play();
@@ -61,14 +62,29 @@ public class Health : MonoBehaviour {
 		}
 		if ((gothurt && !big && !invincible) || (felloff)){
 			GameManager.audio.Stop ();
+			anim.SetBool("Dead", true);
 			playSound (downed, 0.1f);
 			gothurt = false;
 			// make mario die
-			float pauseEndTime = Time.realtimeSinceStartup + 4.0f;
-			anim.SetBool("Dead", true);
+			pauseEndTime = Time.realtimeSinceStartup + 4.0f;
 			
 			Time.timeScale = 0.001f;
-			while (Time.realtimeSinceStartup < pauseEndTime) {}
+//			bool move_up = true;
+//			Vector2 top_pos = new Vector2(mario_small.transform.position.x, mario_small.transform.position.y + 2.0f);
+			while (Time.realtimeSinceStartup < pauseEndTime) {
+//				if (!felloff) {
+//					if (move_up) {
+//						Vector2 new_pos = new Vector2(mario_small.transform.position.x, mario_small.transform.position.y + 0.1f);
+//						mario_small.transform.position = new_pos;
+//						if (new_pos.y >= top_pos.y)
+//							move_up = false;
+//					}
+//					else {
+//						Vector2 new_pos = new Vector2(mario_small.transform.position.x, mario_small.transform.position.y - 0.1f);
+//						mario_small.transform.position = new_pos;
+//					}
+//				}
+			}
 			// PhysEngine2D.objs.Remove(mario_small.GetComponent<PE_Obj2D>());
 			// Time.timeScale = 1;
 			Application.LoadLevel(Application.loadedLevel);
