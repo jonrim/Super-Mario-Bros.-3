@@ -20,10 +20,14 @@ public class Piranha_plant : MonoBehaviour {
 	private bool direction; // true for right, false for left
 	private Animator anim;
 	private bool shot = false;
+	public bool fire;
 	// Use this for initialization
 	void Start () {
 		start_pos = transform.position.y;
-		transform.position = new Vector3(transform.position.x, start_pos - 2, transform.position.z);
+		if (fire)
+			transform.position = new Vector3(transform.position.x, start_pos - 2.42f, transform.position.z);
+		else
+			transform.position = new Vector3(transform.position.x, start_pos - 2, transform.position.z);
 		state = Piranha_state.INACTIVE;
 		anim = GetComponent<Animator>();
 		direction = false;
@@ -33,22 +37,22 @@ public class Piranha_plant : MonoBehaviour {
 	void Update() {
 		if (state == Piranha_state.INACTIVE || state == Piranha_state.WAITING)
 			return;
+		if (fire) {
+			if (player_pos.position.x > this.transform.position.x && direction == false) {
+				transform.localScale = new Vector3(-1, 1, 1);
+				direction = true;
+			}
+			else if (player_pos.position.x < this.transform.position.x && direction == true) {
+				transform.localScale = new Vector3(1, 1, 1);
+				direction = false;
+			}
 
-		if (player_pos.position.x > this.transform.position.x && direction == false) {
-			transform.localScale = new Vector3(-1, 1, 1);
-			direction = true;
+			if (player_pos.position.y > this.transform.position.y + 1) {
+				anim.SetBool("look_up", true);
+			} else {
+				anim.SetBool("look_up", false);
+			}
 		}
-		else if (player_pos.position.x < this.transform.position.x && direction == true) {
-			transform.localScale = new Vector3(1, 1, 1);
-			direction = false;
-		}
-
-		if (player_pos.position.y > this.transform.position.y + 1) {
-			anim.SetBool("look_up", true);
-		} else {
-			anim.SetBool("look_up", false);
-		}
-
 	}
 
 	void FixedUpdate () {
@@ -75,7 +79,7 @@ public class Piranha_plant : MonoBehaviour {
 			break;
 
 		case Piranha_state.SHOOTING:
-			if (timer < .6f && !shot) {
+			if (timer < .6f && !shot && fire) {
 
 				Vector3 fireball_pos = transform.position;
 				fireball_pos.y += .5f;
@@ -83,7 +87,6 @@ public class Piranha_plant : MonoBehaviour {
 				Vector3 dir = player_pos.transform.position - transform.position;
 				dir.y -= .5f;
 				if (dir.y > 0f) {
-;
 					if (3.5 * (dir.y + .5f) >= Mathf.Abs(dir.x)) { //45 degrees up
 						dir.y = Mathf.Abs(dir.x);
 					} else {
@@ -115,9 +118,13 @@ public class Piranha_plant : MonoBehaviour {
 		case Piranha_state.MOVING_DOWN:
 			
 			newPos = new Vector3(transform.position.x, transform.position.y - .08f, transform.position.z);
-			if (newPos.y <= start_pos - 2) {
-				newPos.y = start_pos - 2;
 
+			if (((newPos.y <= start_pos - 2.42f) && fire) || ((newPos.y <= start_pos - 2) && !fire)){
+				if (fire)
+					newPos.y = start_pos - 2.42f;
+				else
+					newPos.y = start_pos - 2;
+					
 				if (player_seen) {
 					state = Piranha_state.WAITING;
 					timer = 1.6f;
