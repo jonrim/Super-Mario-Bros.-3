@@ -39,6 +39,14 @@ public class ItemBehavior : PE_Obj2D {
 	}
 	// Update is called once per frame
 	void Update () {
+		if (coin) {
+			Vector3 newPos = new Vector3(transform.position.x, transform.position.y + .3f, transform.position.z);
+			if (newPos.y >= end_pos) {
+				Destroy (transform.gameObject);
+			}
+			transform.position = newPos;
+			return;
+		}
 		Vector2 point1 = new Vector2(is_on_ground.transform.position.x - is_on_ground.collider2D.bounds.size.x/2, 
 		                             is_on_ground.transform.position.y - is_on_ground.collider2D.bounds.size.y/2);
 		Vector2 point2 = new Vector2(is_on_ground.transform.position.x + is_on_ground.collider2D.bounds.size.x/2, 
@@ -57,14 +65,6 @@ public class ItemBehavior : PE_Obj2D {
 				acc.y = 0;
 				vel.y = -15.0f;
 			}
-		}
-		if (coin) {
-			Vector3 newPos = new Vector3(transform.position.x, transform.position.y + .3f, transform.position.z);
-			if (newPos.y >= end_pos) {
-				Destroy (transform.gameObject);
-			}
-			transform.position = newPos;
-			return;
 		}
 		if (!tanooki && !coin && timer < 1.0f) {
 			Vector3 newPos = new Vector3(transform.position.x, transform.position.y + .07f, transform.position.z);
