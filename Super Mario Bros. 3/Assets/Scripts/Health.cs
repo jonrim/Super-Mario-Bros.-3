@@ -123,7 +123,7 @@ public class Health : MonoBehaviour {
 			//Instantiate(mario_small, mario_big.transform.position, mario_big.transform.rotation);
 			Vector3 facingDirection = new Vector3(mario_big.transform.localScale.x, mario_big.transform.localScale.y,
 			                         mario_big.transform.localScale.z);
-			Vector3 loc = new Vector2(mario_big.transform.position.x, mario_big.transform.position.y);
+			Vector3 loc = new Vector2(mario_big.transform.position.x, mario_big.transform.position.y - 0.4f);
 			mario_small.GetComponent<PE_Obj2D>().vel = mario_big.GetComponent<PE_Obj2D>().vel;
 			mario_big.gameObject.SetActive(false);
 			mario_small.transform.localScale = facingDirection;
@@ -191,13 +191,14 @@ public class Health : MonoBehaviour {
 				float pauseEndTime = Time.realtimeSinceStartup + 0.01f;
 				// delete small mario and add big mario
 				Vector3 facingDirection = new Vector3(mario_small.transform.localScale.x, mario_small.transform.localScale.y, mario_small.transform.localScale.z);
-				Vector2 loc = new Vector2(mario_small.transform.position.x, mario_small.transform.position.y);
+				Vector2 loc = new Vector2(mario_small.transform.position.x, mario_small.transform.position.y + 0.4f);
 				mario_big.GetComponent<PE_Obj2D>().vel = mario_small.GetComponent<PE_Obj2D>().vel;
 
 				mario_big.transform.localScale = facingDirection;
 				mario_big.transform.position = loc;
-				mario_big.gameObject.SetActive(true);
 				mario_small.gameObject.SetActive(false);
+				mario_big.gameObject.SetActive(true);
+
 				// Instantiate(mario_big, mario_small.transform.position, mario_small.transform.rotation);
 				//mario_big.transform.localScale = new Vector3 (mario_small.transform.localScale.x, mario_small.transform.localScale.y,
 				                                             // mario_small.transform.localScale.z);
@@ -213,6 +214,7 @@ public class Health : MonoBehaviour {
 				while (Time.realtimeSinceStartup < pauseEndTime) {}
 				anim.speed = 1.0f;
 				Time.timeScale = 1;
+				type = PowerUp.mushroom;
 				big = true;
 				mario_big.GetComponent<PlayerMovement>().big = true;
 			}
@@ -260,6 +262,7 @@ public class Health : MonoBehaviour {
 				anim.speed = 1.0f;
 				Time.timeScale = 1;
 				tanooki = true;
+				type = PowerUp.tanooki;
 				mario_tanooki.GetComponent<PlayerMovement>().big = true;
 			}
 			item_number = 0;

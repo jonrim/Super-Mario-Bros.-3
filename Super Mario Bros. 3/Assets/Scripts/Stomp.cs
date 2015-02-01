@@ -14,7 +14,8 @@ public class Stomp : MonoBehaviour {
 	}
 
 	void OnTriggerEnter2D (Collider2D other) {
-
+		if (other.gameObject.GetComponent<PE_Obj2D>() == null)
+			return;
 		if (other.gameObject.tag == "Enemy") {
 			other.gameObject.transform.GetComponent<Enemy_Death>().dead = true;
 
