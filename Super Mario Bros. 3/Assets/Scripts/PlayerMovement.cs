@@ -285,7 +285,7 @@ public class PlayerMovement : MonoBehaviour {
 					runmeter++;
 				hover = true;
 			}
-			else {
+			else if (mainCamera.GetComponent<Health>().tanooki) {
 				mario_anim.SetBool("Fly",false);
 				mario_anim.SetBool("Hover",false);
 			}
@@ -340,7 +340,7 @@ public class PlayerMovement : MonoBehaviour {
 				GetComponent<PE_Obj2D>().vel.y = -15.0f;
 			}
 		}
-		if (canJump2) {
+		if (canJump2 && mainCamera.GetComponent<Health>().tanooki) {
 			hover = false;
 			mario_anim.SetBool("Hover",hover);
 		}

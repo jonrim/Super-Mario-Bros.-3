@@ -30,6 +30,9 @@ public class Health : MonoBehaviour {
 	Vector2 position;
 	Vector2 holderPos;
 	public float pauseEndTime;
+	private bool dead;
+	private bool move_up;
+	Vector2 top_pos;
 	public void playSound(AudioClip sound, float vol){
 		audio.clip = sound;
 		audio.volume = vol;
@@ -60,15 +63,17 @@ public class Health : MonoBehaviour {
 			invincible = false;
 			gothurt = false;
 		}
-		if ((gothurt && !big && !invincible) || (felloff)){
+		if (((gothurt && !big && !invincible) || (felloff)) && !dead) {
 			GameManager.audio.Stop ();
 			anim.SetBool("Dead", true);
 			playSound (downed, 0.1f);
 			gothurt = false;
 			// make mario die
 			pauseEndTime = Time.realtimeSinceStartup + 4.0f;
-			
+			move_up = true;
+			top_pos = new Vector2(mario_small.transform.position.x, mario_small.transform.position.y + 2.0f);
 			Time.timeScale = 0.001f;
+			dead = true;
 //			bool move_up = true;
 //			Vector2 top_pos = new Vector2(mario_small.transform.position.x, mario_small.transform.position.y + 2.0f);
 			while (Time.realtimeSinceStartup < pauseEndTime) {
@@ -85,9 +90,28 @@ public class Health : MonoBehaviour {
 //					}
 //				}
 			}
-			// PhysEngine2D.objs.Remove(mario_small.GetComponent<PE_Obj2D>());
-			// Time.timeScale = 1;
 			Application.LoadLevel(Application.loadedLevel);
+			
+			PhysEngine2D.objs.Remove(mario_small.GetComponent<PE_Obj2D>());
+			// Time.timeScale = 1;
+		}
+		else if (dead) {
+//			if (!felloff) {
+//				if (move_up) {
+//					Vector2 new_pos = new Vector2(mario_small.transform.position.x, mario_small.transform.position.y + 0.1f);
+//					mario_small.transform.position = new_pos;
+//					if (new_pos.y >= top_pos.y)
+//						move_up = false;
+//				}
+//				else {
+//					Vector2 new_pos = new Vector2(mario_small.transform.position.x, mario_small.transform.position.y - 0.1f);
+//					mario_small.transform.position = new_pos;
+//				}
+//			}
+//			if (Time.realtimeSinceStartup > pauseEndTime) {
+//				Application.LoadLevel(Application.loadedLevel);
+//			}
+//			return;
 		}
 		else if (gothurt && !invincible && (type == PowerUp.mushroom)){
 			playSound (shrink_sound, 0.1f);

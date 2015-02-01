@@ -93,14 +93,14 @@ public class PE_Obj2D : MonoBehaviour {
 				spawn_multiplier = false;
 				go_multiplier.GetComponent<ItemBehavior>().end_pos = this.transform.position.y + this.collider2D.bounds.size.y/2 + 0.5f;
 				Instantiate(go_multiplier, new Vector2(this.transform.position.x,
-				                                       this.transform.position.y), 
+				                                       this.transform.position.y + 0.2f), 
 				            this.transform.rotation);
 			}
 			else if (spawn_mushroom) {
 				spawn_mushroom = false;
 				go_mushroom.GetComponent<ItemBehavior>().end_pos = this.transform.position.y + this.collider2D.bounds.size.y/2 + 0.5f;
 				Instantiate(go_mushroom, new Vector2(this.transform.position.x,
-				                                     this.transform.position.y), 
+				                                     this.transform.position.y + 0.2f), 
 				            this.transform.rotation);
 				
 			}
