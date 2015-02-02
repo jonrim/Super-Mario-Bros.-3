@@ -20,7 +20,8 @@ public class ManagerScript : MonoBehaviour {
 	// Use this for initialization
 	void Start () {
 		Time.timeScale = 1;
-		playSound (levelStart, 0.8f);
+		if (levelStart != null)
+			playSound (levelStart, 0.8f);
 	}
 	
 	// Update is called once per frame
