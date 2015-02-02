@@ -72,6 +72,11 @@ public virtual void Update () {
 				vel.y = -15.0f;
 			}
 		}
+		if (transform.position.y < -4.0f) {
+			if (GetComponent<PE_Obj2D>() != null)
+				PhysEngine2D.objs.Remove(GetComponent<PE_Obj2D>());
+			Destroy (transform.gameObject);
+		}
 	}
 
 	public override void OnTriggerEnter2D(Collider2D other){

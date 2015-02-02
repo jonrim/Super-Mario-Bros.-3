@@ -19,7 +19,8 @@ public class Enemy_Death : MonoBehaviour {
 		if (dead && !dead_anim) {
 			enemy_anim.SetBool ("Dead", dead);
 			timer = 0;
-			PhysEngine2D.objs.Remove(transform.GetComponent<Enemy_AI>());
+			if (GetComponent<Enemy_AI>() != null)
+				PhysEngine2D.objs.Remove(GetComponent<Enemy_AI>());
 			transform.gameObject.GetComponent<PE_Obj2D>().still = true;
 			dead_anim = true;
 		}
@@ -34,7 +35,8 @@ public class Enemy_Death : MonoBehaviour {
 //			deadbytail = true;
 //		}
 		if ((timer >= 0.2f && timer <= 5.0f && dead_anim) || (timer >= 3.0f && timer <= 5.0f && deadbytail)) {
-			// PhysEngine2D.objs.Remove(transform.parent.gameObject.GetComponent<PE_Obj2D>());
+			if (GetComponent<PE_Obj2D>() != null)
+				PhysEngine2D.objs.Remove(GetComponent<PE_Obj2D>());
 			Destroy (transform.gameObject);
 		}
 		timer += Time.fixedDeltaTime;
