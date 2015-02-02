@@ -29,7 +29,7 @@ public class PlayerMovement : MonoBehaviour {
 	public BoxCollider2D coll;
 	private GameObject mainCamera;
 	public AudioClip tanooki_attack;
-
+	public bool original;
 	void playSound(AudioClip sound, float vol){
 		audio.clip = sound;
 		audio.volume = vol;
@@ -41,6 +41,7 @@ public class PlayerMovement : MonoBehaviour {
 	}
 	// Use this for initialization
 	void Start () {
+		RunMeter = GameObject.Find("RunMeter").GetComponent<GUIText>() as GUIText;
 		mario_anim = GetComponent<Animator>();
 		is_on_ground = transform.FindChild("IsOnGround");
 		mainCamera = GameObject.Find ("Main Camera");
@@ -362,6 +363,7 @@ public class PlayerMovement : MonoBehaviour {
 		if (this.gameObject.transform.position.y <= mainCamera.transform.position.y - 12) {
 			mainCamera.GetComponent<Health>().felloff = true;
 		}
-		RunMeter.text = "Run Meter: " + runmeter;
+		if (original)
+			RunMeter.text = "Run Meter: " + runmeter;
 	}
 }

@@ -128,7 +128,7 @@ public class PE_Obj2D : MonoBehaviour {
 			Destroy (that.gameObject);
 		}
 		if ((this.gameObject.tag == "Block_item" || this.gameObject.tag == "Block_empty" || this.gameObject.tag == "Block_breakable") &&
-		    (that.gameObject.tag == "Block_item" || that.gameObject.tag == "Block_empty" || this.gameObject.tag == "Block_breakable")) {
+		    (that.gameObject.tag == "Block_item" || that.gameObject.tag == "Block_empty" || that.gameObject.tag == "Block_breakable")) {
 			if (transform.position.x < that.gameObject.transform.position.x)
 				BlockOnRight = true;
 			else
@@ -157,7 +157,7 @@ public class PE_Obj2D : MonoBehaviour {
 		if ((that.gameObject.tag != "Player") && (this.gameObject.tag != "ItemBottom") &&
 		    !(this.gameObject.tag == "Item" && that.gameObject.tag == "Item") && 
 		    !(this.gameObject.tag == "Enemy" && that.gameObject.tag == "Enemy") &&
-		    !(that.gameObject.tag == "Coin" && this.gameObject.tag == "Player") &&
+		    !(that.gameObject.tag == "Coin" && this.gameObject.tag == "Player") && (this.gameObject.tag != "Block_breakable") && (this.gameObject.tag != "Block_empty") &&
 		    (this.gameObject.tag != "Block_item") && !(that.gameObject.tag == "Item" && this.gameObject.tag == "Player") && !(that.gameObject.tag == "Enemy" &&
 		     this.gameObject.tag == "Player" && mainCamera.GetComponent<Health>().invincible == true)){
 

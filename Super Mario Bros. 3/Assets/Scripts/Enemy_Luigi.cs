@@ -12,7 +12,8 @@ public class Enemy_Luigi : PE_Obj2D {
 	public AudioClip hit_by_shell;
 	public bool dead = false;
 	public AudioClip breakSound;
-	
+	public AudioClip peachSound;
+	public AudioClip kingSound;
 	void playSound(AudioClip sound, float vol){
 		audio.clip = sound;
 		audio.volume = vol;
@@ -78,8 +79,18 @@ public virtual void Update () {
 		// if (other == null) {
 		// 	return;
 		// } else if (other.gameObject.tag == "Shell") {
-		if (other.gameObject.tag == "Block_item" || other.gameObject.tag == "Block_empty" || other.gameObject.tag == "Block_breakable") {
-			playSound(breakSound, 1.0f);
+		if (other.gameObject.tag != "Floor" && other.gameObject.tag != "Player") {
+			if (other.gameObject.tag == "Block_item" || other.gameObject.tag == "Block_empty" || other.gameObject.tag == "Block_breakable" ||
+		    	other.gameObject.tag == "Item") {
+				if (!audio.isPlaying || audio.clip == breakSound)
+					playSound(breakSound, 1.0f);
+			}
+			else if (other.gameObject.tag == "Peach") {
+				playSound (peachSound, 1.0f);
+			}
+			else if (other.gameObject.tag == "King") {
+				playSound (kingSound, 1.0f);
+			}
 			if (other.gameObject.GetComponent<PE_Obj2D>() != null)
 				PhysEngine2D.objs.Remove(other.gameObject.GetComponent<PE_Obj2D>());
 			Destroy (other.gameObject);

@@ -32,6 +32,7 @@ public class Health : MonoBehaviour {
 	public float pauseEndTime;
 	private bool dead;
 	private bool move_up;
+	public bool cloned;
 	Vector2 top_pos;
 	public void playSound(AudioClip sound, float vol){
 		audio.clip = sound;
@@ -56,7 +57,15 @@ public class Health : MonoBehaviour {
 		timer = 10.0f;
 		holderPos = new Vector2(-13.0f,0.0f);
 	}
-	
+	void Update () {
+		if (cloned) {
+//			GameObject clone = GameObject.Find ("Mario(Clone)");
+//			if (clone.transform.position.x > mario_small.transform.position.x + 2.0f)
+//				clone.transform.position = new Vector2(mario_small.transform.position.x + 1.9f, clone.transform.position.y);
+//			else if (clone.transform.position.x < mario_small.transform.position.x - 2.0f)
+//				clone.transform.position = new Vector2(mario_small.transform.position.x - 1.9f, clone.transform.position.y);
+		}
+	}
 	// Update is called once per frame
 	void FixedUpdate () {
 		if ((timer > 3.0f) && invincible){
@@ -270,8 +279,10 @@ public class Health : MonoBehaviour {
 		else if (item_number == 3) {
 			Vector2 pos = new Vector2( mario_small.transform.position.x, mario_small.transform.position.y + 5.0f);
 			// Vector2 pos = new Vector2( mario_small.transform.position.x + 1.0f, mario_small.transform.position.y);
+			mario.gameObject.GetComponent<PlayerMovement>().original = false;
 			Instantiate(mario, pos, mario_small.transform.rotation);
 			item_number = 0;
+			cloned = true;
 		}
 		if (type == PowerUp.none) {
 			mario_tanooki.transform.position = holderPos;

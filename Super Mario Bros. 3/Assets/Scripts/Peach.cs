@@ -52,7 +52,6 @@ public class Peach : PE_Obj2D {
 		// next bool needed so that you can't jump off walls
 		canJump2 = Physics2D.OverlapPoint(is_on_ground.position, GroundLayers);
 		// go in opposite direction if the enemy approaches a cliff
-		print (transform.position.x);
 		if (transform.position.x >= 5.0f) {
 			anim.SetBool ("Cry", true);
 			vel.x = 0;
