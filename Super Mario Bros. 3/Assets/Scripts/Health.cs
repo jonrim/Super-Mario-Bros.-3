@@ -276,7 +276,7 @@ public class Health : MonoBehaviour {
 			}
 			item_number = 0;
 		}
-		else if (item_number == 3) {
+		else if (item_number == 3 && !cloned) {
 			Vector2 pos = new Vector2( mario_small.transform.position.x, mario_small.transform.position.y + 5.0f);
 			// Vector2 pos = new Vector2( mario_small.transform.position.x + 1.0f, mario_small.transform.position.y);
 			mario.gameObject.GetComponent<PlayerMovement>().original = false;

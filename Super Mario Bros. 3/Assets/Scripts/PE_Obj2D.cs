@@ -211,7 +211,7 @@ public class PE_Obj2D : MonoBehaviour {
 						eY1 = pos1.y - this.collider2D.bounds.size.y / 2; // current bottom side
 						eX2 = thatP.x + that.collider2D.bounds.size.x / 2 ; // other object's right side 
 						eY2 = thatP.y + that.collider2D.bounds.size.y / 2 ; // other object's  top side.
-						if (((Mathf.Abs(eY0 - eY2) <= 0.1)) 
+						if (((Mathf.Abs(eY0 - eY2) <= 0.2f)) 
 						    && !((that.gameObject.tag == "Platform") && (vel.y > 0))) { // land on top
 							float dist = this.collider2D.bounds.size.y/2 + that.collider2D.bounds.size.y/2;
 							vel.y = 0;
@@ -288,7 +288,7 @@ public class PE_Obj2D : MonoBehaviour {
 						eX2 = thatP.x - that.collider2D.bounds.size.x / 2 ;
 						eY2 = thatP.y + that.collider2D.bounds.size.y / 2 ;
 
-						if ((Mathf.Abs(eY1 - eY2) <= 0.1)  
+						if ((Mathf.Abs(eY1 - eY2) <= 0.2f)  
 							&& !((that.gameObject.tag == "Platform") && (vel.y > 0))) { // land on top
 							float dist = this.collider2D.bounds.size.y/2 + that.collider2D.bounds.size.y/2;
 							vel.y = 0;

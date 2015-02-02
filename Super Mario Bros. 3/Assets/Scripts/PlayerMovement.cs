@@ -56,6 +56,10 @@ public class PlayerMovement : MonoBehaviour {
 	}
 	// Update is called once per frame
 	void Update () {
+		if (transform == null)
+			return;
+		if (is_on_ground == null)
+			return;
 		if (run && runmeter < 7 && runtimer < Time.realtimeSinceStartup && !turn && 
 		    (Input.GetButton("Left") || Input.GetButton("Right")) && Mathf.Abs(GetComponent<PE_Obj2D>().vel.x) >= 3.0f) {
 			runmeter++;
