@@ -29,7 +29,7 @@ public class Enemy_AI : PE_Obj2D {
 		// vel.x = -2.0f;
 		transform.localScale = new Vector3(1, 1, 1);
 
-		vel.x = 2.0f*-Mathf.Sign(mario.transform.position.x - transform.position.x);
+		vel.x = 2.0f*Mathf.Sign(mario.transform.position.x - transform.position.x);
 		float sign = Mathf.Sign (vel.x);
 		transform.localScale = new Vector3(-sign, 1, 1);
 		
@@ -70,7 +70,7 @@ public virtual void Update () {
 				vel.y = -15.0f;
 			}
 		}
-		if (!canJump2 && vel.y == 0) {
+		if (!canJump2 && vel.y == 0 && acc.y == 0) {
 			turnAround();
 		}
 	}
