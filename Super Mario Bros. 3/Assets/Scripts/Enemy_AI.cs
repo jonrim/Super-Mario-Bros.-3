@@ -104,7 +104,9 @@ public virtual void Update () {
 			audio.PlayOneShot(hit_by_shell);
 			dead = true;
 		}
-		else if (otherColl.gameObject.tag == "Block_item" || otherColl.gameObject.tag == "Block_empty" || otherColl.gameObject.tag == "Block_breakable") {
+		else if ((otherColl.gameObject.tag == "Block_item" || otherColl.gameObject.tag == "Block_empty" || otherColl.gameObject.tag == "Block_breakable")
+				&& (transform.position.y < otherColl.gameObject.transform.position.y + otherColl.collider2D.bounds.size.y - 0.1f) &&
+		         (transform.position.y > otherColl.gameObject.transform.position.y - otherColl.collider2D.bounds.size.y + 0.1f)) {
 			turnAround();
 			base.OnTriggerEnter2D(otherColl);
 		} else {
