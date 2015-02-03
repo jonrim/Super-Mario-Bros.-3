@@ -30,6 +30,7 @@ public class PlayerMovement : MonoBehaviour {
 	private GameObject mainCamera;
 	public AudioClip tanooki_attack;
 	public bool original;
+	public bool CanClimb;
 	void playSound(AudioClip sound, float vol){
 		audio.clip = sound;
 		audio.volume = vol;
@@ -79,7 +80,26 @@ public class PlayerMovement : MonoBehaviour {
 		canJump = Physics2D.OverlapArea(point1, point2, GroundLayers, 0, 0);
 		// next bool needed so that you can't jump off walls
 		canJump2 = Physics2D.OverlapPoint(is_on_ground.position, GroundLayers);
-		if ((Input.GetAxis ("Vertical") == -1) && big &&
+		if (Input.GetAxis ("Vertical") == 1 && CanClimb) {
+			mario_anim.SetBool("Climb", true);
+			Vector2 pos = new Vector2(transform.position.x, transform.position.y + 0.1f);
+			transform.position = pos;
+			GetComponent<PE_Obj2D>().vel.y = 0;
+			GetComponent<PE_Obj2D>().vel.x = 0;
+			GetComponent<PE_Obj2D>().acc.y = 0;
+		}
+		else if (Input.GetAxis ("Vertical") == -1 && CanClimb) {
+			mario_anim.SetBool("Climb", true);
+			Vector2 pos = new Vector2(transform.position.x, transform.position.y - 0.1f);
+			transform.position = pos;
+			GetComponent<PE_Obj2D>().vel.y = 0;
+			GetComponent<PE_Obj2D>().vel.x = 0;
+			GetComponent<PE_Obj2D>().acc.y = 0;
+		}
+		else if (!CanClimb) {
+			mario_anim.SetBool("Climb", false);
+		}
+		else if ((Input.GetAxis ("Vertical") == -1) && big &&
 		    ((Input.GetButton ("Left") && Input.GetButton ("Right")) || ( !Input.GetButton ("Left") && !Input.GetButton ("Right")))) {
 			mario_anim.SetBool("Crouch",true);
 			coll.size = new Vector2(coll.size.x, normalHeight*0.67f);
@@ -253,6 +273,9 @@ public class PlayerMovement : MonoBehaviour {
 //		}
 
 		if (Input.GetButtonDown ("Jump")) {
+			if (CanClimb) {
+				mario_anim.SetBool("Climb", false);
+			}
 			if ((canJump) && (canJump2)){
 				GetComponent<PE_Obj2D>().vel.y = 10.0f;
 				if (audio.isPlaying) {

@@ -120,8 +120,16 @@ public class PE_Obj2D : MonoBehaviour {
 	virtual public void OnTriggerStay2D(Collider2D other) {
 		OnTriggerEnter2D(other);
 	}
+	virtual public void OnTriggerExit2D(Collider2D other) {
+		if ((this.gameObject.tag == "Player") && (other.gameObject.tag == "Ladder")) {
+			GetComponent<PlayerMovement>().CanClimb = false;
+		}
+	}
 	
 	void ResolveCollisionWith(PE_Obj2D that) {
+		if ((this.gameObject.tag == "Player") && (that.gameObject.tag == "Ladder")) {
+			GetComponent<PlayerMovement>().CanClimb = true;
+		}
 			// print ("Collision between this: " + this.gameObject.tag + " and that: " + that.gameObject.tag);
 		if ((this.gameObject.tag == "Player") && (that.gameObject.tag == "Coin")) {
 			mainCamera.GetComponent<Health>().playSound(CoinSound, 0.1f);
@@ -156,6 +164,7 @@ public class PE_Obj2D : MonoBehaviour {
 		}
 		if ((that.gameObject.tag != "Player") && (this.gameObject.tag != "ItemBottom") &&
 		    !(this.gameObject.tag == "Item" && that.gameObject.tag == "Item") && 
+		    !(this.gameObject.tag == "Player" && that.gameObject.tag == "Ladder") && 
 		    !(this.gameObject.tag == "Enemy" && that.gameObject.tag == "Enemy") &&
 		    !(that.gameObject.tag == "Coin" && this.gameObject.tag == "Player") && (this.gameObject.tag != "Block_breakable") && (this.gameObject.tag != "Block_empty") &&
 		    (this.gameObject.tag != "Block_item") && !(that.gameObject.tag == "Item" && this.gameObject.tag == "Player") && !(that.gameObject.tag == "Enemy" &&
