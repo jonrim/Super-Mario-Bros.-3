@@ -12,6 +12,7 @@ public class Shell : PE_Obj2D {
 	public AudioClip hit_by_shell;
 	public AudioClip hit_wall;
 	public AudioClip breakSound;
+	public bool carried = false;
 
 	void playSound(AudioClip sound, float vol){
 		audio.clip = sound;
@@ -30,6 +31,11 @@ public class Shell : PE_Obj2D {
 	}
 	// Update is called once per frame
 	void FixedUpdate () {
+		if (carried) {
+			vel.x = 0;
+			return;
+		}
+
 		if (vel.x == 0)
 			moving = false;
 		if (!moving) {
@@ -37,7 +43,7 @@ public class Shell : PE_Obj2D {
 					anim.SetBool ("twitch", true);		
 				}
 				anim.speed = 1.0f + Mathf.Pow (timer / 7.0f, 7);
-			if (timer >= 7.0f) {
+			if (timer >= 7000000.0f) {
 					PhysEngine2D.objs.Remove (transform.gameObject.GetComponent<PE_Obj2D> ());
 					Destroy (transform.gameObject);
 					Vector2 pos = new Vector2(transform.position.x, transform.position.y + 0.5f);
@@ -63,6 +69,16 @@ public class Shell : PE_Obj2D {
 
 	}
 
+	IEnumerator stopCarry() {
+		while (Input.GetButton("Run")) {
+			yield return null;
+		}
+
+		gameObject.layer = 11;
+		carried = false;
+		transform.parent = null;
+	}
+
 	public override void OnTriggerEnter2D(Collider2D otherColl){
 		// print ("I collided with something");
 		PE_Obj2D other = otherColl.gameObject.GetComponent<PE_Obj2D>();
@@ -73,16 +89,25 @@ public class Shell : PE_Obj2D {
 		//print ("collided with " + other.gameObject.tag);
 		if (other.gameObject.tag == "Player" && !moving) 
 		{
-			// print ("player hit me");
-			if (this.transform.position.x < other.transform.position.x) {
-				GetComponent<PE_Obj2D>().vel.x = -12.0f;
+			if (Input.GetButton("Run")) {
+				print ("carry");
+				transform.parent = otherColl.transform;
+				gameObject.layer = 19;
+				vel.x = 0;
+				carried = true;
+				StartCoroutine("stopCarry");
 			} else {
-				GetComponent<PE_Obj2D>().vel.x = 12.0f;
+				print ("hit");
+				transform.parent = null;
+				if (this.transform.position.x < other.transform.position.x) {
+					GetComponent<PE_Obj2D>().vel.x = -12.0f;
+				} else {
+					GetComponent<PE_Obj2D>().vel.x = 12.0f;
+				}
+				moving = true;
+				timer = 0;
+				playSound(hit_by_shell, 1.0f);
 			}
-			moving = true;
-			timer = 0;
-			playSound(hit_by_shell, 1.0f);
-			//this.gameObject.tag = "Shell";
 		}
 		else if (other.gameObject.tag == "PlayerFeet" && moving) {
 			Vector2 pos = new Vector2(other.gameObject.transform.position.x, other.gameObject.transform.position.y + 0.5f);

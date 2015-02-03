@@ -107,5 +107,12 @@ public class Piranha_plant_green : MonoBehaviour {
 			GameObject mainCamera = GameObject.Find ("Main Camera");
 			mainCamera.GetComponent<Health>().gothurt = true;
 		}
+		else if (other.gameObject.tag == "Tail") {
+			float thisHeight = GetComponent<BoxCollider2D>().bounds.size.y;
+			float topOfPipe = start_pos - thisHeight + .2f;
+			if (transform.position.y + thisHeight > topOfPipe && other.transform.position.y + other.bounds.size.y > topOfPipe) {
+				Destroy (gameObject);
+			}
+		}
 	}
 }
