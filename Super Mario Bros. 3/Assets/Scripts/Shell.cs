@@ -43,7 +43,7 @@ public class Shell : PE_Obj2D {
 					anim.SetBool ("twitch", true);		
 				}
 				anim.speed = 1.0f + Mathf.Pow (timer / 7.0f, 7);
-			if (timer >= 7000000.0f) {
+			if (timer >= 9.0f) {
 					PhysEngine2D.objs.Remove (transform.gameObject.GetComponent<PE_Obj2D> ());
 					Destroy (transform.gameObject);
 					Vector2 pos = new Vector2(transform.position.x, transform.position.y + 0.5f);
@@ -71,6 +71,7 @@ public class Shell : PE_Obj2D {
 
 	IEnumerator stopCarry() {
 		while (Input.GetButton("Run")) {
+			transform.localPosition = new Vector3(.6f, 0, 0);
 			yield return null;
 		}
 
