@@ -96,9 +96,6 @@ public class PlayerMovement : MonoBehaviour {
 			GetComponent<PE_Obj2D>().vel.x = 0;
 			GetComponent<PE_Obj2D>().acc.y = 0;
 		}
-		else if (!CanClimb) {
-			mario_anim.SetBool("Climb", false);
-		}
 		else if ((Input.GetAxis ("Vertical") == -1) && big &&
 		    ((Input.GetButton ("Left") && Input.GetButton ("Right")) || ( !Input.GetButton ("Left") && !Input.GetButton ("Right")))) {
 			mario_anim.SetBool("Crouch",true);
@@ -116,6 +113,9 @@ public class PlayerMovement : MonoBehaviour {
 		}
 		else if ((Input.GetButton ("Run") || Input.GetButtonUp ("Run")) && mainCamera.GetComponent<Health>().tanooki) {
 			mario_anim.SetBool("Attack", false);
+		}
+		if (!CanClimb) {
+			mario_anim.SetBool("Climb", false);
 		}
 		if (mainCamera.GetComponent<Health>().tanooki) {
 			if (tailtimer >= 0.05f && tailtimer <= 0.35f) {

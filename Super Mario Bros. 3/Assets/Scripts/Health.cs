@@ -22,6 +22,7 @@ public class Health : MonoBehaviour {
 	public Animator anim;
 	public float timer;
 	public bool invincible;
+	public bool invincibility_mode;
 	public AudioClip CoinSound;
 	public AudioClip shrink_sound;
 	public AudioClip tanooki_obtained;
@@ -58,6 +59,16 @@ public class Health : MonoBehaviour {
 		holderPos = new Vector2(-13.0f,0.0f);
 	}
 	void Update () {
+		if (Input.GetKeyDown (KeyCode.G)) {
+			print("Pressed G key");
+			invincibility_mode = !invincibility_mode;
+		}
+		if (invincibility_mode) {
+			invincible = true;
+		}
+		else {
+			invincible = false;
+		}
 		if (cloned) {
 //			GameObject clone = GameObject.Find ("Mario(Clone)");
 //			if (clone.transform.position.x > mario_small.transform.position.x + 2.0f)
@@ -68,7 +79,7 @@ public class Health : MonoBehaviour {
 	}
 	// Update is called once per frame
 	void FixedUpdate () {
-		if ((timer > 3.0f) && invincible){
+		if ((timer > 3.0f) && invincible && !invincibility_mode){
 			invincible = false;
 			gothurt = false;
 		}
