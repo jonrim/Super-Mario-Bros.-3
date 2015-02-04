@@ -167,8 +167,8 @@ public class PE_Obj2D : MonoBehaviour {
 		    !(this.gameObject.tag == "Player" && that.gameObject.tag == "Ladder") && 
 		    !(this.gameObject.tag == "Enemy" && that.gameObject.tag == "Enemy") &&
 		    !(that.gameObject.tag == "Coin" && this.gameObject.tag == "Player") && (this.gameObject.tag != "Block_breakable") && (this.gameObject.tag != "Block_empty") &&
-		    (this.gameObject.tag != "Block_item") && !(that.gameObject.tag == "Item" && this.gameObject.tag == "Player") && !(that.gameObject.tag == "Enemy" &&
-		     this.gameObject.tag == "Player" && mainCamera.GetComponent<Health>().invincible == true)){
+		    (this.gameObject.tag != "Block_item") && !(that.gameObject.tag == "Item" && this.gameObject.tag == "Player") && !((that.gameObject.tag == "Enemy" || 
+		     that.gameObject.name == "Fireball") && this.gameObject.tag == "Player" && mainCamera.GetComponent<Health>().invincible == true)){
 
 			if (this.gameObject.tag == "Shell" && that.gameObject.tag == "Player") {
 				print ("ResolveCollisionWith 4");
@@ -220,7 +220,7 @@ public class PE_Obj2D : MonoBehaviour {
 						eY1 = pos1.y - this.collider2D.bounds.size.y / 2; // current bottom side
 						eX2 = thatP.x + that.collider2D.bounds.size.x / 2 ; // other object's right side 
 						eY2 = thatP.y + that.collider2D.bounds.size.y / 2 ; // other object's  top side.
-						if (((Mathf.Abs(eY0 - eY2) <= 0.2f)) 
+						if (((Mathf.Abs(eY0 - eY2) <= 0.3f)) 
 						    && !((that.gameObject.tag == "Platform") && (vel.y > 0))) { // land on top
 							float dist = this.collider2D.bounds.size.y/2 + that.collider2D.bounds.size.y/2;
 							vel.y = 0;
@@ -232,6 +232,7 @@ public class PE_Obj2D : MonoBehaviour {
 						         && (that.gameObject.tag != "Platform")) { // hit the right side
 							float dist = this.collider2D.bounds.size.x/2 + that.collider2D.bounds.size.x/2;
 							if (pos0.x > pos1.x) {
+								print ("shouldn't print");
 								vel.x = 0;
 								// acc.x = 0;
 							}
@@ -297,7 +298,7 @@ public class PE_Obj2D : MonoBehaviour {
 						eX2 = thatP.x - that.collider2D.bounds.size.x / 2 ;
 						eY2 = thatP.y + that.collider2D.bounds.size.y / 2 ;
 
-						if ((Mathf.Abs(eY1 - eY2) <= 0.2f)  
+						if ((Mathf.Abs(eY1 - eY2) <= 0.3f)  
 							&& !((that.gameObject.tag == "Platform") && (vel.y > 0))) { // land on top
 							float dist = this.collider2D.bounds.size.y/2 + that.collider2D.bounds.size.y/2;
 							vel.y = 0;
@@ -309,6 +310,7 @@ public class PE_Obj2D : MonoBehaviour {
 						         && (that.gameObject.tag != "Platform")){ // hit the left side
 							float dist = this.collider2D.bounds.size.x/2 + that.collider2D.bounds.size.x/2;
 							if (pos0.x < pos1.x) {
+								print ("shouldn't print");
 								vel.x = 0;
 								// acc.x = 0;
 							}

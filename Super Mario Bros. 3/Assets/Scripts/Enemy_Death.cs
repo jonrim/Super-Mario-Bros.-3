@@ -17,7 +17,8 @@ public class Enemy_Death : MonoBehaviour {
 	// Update is called once per frame
 	virtual public void FixedUpdate () {
 		if (dead && !dead_anim) {
-			enemy_anim.SetBool ("Dead", dead);
+			if (enemy_anim != null)
+				enemy_anim.SetBool ("Dead", dead);
 			timer = 0;
 			if (GetComponent<Enemy_AI>() != null)
 				PhysEngine2D.objs.Remove(GetComponent<Enemy_AI>());

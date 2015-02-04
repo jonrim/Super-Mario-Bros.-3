@@ -16,7 +16,7 @@ public class Stomp : MonoBehaviour {
 	void OnTriggerEnter2D (Collider2D other) {
 		if (other.gameObject.GetComponent<PE_Obj2D>() == null)
 			return;
-		if ((other.gameObject.tag == "Enemy") && (transform.position.y > other.gameObject.transform.position.y + other.collider2D.bounds.size.y/2 - 0.5f)){
+		if ((other.gameObject.tag == "Enemy") && (transform.position.y  + this.collider2D.bounds.size.y/2 > other.gameObject.transform.position.y + other.collider2D.bounds.size.y/2 - 0.1f)){
 			other.gameObject.transform.GetComponent<Enemy_Death>().dead = true;
 
 			bounce();
