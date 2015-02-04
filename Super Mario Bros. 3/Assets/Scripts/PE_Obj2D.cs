@@ -168,7 +168,7 @@ public class PE_Obj2D : MonoBehaviour {
 		    !(this.gameObject.tag == "Enemy" && that.gameObject.tag == "Enemy") &&
 		    !(that.gameObject.tag == "Coin" && this.gameObject.tag == "Player") && (this.gameObject.tag != "Block_breakable") && (this.gameObject.tag != "Block_empty") &&
 		    (this.gameObject.tag != "Block_item") && !(that.gameObject.tag == "Item" && this.gameObject.tag == "Player") && !((that.gameObject.tag == "Enemy" || 
-		     that.gameObject.name == "Fireball") && this.gameObject.tag == "Player" && mainCamera.GetComponent<Health>().invincible == true)){
+		     that.gameObject.tag == "Fireball") && this.gameObject.tag == "Player" && mainCamera.GetComponent<Health>().invincible == true)){
 
 			if (this.gameObject.tag == "Shell" && that.gameObject.tag == "Player") {
 				print ("ResolveCollisionWith 4");
