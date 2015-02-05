@@ -11,7 +11,7 @@ public class Enemy_AI : PE_Obj2D {
 	public bool canJump2;
 	public AudioClip hit_by_shell;
 	public bool dead = false;
-	
+	public float turntimer;
 	// Use this for initialization
 /// <summary>
 /// /Jrim
@@ -70,9 +70,12 @@ public virtual void Update () {
 				vel.y = -15.0f;
 			}
 		}
-		if (!canJump2 && vel.y == 0 && acc.y == 0) {
+		if (!canJump2 && vel.y == 0 && acc.y == 0 && turntimer >= 0.1f) {
 			turnAround();
+			turntimer = 0;
 		}
+
+		turntimer += Time.fixedDeltaTime;
 	}
 
 	public override void OnTriggerEnter2D(Collider2D otherColl){
