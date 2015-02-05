@@ -250,7 +250,7 @@ public class PE_Obj2D : MonoBehaviour {
 						eY2 = thatP.y - that.collider2D.bounds.size.y / 2 ;
 
 						if ((Mathf.Abs(eY1 - eY2) <= 0.7) && ((Mathf.Abs(eX1 - eX2) >= 0.4) || that.gameObject.GetComponent<PE_Obj2D>().BlockOnRight) 
-						    && !((that.gameObject.tag == "Platform") && (vel.y > 0))){ // hit the bottom
+						    && !((that.gameObject.tag == "Platform") && (vel.y > 0)) && !GetComponent<PlayerMovement>().canJump){ // hit the bottom
 							float dist = this.collider2D.bounds.size.y/2 + that.collider2D.bounds.size.y/2;
 							vel.y = -1;
 							Vector2 pos = new Vector2(this.transform.position.x, that.transform.position.y - dist - 0.03f);
@@ -275,7 +275,7 @@ public class PE_Obj2D : MonoBehaviour {
 						eY2 = thatP.y - that.collider2D.bounds.size.y / 2 ;
 
 						if ((Mathf.Abs(eY1 - eY2) <= 0.7) && ((Mathf.Abs(eX1 - eX2) >= 0.4) || that.gameObject.GetComponent<PE_Obj2D>().BlockOnLeft)
-						    && !((that.gameObject.tag == "Platform") && (vel.y > 0))) { // hit the bottom
+						    && !((that.gameObject.tag == "Platform") && (vel.y > 0)) && !GetComponent<PlayerMovement>().canJump) { // hit the bottom
 							float dist = this.collider2D.bounds.size.y/2 + that.collider2D.bounds.size.y/2;
 							vel.y = -1;
 							Vector2 pos = new Vector2(this.transform.position.x, that.transform.position.y - dist - 0.03f);
