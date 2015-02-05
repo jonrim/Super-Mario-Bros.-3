@@ -17,6 +17,10 @@ public class Tail : PE_Obj2D {
 		else if (other.gameObject.tag == "Enemy") {
 			other.gameObject.transform.GetComponent<Enemy_Death>().taildead = true;
 		}
+		else if (other.gameObject.tag == "Coin") {
+			mainCamera.GetComponent<Health>().playSound(CoinSound, 0.1f);
+			Destroy (otherColl.gameObject);
+		}
 	}
 
 	public override void OnTriggerStay2D(Collider2D other){

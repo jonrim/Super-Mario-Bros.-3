@@ -66,9 +66,6 @@ public class Health : MonoBehaviour {
 		if (invincibility_mode) {
 			invincible = true;
 		}
-		else {
-			invincible = false;
-		}
 		if (cloned) {
 //			GameObject clone = GameObject.Find ("Mario(Clone)");
 //			if (clone.transform.position.x > mario_small.transform.position.x + 2.0f)

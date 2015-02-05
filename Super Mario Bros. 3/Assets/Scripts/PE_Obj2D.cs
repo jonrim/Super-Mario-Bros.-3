@@ -135,6 +135,7 @@ public class PE_Obj2D : MonoBehaviour {
 			mainCamera.GetComponent<Health>().playSound(CoinSound, 0.1f);
 			Destroy (that.gameObject);
 		}
+
 		if ((this.gameObject.tag == "Block_item" || this.gameObject.tag == "Block_empty" || this.gameObject.tag == "Block_breakable") &&
 		    (that.gameObject.tag == "Block_item" || that.gameObject.tag == "Block_empty" || that.gameObject.tag == "Block_breakable")) {
 			if (transform.position.x < that.gameObject.transform.position.x)

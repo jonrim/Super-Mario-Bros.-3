@@ -375,7 +375,7 @@ public class PlayerMovement : MonoBehaviour {
 		if (Input.GetButtonUp("Jump") && !mainCamera.GetComponent<Health>().tanooki) { // return to normal gravity if you let go of the jump button
 			GetComponent<PE_Obj2D>().acc.y = -60.0f;
 		}
-		mario_anim.SetBool ("CanJump", canJump2);
+		mario_anim.SetBool ("CanJump", canJump2 && GetComponent<PE_Obj2D>().vel.y == 0);
 		if (turn && Input.GetButton ("Right") && !canJump2) {
 			transform.localScale = new Vector3(1, 1, 1);
 		}
