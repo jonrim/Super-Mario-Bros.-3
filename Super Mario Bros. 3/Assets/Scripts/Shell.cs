@@ -13,6 +13,7 @@ public class Shell : PE_Obj2D {
 	public AudioClip hit_wall;
 	public AudioClip breakSound;
 	public bool carried = false;
+	public bool respawn = true;
 
 	void playSound(AudioClip sound, float vol){
 		audio.clip = sound;
@@ -38,7 +39,7 @@ public class Shell : PE_Obj2D {
 
 		if (vel.x == 0)
 			moving = false;
-		if (!moving) {
+		if (!moving && respawn) {
 			if (timer > 4.0f) {
 					anim.SetBool ("twitch", true);		
 				}
@@ -121,7 +122,7 @@ public class Shell : PE_Obj2D {
 		}
 		else if (other.gameObject.tag == "Player" && moving && (transform.position.y < other.gameObject.transform.position.y + 2*other.collider2D.bounds.size.y - 0.3f)
 		         && (transform.position.y > other.gameObject.transform.position.y - 2*other.collider2D.bounds.size.y + 0.3f)) {
-			// mainCamera.GetComponent<Health>().gothurt = true;
+			//mainCamera.GetComponent<Health>().gothurt = true;
 		}
 		else if (other.gameObject.tag == "Block_item" || other.gameObject.tag == "Block_empty" || other.gameObject.tag == "Block_breakable"
 		         && moving && (transform.position.y < other.gameObject.transform.position.y + 2*other.collider2D.bounds.size.y - 0.3f)

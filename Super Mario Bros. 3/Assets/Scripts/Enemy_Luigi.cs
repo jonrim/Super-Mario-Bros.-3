@@ -36,7 +36,7 @@ public class Enemy_Luigi : PE_Obj2D {
 		// vel.x = -2.0f;
 		transform.localScale = new Vector3(5.2f, 5.2f, 1);
 
-		vel.x = 4.0f;
+		vel.x = 3.7f;
 		
 		base.Start ();
 	}
