@@ -121,8 +121,8 @@ public class Shell : PE_Obj2D {
 			timer = 0;
 		}
 		else if (other.gameObject.tag == "Player" && moving && (transform.position.y < other.gameObject.transform.position.y + 2*other.collider2D.bounds.size.y - 0.3f)
-		         && (transform.position.y > other.gameObject.transform.position.y - 2*other.collider2D.bounds.size.y + 0.3f)) {
-			//mainCamera.GetComponent<Health>().gothurt = true;
+		         && (transform.position.y > other.gameObject.transform.position.y - other.collider2D.bounds.size.y)) {
+			mainCamera.GetComponent<Health>().gothurt = true;
 		}
 		else if (other.gameObject.tag == "Block_item" || other.gameObject.tag == "Block_empty" || other.gameObject.tag == "Block_breakable"
 		         && moving && (transform.position.y < other.gameObject.transform.position.y + 2*other.collider2D.bounds.size.y - 0.3f)
