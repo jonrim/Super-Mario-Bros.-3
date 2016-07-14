@@ -8,9 +8,9 @@ public class Switch : PE_Obj2D {
 	public AudioClip switchSound;
 
 	void playSound(AudioClip sound, float vol){
-		audio.clip = sound;
-		audio.volume = vol;
-		audio.Play();
+		GetComponent<AudioSource>().clip = sound;
+		GetComponent<AudioSource>().volume = vol;
+		GetComponent<AudioSource>().Play();
 	}
 
 	public override void Start () {
@@ -22,7 +22,7 @@ public class Switch : PE_Obj2D {
 		// if (other == null) {
 		// 	return;
 		// } else if (other.gameObject.tag == "Shell") {
-		if ((other.gameObject.tag == "PlayerFeet") && (other.gameObject.transform.position.y >= transform.position.y + this.collider2D.bounds.size.y/2 - 0.1f) && !steppedon) {
+		if ((other.gameObject.tag == "PlayerFeet") && (other.gameObject.transform.position.y >= transform.position.y + this.GetComponent<Collider2D>().bounds.size.y/2 - 0.1f) && !steppedon) {
 			anim.SetBool ("SteppedOn", true);
 			playSound(switchSound, 1.0f);
 			if (door.GetComponent<PE_Obj2D>() != null)

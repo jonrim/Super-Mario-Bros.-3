@@ -20,9 +20,9 @@ public class ItemBehavior : PE_Obj2D {
 	// Use this for initialization
 
 	void playSound(AudioClip sound, float vol){
-		audio.clip = sound;
-		audio.volume = vol;
-		audio.Play();
+		GetComponent<AudioSource>().clip = sound;
+		GetComponent<AudioSource>().volume = vol;
+		GetComponent<AudioSource>().Play();
 	}
 
 	public override void Start () {
@@ -47,10 +47,10 @@ public class ItemBehavior : PE_Obj2D {
 			transform.position = newPos;
 			return;
 		}
-		Vector2 point1 = new Vector2(is_on_ground.transform.position.x - is_on_ground.collider2D.bounds.size.x/2, 
-		                             is_on_ground.transform.position.y - is_on_ground.collider2D.bounds.size.y/2);
-		Vector2 point2 = new Vector2(is_on_ground.transform.position.x + is_on_ground.collider2D.bounds.size.x/2, 
-		                             is_on_ground.transform.position.y + is_on_ground.collider2D.bounds.size.y/2);
+		Vector2 point1 = new Vector2(is_on_ground.transform.position.x - is_on_ground.GetComponent<Collider2D>().bounds.size.x/2, 
+		                             is_on_ground.transform.position.y - is_on_ground.GetComponent<Collider2D>().bounds.size.y/2);
+		Vector2 point2 = new Vector2(is_on_ground.transform.position.x + is_on_ground.GetComponent<Collider2D>().bounds.size.x/2, 
+		                             is_on_ground.transform.position.y + is_on_ground.GetComponent<Collider2D>().bounds.size.y/2);
 		canJump = Physics2D.OverlapArea(point1, point2, GroundLayers, 0, 0);
 		// next bool needed so that you can't jump off walls
 		canJump2 = Physics2D.OverlapPoint(is_on_ground.position, GroundLayers);
@@ -113,7 +113,7 @@ public class ItemBehavior : PE_Obj2D {
 			return;
 		}
 		else if (((other.gameObject.tag == "Block_item" && timer > 1.0f) || other.gameObject.tag == "Block_empty") && 
-		         (transform.position.y < otherColl.transform.position.y + otherColl.collider2D.bounds.size.y/2)) {
+		         (transform.position.y < otherColl.transform.position.y + otherColl.GetComponent<Collider2D>().bounds.size.y/2)) {
 			vel.x = -vel.x;
 			float sign = Mathf.Sign (vel.x);
 			transform.position = new Vector2(transform.position.x + sign * 0.1f, transform.position.y);

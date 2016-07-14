@@ -32,9 +32,9 @@ public class PlayerMovement : MonoBehaviour {
 	public bool original;
 	public bool CanClimb;
 	void playSound(AudioClip sound, float vol){
-		audio.clip = sound;
-		audio.volume = vol;
-		audio.Play();
+		GetComponent<AudioSource>().clip = sound;
+		GetComponent<AudioSource>().volume = vol;
+		GetComponent<AudioSource>().Play();
 	}
 
 	void Awake () {
@@ -67,16 +67,16 @@ public class PlayerMovement : MonoBehaviour {
 			runtimer = Time.realtimeSinceStartup + 0.2f;
 		}
 		else if (((!run || turn || (Mathf.Abs(GetComponent<PE_Obj2D>().vel.x) < 3.0f )) && runmeter > 0 && runtimer < Time.realtimeSinceStartup)) {
-			if (audio.clip == RunSound && audio.isPlaying)
-				audio.Stop ();
+			if (GetComponent<AudioSource>().clip == RunSound && GetComponent<AudioSource>().isPlaying)
+				GetComponent<AudioSource>().Stop ();
 			runmeter--;
 			runtimer = Time.realtimeSinceStartup + 0.4f;
 		}
 		mario_anim.speed = Mathf.Abs (GetComponent<PE_Obj2D>().vel.x) * 0.1f + 0.5f;
-		Vector2 point1 = new Vector2(is_on_ground.transform.position.x - is_on_ground.collider2D.bounds.size.x/2, 
-		                             is_on_ground.transform.position.y - is_on_ground.collider2D.bounds.size.y/2);
-		Vector2 point2 = new Vector2(is_on_ground.transform.position.x + is_on_ground.collider2D.bounds.size.x/2, 
-		                             is_on_ground.transform.position.y + is_on_ground.collider2D.bounds.size.y/2);
+		Vector2 point1 = new Vector2(is_on_ground.transform.position.x - is_on_ground.GetComponent<Collider2D>().bounds.size.x/2, 
+		                             is_on_ground.transform.position.y - is_on_ground.GetComponent<Collider2D>().bounds.size.y/2);
+		Vector2 point2 = new Vector2(is_on_ground.transform.position.x + is_on_ground.GetComponent<Collider2D>().bounds.size.x/2, 
+		                             is_on_ground.transform.position.y + is_on_ground.GetComponent<Collider2D>().bounds.size.y/2);
 		canJump = Physics2D.OverlapArea(point1, point2, GroundLayers, 0, 0);
 		// next bool needed so that you can't jump off walls
 		canJump2 = Physics2D.OverlapPoint(is_on_ground.position, GroundLayers);
@@ -199,15 +199,15 @@ public class PlayerMovement : MonoBehaviour {
 			}
 		}
 		if (turn) {
-			if (audio.isPlaying && audio.clip == RunSound) {
-				audio.Stop ();
+			if (GetComponent<AudioSource>().isPlaying && GetComponent<AudioSource>().clip == RunSound) {
+				GetComponent<AudioSource>().Stop ();
 			}
-			if (!audio.isPlaying)
+			if (!GetComponent<AudioSource>().isPlaying)
 				playSound(TurnSound, 1.0f);
 		}
 		else {
-			if (audio.isPlaying && audio.clip == TurnSound)
-				audio.Stop();
+			if (GetComponent<AudioSource>().isPlaying && GetComponent<AudioSource>().clip == TurnSound)
+				GetComponent<AudioSource>().Stop();
 		}
 		// terminal velocities in x-direction
 		if ((Mathf.Abs (GetComponent<PE_Obj2D>().vel.x - 5.0f) <= 0.5f) && Input.GetButton ("Right")
@@ -238,14 +238,14 @@ public class PlayerMovement : MonoBehaviour {
 			GetComponent<PE_Obj2D>().acc.x = 0;
 		}
 		else if ((GetComponent<PE_Obj2D>().vel.x >= 9.0f) && Input.GetButton ("Right") && run && runmeter == 7) {
-			if (!audio.isPlaying && canJump)
+			if (!GetComponent<AudioSource>().isPlaying && canJump)
 				playSound(RunSound, 1.0f);
 			mario_anim.SetBool ("Run", true);
 			GetComponent<PE_Obj2D>().vel.x = 11.0f;
 			GetComponent<PE_Obj2D>().acc.x = 0;
 		}
 		else if ((GetComponent<PE_Obj2D>().vel.x <= -9.0f) && Input.GetButton("Left") && run && runmeter == 7){
-			if (!audio.isPlaying && canJump)
+			if (!GetComponent<AudioSource>().isPlaying && canJump)
 				playSound(RunSound, 1.0f);
 			mario_anim.SetBool ("Run", true);
 			GetComponent<PE_Obj2D>().vel.x = -11.0f;
@@ -278,8 +278,8 @@ public class PlayerMovement : MonoBehaviour {
 			}
 			if ((canJump) && (canJump2)){
 				GetComponent<PE_Obj2D>().vel.y = 10.0f;
-				if (audio.isPlaying) {
-					audio.Stop ();
+				if (GetComponent<AudioSource>().isPlaying) {
+					GetComponent<AudioSource>().Stop ();
 				}
 				playSound (JumpSound, 1.0f);
 				// audio.Play();
@@ -292,8 +292,8 @@ public class PlayerMovement : MonoBehaviour {
 			else if (mainCamera.GetComponent<Health>().tanooki && ((Mathf.Abs(velAtTakeOff) < 11.0f) || (runmeter < 6))) {
 				mario_anim.SetBool("Hover",true);
 				mario_anim.SetBool("Fly",false);
-				audio.clip = tanooki_attack;
-				if (audio.clip == tanooki_attack && !audio.isPlaying)
+				GetComponent<AudioSource>().clip = tanooki_attack;
+				if (GetComponent<AudioSource>().clip == tanooki_attack && !GetComponent<AudioSource>().isPlaying)
 					playSound (tanooki_attack, 0.7f);
 				pauseEndTime = Time.realtimeSinceStartup + 15.0f * Time.fixedDeltaTime;
 				GetComponent<PE_Obj2D>().vel.y = -2.0f;
@@ -303,8 +303,8 @@ public class PlayerMovement : MonoBehaviour {
 			else if (mainCamera.GetComponent<Health>().tanooki && (Mathf.Abs(velAtTakeOff) == 11.0f)) {
 				mario_anim.SetBool("Fly",true);
 				mario_anim.SetBool("Hover",true);
-				audio.clip = tanooki_attack;
-				if (audio.clip == tanooki_attack && !audio.isPlaying)
+				GetComponent<AudioSource>().clip = tanooki_attack;
+				if (GetComponent<AudioSource>().clip == tanooki_attack && !GetComponent<AudioSource>().isPlaying)
 					playSound (tanooki_attack, 0.7f);
 				pauseEndTime = Time.realtimeSinceStartup + 15.0f * Time.fixedDeltaTime;
 				GetComponent<PE_Obj2D>().vel.y = 5.0f;
@@ -320,8 +320,8 @@ public class PlayerMovement : MonoBehaviour {
 		}
 		if (HitJump || Hit) {
 			GetComponent<PE_Obj2D>().vel.y = 10.0f;
-			if (audio.isPlaying) {
-				audio.Stop ();
+			if (GetComponent<AudioSource>().isPlaying) {
+				GetComponent<AudioSource>().Stop ();
 			}
 			playSound (HitSound, 1.0f);
 			// audio.Play();

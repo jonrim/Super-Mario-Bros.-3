@@ -9,9 +9,9 @@ public class ManagerScript : MonoBehaviour {
 	public AudioClip levelMusic;
 
 	void playSound(AudioClip sound, float vol){
-		audio.clip = sound;
-		audio.volume = vol;
-		audio.Play();
+		GetComponent<AudioSource>().clip = sound;
+		GetComponent<AudioSource>().volume = vol;
+		GetComponent<AudioSource>().Play();
 	}
 
 	void Awake () {
@@ -26,20 +26,20 @@ public class ManagerScript : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-		if (!audio.isPlaying && Time.timeScale == 1) {
+		if (!GetComponent<AudioSource>().isPlaying && Time.timeScale == 1) {
 			playSound (levelMusic, 0.8f);
 		}
 		if (Time.timeScale == 0) {
-			audio.Pause ();
+			GetComponent<AudioSource>().Pause ();
 		}
 		if (Input.GetKeyDown(KeyCode.Return)) {
 			if (IsMenuActive) {
 				Time.timeScale = 1;
-				audio.Play ();
+				GetComponent<AudioSource>().Play ();
 			}
 			else {
-				audio.Pause();
-				audio.PlayOneShot(pauseSound);
+				GetComponent<AudioSource>().Pause();
+				GetComponent<AudioSource>().PlayOneShot(pauseSound);
 			}
 			IsMenuActive = !IsMenuActive;
 		}

@@ -29,9 +29,9 @@ public class Spawner : MonoBehaviour {
 		if (myObject == null) 
 			dead = true;
 		if (!respawn && !dead) {
-			if (myObject.renderer.isVisible)
+			if (myObject.GetComponent<Renderer>().isVisible)
 					timer = 3f;
-			else if (renderer.isVisible)
+			else if (GetComponent<Renderer>().isVisible)
 					timer = 3f;
 			
 			timer -= Time.deltaTime;

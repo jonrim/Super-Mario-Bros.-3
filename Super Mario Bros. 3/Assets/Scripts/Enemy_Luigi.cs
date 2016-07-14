@@ -15,9 +15,9 @@ public class Enemy_Luigi : PE_Obj2D {
 	public AudioClip peachSound;
 	public AudioClip kingSound;
 	void playSound(AudioClip sound, float vol){
-		audio.clip = sound;
-		audio.volume = vol;
-		audio.Play();
+		GetComponent<AudioSource>().clip = sound;
+		GetComponent<AudioSource>().volume = vol;
+		GetComponent<AudioSource>().Play();
 	}
 	// Use this for initialization
 /// <summary>
@@ -51,10 +51,10 @@ public class Enemy_Luigi : PE_Obj2D {
 
 public virtual void Update () {
 
-		Vector2 point1 = new Vector2(is_on_ground.transform.position.x - is_on_ground.collider2D.bounds.size.x/2, 
-		                             is_on_ground.transform.position.y - is_on_ground.collider2D.bounds.size.y/2);
-		Vector2 point2 = new Vector2(is_on_ground.transform.position.x + is_on_ground.collider2D.bounds.size.x/2, 
-		                             is_on_ground.transform.position.y + is_on_ground.collider2D.bounds.size.y/2);
+		Vector2 point1 = new Vector2(is_on_ground.transform.position.x - is_on_ground.GetComponent<Collider2D>().bounds.size.x/2, 
+		                             is_on_ground.transform.position.y - is_on_ground.GetComponent<Collider2D>().bounds.size.y/2);
+		Vector2 point2 = new Vector2(is_on_ground.transform.position.x + is_on_ground.GetComponent<Collider2D>().bounds.size.x/2, 
+		                             is_on_ground.transform.position.y + is_on_ground.GetComponent<Collider2D>().bounds.size.y/2);
 		canJump = Physics2D.OverlapArea(point1, point2, GroundLayers, 0, 0);
 		// next bool needed so that you can't jump off walls
 		canJump2 = Physics2D.OverlapPoint(is_on_ground.position, GroundLayers);
@@ -87,7 +87,7 @@ public virtual void Update () {
 		if (other.gameObject.tag != "Floor" && other.gameObject.tag != "Player") {
 			if (other.gameObject.tag == "Block_item" || other.gameObject.tag == "Block_empty" || other.gameObject.tag == "Block_breakable" ||
 		    	other.gameObject.tag == "Item") {
-				if (!audio.isPlaying || audio.clip == breakSound)
+				if (!GetComponent<AudioSource>().isPlaying || GetComponent<AudioSource>().clip == breakSound)
 					playSound(breakSound, 1.0f);
 			}
 			else if (other.gameObject.tag == "Peach") {

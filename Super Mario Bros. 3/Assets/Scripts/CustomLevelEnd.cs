@@ -14,9 +14,9 @@ public class CustomLevelEnd : MonoBehaviour {
 	void Update () {
 		Luigi = GameObject.Find("Luigi");
 		if (Luigi == null && !done) {
-			audio.clip = Sound;
-			audio.volume = 2.0f;
-			audio.Play();
+			GetComponent<AudioSource>().clip = Sound;
+			GetComponent<AudioSource>().volume = 2.0f;
+			GetComponent<AudioSource>().Play();
 			done = true;
 			Time.timeScale = 0.001f;
 		}

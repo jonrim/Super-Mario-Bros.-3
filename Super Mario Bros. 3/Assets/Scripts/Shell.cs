@@ -16,9 +16,9 @@ public class Shell : PE_Obj2D {
 	public bool respawn = true;
 
 	void playSound(AudioClip sound, float vol){
-		audio.clip = sound;
-		audio.volume = vol;
-		audio.Play();
+		GetComponent<AudioSource>().clip = sound;
+		GetComponent<AudioSource>().volume = vol;
+		GetComponent<AudioSource>().Play();
 	}
 
 	// Use this for initialization
@@ -52,10 +52,10 @@ public class Shell : PE_Obj2D {
 			}
 			timer += Time.fixedDeltaTime;
 		}
-		Vector2 point1 = new Vector2(is_on_ground.transform.position.x - is_on_ground.collider2D.bounds.size.x/2, 
-		                             is_on_ground.transform.position.y - is_on_ground.collider2D.bounds.size.y/2);
-		Vector2 point2 = new Vector2(is_on_ground.transform.position.x + is_on_ground.collider2D.bounds.size.x/2, 
-		                             is_on_ground.transform.position.y + is_on_ground.collider2D.bounds.size.y/2);
+		Vector2 point1 = new Vector2(is_on_ground.transform.position.x - is_on_ground.GetComponent<Collider2D>().bounds.size.x/2, 
+		                             is_on_ground.transform.position.y - is_on_ground.GetComponent<Collider2D>().bounds.size.y/2);
+		Vector2 point2 = new Vector2(is_on_ground.transform.position.x + is_on_ground.GetComponent<Collider2D>().bounds.size.x/2, 
+		                             is_on_ground.transform.position.y + is_on_ground.GetComponent<Collider2D>().bounds.size.y/2);
 		canJump = Physics2D.OverlapArea(point1, point2, GroundLayers, 0, 0);
 		// next bool needed so that you can't jump off walls
 
@@ -120,13 +120,13 @@ public class Shell : PE_Obj2D {
 			playSound(hit_by_shell, 1.0f);
 			timer = 0;
 		}
-		else if (other.gameObject.tag == "Player" && moving && (transform.position.y < other.gameObject.transform.position.y + 2*other.collider2D.bounds.size.y - 0.3f)
-		         && (transform.position.y > other.gameObject.transform.position.y - other.collider2D.bounds.size.y)) {
+		else if (other.gameObject.tag == "Player" && moving && (transform.position.y < other.gameObject.transform.position.y + 2*other.GetComponent<Collider2D>().bounds.size.y - 0.3f)
+		         && (transform.position.y > other.gameObject.transform.position.y - other.GetComponent<Collider2D>().bounds.size.y)) {
 			mainCamera.GetComponent<Health>().gothurt = true;
 		}
 		else if (other.gameObject.tag == "Block_item" || other.gameObject.tag == "Block_empty" || other.gameObject.tag == "Block_breakable"
-		         && moving && (transform.position.y < other.gameObject.transform.position.y + 2*other.collider2D.bounds.size.y - 0.3f)
-		         && (transform.position.y > other.gameObject.transform.position.y - 2*other.collider2D.bounds.size.y + 0.3f)) {
+		         && moving && (transform.position.y < other.gameObject.transform.position.y + 2*other.GetComponent<Collider2D>().bounds.size.y - 0.3f)
+		         && (transform.position.y > other.gameObject.transform.position.y - 2*other.GetComponent<Collider2D>().bounds.size.y + 0.3f)) {
 			
 			GetComponent<PE_Obj2D>().vel.x = -GetComponent<PE_Obj2D>().vel.x;
 			if (other.gameObject.tag == "Block_breakable" && moving) {

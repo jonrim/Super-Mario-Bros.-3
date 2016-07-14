@@ -36,9 +36,9 @@ public class Health : MonoBehaviour {
 	public bool cloned;
 	Vector2 top_pos;
 	public void playSound(AudioClip sound, float vol){
-		audio.clip = sound;
-		audio.volume = vol;
-		audio.Play();
+		GetComponent<AudioSource>().clip = sound;
+		GetComponent<AudioSource>().volume = vol;
+		GetComponent<AudioSource>().Play();
 	}
 
 	// Use this for initialization
@@ -81,7 +81,7 @@ public class Health : MonoBehaviour {
 			gothurt = false;
 		}
 		if (((gothurt && !big && !invincible) || (felloff)) && !dead) {
-			GameManager.audio.Stop ();
+			GameManager.GetComponent<AudioSource>().Stop ();
 			anim.SetBool("Dead", true);
 			playSound (downed, 0.1f);
 			gothurt = false;

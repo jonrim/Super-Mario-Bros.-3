@@ -42,9 +42,9 @@ public class PE_Obj2D : MonoBehaviour {
 	public AudioClip CoinSound;
 
 	void playSound(AudioClip sound, float vol){
-		audio.clip = sound;
-		audio.volume = vol;
-		audio.Play();
+		GetComponent<AudioSource>().clip = sound;
+		GetComponent<AudioSource>().volume = vol;
+		GetComponent<AudioSource>().Play();
 	}
 
 	virtual public void Start() {
@@ -64,7 +64,7 @@ public class PE_Obj2D : MonoBehaviour {
 	virtual public void FixedUpdate() {
 		if ((this.gameObject.tag == "Block_item") && (blockhit) && !start) {
 			spriteRenderer.sprite = item_block_hit;
-			if (!audio.isPlaying)
+			if (!GetComponent<AudioSource>().isPlaying)
 				playSound(BlockSound, 1.0f);
 			if (!end) {
 				Vector2 pos = new Vector2(transform.position.x, transform.position.y + 0.2f);
@@ -85,20 +85,20 @@ public class PE_Obj2D : MonoBehaviour {
 			spawn_tanooki = false;
 			go_tanooki.GetComponent<ItemBehavior>().end_pos = this.transform.position.y + 3.0f;
 			Instantiate(go_tanooki, new Vector2(this.transform.position.x,
-			                                    this.transform.position.y + this.collider2D.bounds.size.y/2 + 0.5f), 
+			                                    this.transform.position.y + this.GetComponent<Collider2D>().bounds.size.y/2 + 0.5f), 
 			            this.transform.rotation);
 		}
 		else if (blocktimer >= 0.35f) {
 			if (spawn_multiplier) {
 				spawn_multiplier = false;
-				go_multiplier.GetComponent<ItemBehavior>().end_pos = this.transform.position.y + this.collider2D.bounds.size.y/2 + 0.5f;
+				go_multiplier.GetComponent<ItemBehavior>().end_pos = this.transform.position.y + this.GetComponent<Collider2D>().bounds.size.y/2 + 0.5f;
 				Instantiate(go_multiplier, new Vector2(this.transform.position.x,
 				                                       this.transform.position.y + 0.2f), 
 				            this.transform.rotation);
 			}
 			else if (spawn_mushroom) {
 				spawn_mushroom = false;
-				go_mushroom.GetComponent<ItemBehavior>().end_pos = this.transform.position.y + this.collider2D.bounds.size.y/2 + 0.5f;
+				go_mushroom.GetComponent<ItemBehavior>().end_pos = this.transform.position.y + this.GetComponent<Collider2D>().bounds.size.y/2 + 0.5f;
 				Instantiate(go_mushroom, new Vector2(this.transform.position.x,
 				                                     this.transform.position.y + 0.2f), 
 				            this.transform.rotation);
@@ -156,7 +156,7 @@ public class PE_Obj2D : MonoBehaviour {
 			//Time.timeScale = 0;
 
 			//if we got stomped, don't damage mario
-			if (!this.collider2D.bounds.Intersects(that.gameObject.transform.FindChild("IsOnGround").collider2D.bounds)) {
+			if (!this.GetComponent<Collider2D>().bounds.Intersects(that.gameObject.transform.FindChild("IsOnGround").GetComponent<Collider2D>().bounds)) {
 			//if (!this.GetComponent<Enemy_Death>().dead) {
 				// damage Mario
 				mainCamera = GameObject.Find ("Main Camera");
@@ -190,19 +190,19 @@ public class PE_Obj2D : MonoBehaviour {
 					//Vector2 overlap = Vector2.zero;
 					thatP = that.transform.position;
 					delta = pos1 - thatP;
-					if ((this.transform.position.x <= thatP.x + that.collider2D.bounds.size.x/2 ) &&
-					    (this.transform.position.x >= thatP.x - that.collider2D.bounds.size.x/2 )) { // if the center of this obj is between the x-bounds of that obj
+					if ((this.transform.position.x <= thatP.x + that.GetComponent<Collider2D>().bounds.size.x/2 ) &&
+					    (this.transform.position.x >= thatP.x - that.GetComponent<Collider2D>().bounds.size.x/2 )) { // if the center of this obj is between the x-bounds of that obj
 
 						if ((pos1.y >= thatP.y) 
 						&& !((that.gameObject.tag == "Platform") && (vel.y > 0))){ // land on top
-							float dist = this.collider2D.bounds.size.y/2 + that.collider2D.bounds.size.y/2;
+							float dist = this.GetComponent<Collider2D>().bounds.size.y/2 + that.GetComponent<Collider2D>().bounds.size.y/2;
 							vel.y = 0;
 							acc.y = 0;
-							Vector2 pos = new Vector2(this.transform.position.x, that.collider2D.transform.position.y + dist+0.03f);
+							Vector2 pos = new Vector2(this.transform.position.x, that.GetComponent<Collider2D>().transform.position.y + dist+0.03f);
 							this.transform.position = pos;
 						}
 						else if (that.gameObject.tag != "Platform") { // hit the bottom
-							float dist = this.collider2D.bounds.size.y/2 + that.collider2D.bounds.size.y/2;
+							float dist = this.GetComponent<Collider2D>().bounds.size.y/2 + that.GetComponent<Collider2D>().bounds.size.y/2;
 							vel.y = -1;
 							Vector2 pos = new Vector2(this.transform.position.x, that.transform.position.y - dist-0.03f);
 							this.transform.position = pos;
@@ -215,15 +215,15 @@ public class PE_Obj2D : MonoBehaviour {
 
 					else if (delta.x >= 0 && delta.y >= 0) { // Top, Right
 						// Get the edges that we're concerned with
-						eX0 = pos0.x - this.collider2D.bounds.size.x / 2; // prev Left side of object.
-						eY0 = pos0.y - this.collider2D.bounds.size.y / 2; // prev bottom side
-						eX1 = pos1.x - this.collider2D.bounds.size.x / 2; // current right side
-						eY1 = pos1.y - this.collider2D.bounds.size.y / 2; // current bottom side
-						eX2 = thatP.x + that.collider2D.bounds.size.x / 2 ; // other object's right side 
-						eY2 = thatP.y + that.collider2D.bounds.size.y / 2 ; // other object's  top side.
+						eX0 = pos0.x - this.GetComponent<Collider2D>().bounds.size.x / 2; // prev Left side of object.
+						eY0 = pos0.y - this.GetComponent<Collider2D>().bounds.size.y / 2; // prev bottom side
+						eX1 = pos1.x - this.GetComponent<Collider2D>().bounds.size.x / 2; // current right side
+						eY1 = pos1.y - this.GetComponent<Collider2D>().bounds.size.y / 2; // current bottom side
+						eX2 = thatP.x + that.GetComponent<Collider2D>().bounds.size.x / 2 ; // other object's right side 
+						eY2 = thatP.y + that.GetComponent<Collider2D>().bounds.size.y / 2 ; // other object's  top side.
 						if (((Mathf.Abs(eY0 - eY2) <= 0.3f)) 
 						    && !((that.gameObject.tag == "Platform") && (vel.y > 0))) { // land on top
-							float dist = this.collider2D.bounds.size.y/2 + that.collider2D.bounds.size.y/2;
+							float dist = this.GetComponent<Collider2D>().bounds.size.y/2 + that.GetComponent<Collider2D>().bounds.size.y/2;
 							vel.y = 0;
 							acc.y = 0;
 							Vector2 pos = new Vector2(this.transform.position.x, that.transform.position.y + dist + 0.03f);
@@ -231,7 +231,7 @@ public class PE_Obj2D : MonoBehaviour {
 						}
 						else if ((this.gameObject.tag != "Enemy") && (this.gameObject.tag != "Item")
 						         && (that.gameObject.tag != "Platform")) { // hit the right side
-							float dist = this.collider2D.bounds.size.x/2 + that.collider2D.bounds.size.x/2;
+							float dist = this.GetComponent<Collider2D>().bounds.size.x/2 + that.GetComponent<Collider2D>().bounds.size.x/2;
 							if (pos0.x > pos1.x) {
 								print ("shouldn't print");
 								vel.x = 0;
@@ -242,23 +242,23 @@ public class PE_Obj2D : MonoBehaviour {
 						}
 
 					} else if (delta.x >= 0 && delta.y < 0) { // Bottom, Right
-						eX0 = pos0.x - this.collider2D.bounds.size.x / 2;
-						eY0 = pos0.y + this.collider2D.bounds.size.y / 2;
-						eX1 = pos1.x - this.collider2D.bounds.size.x / 2;
-						eY1 = pos1.y + this.collider2D.bounds.size.y / 2;
-						eX2 = thatP.x + that.collider2D.bounds.size.x / 2 ;
-						eY2 = thatP.y - that.collider2D.bounds.size.y / 2 ;
+						eX0 = pos0.x - this.GetComponent<Collider2D>().bounds.size.x / 2;
+						eY0 = pos0.y + this.GetComponent<Collider2D>().bounds.size.y / 2;
+						eX1 = pos1.x - this.GetComponent<Collider2D>().bounds.size.x / 2;
+						eY1 = pos1.y + this.GetComponent<Collider2D>().bounds.size.y / 2;
+						eX2 = thatP.x + that.GetComponent<Collider2D>().bounds.size.x / 2 ;
+						eY2 = thatP.y - that.GetComponent<Collider2D>().bounds.size.y / 2 ;
 
 						if ((Mathf.Abs(eY1 - eY2) <= 0.7) && ((Mathf.Abs(eX1 - eX2) >= 0.4) || that.gameObject.GetComponent<PE_Obj2D>().BlockOnRight) 
 						    && !((that.gameObject.tag == "Platform") && (vel.y > 0))){ // hit the bottom
-							float dist = this.collider2D.bounds.size.y/2 + that.collider2D.bounds.size.y/2;
+							float dist = this.GetComponent<Collider2D>().bounds.size.y/2 + that.GetComponent<Collider2D>().bounds.size.y/2;
 							vel.y = -1;
 							Vector2 pos = new Vector2(this.transform.position.x, that.transform.position.y - dist - 0.03f);
 							this.transform.position = pos;
 						}
 						else if ((this.gameObject.tag != "Enemy") && (this.gameObject.tag != "Item")
 						         && (that.gameObject.tag != "Platform")) { // hit the right side
-							float dist = this.collider2D.bounds.size.x/2 + that.collider2D.bounds.size.x/2;
+							float dist = this.GetComponent<Collider2D>().bounds.size.x/2 + that.GetComponent<Collider2D>().bounds.size.x/2;
 							if (pos0.x > pos1.x) {
 								vel.x = 0;
 								// acc.x = 0;
@@ -267,23 +267,23 @@ public class PE_Obj2D : MonoBehaviour {
 							this.transform.position = pos;
 						}
 					} else if (delta.x < 0 && delta.y < 0) { // Bottom, Left
-						eX0 = pos0.x + this.collider2D.bounds.size.x / 2;
-						eY0 = pos0.y + this.collider2D.bounds.size.y / 2;
-						eX1 = pos1.x + this.collider2D.bounds.size.x / 2;
-						eY1 = pos1.y + this.collider2D.bounds.size.y / 2;
-						eX2 = thatP.x - that.collider2D.bounds.size.x / 2 ;
-						eY2 = thatP.y - that.collider2D.bounds.size.y / 2 ;
+						eX0 = pos0.x + this.GetComponent<Collider2D>().bounds.size.x / 2;
+						eY0 = pos0.y + this.GetComponent<Collider2D>().bounds.size.y / 2;
+						eX1 = pos1.x + this.GetComponent<Collider2D>().bounds.size.x / 2;
+						eY1 = pos1.y + this.GetComponent<Collider2D>().bounds.size.y / 2;
+						eX2 = thatP.x - that.GetComponent<Collider2D>().bounds.size.x / 2 ;
+						eY2 = thatP.y - that.GetComponent<Collider2D>().bounds.size.y / 2 ;
 
 						if ((Mathf.Abs(eY1 - eY2) <= 0.7) && ((Mathf.Abs(eX1 - eX2) >= 0.4) || that.gameObject.GetComponent<PE_Obj2D>().BlockOnLeft)
 						    && !((that.gameObject.tag == "Platform") && (vel.y > 0))) { // hit the bottom
-							float dist = this.collider2D.bounds.size.y/2 + that.collider2D.bounds.size.y/2;
+							float dist = this.GetComponent<Collider2D>().bounds.size.y/2 + that.GetComponent<Collider2D>().bounds.size.y/2;
 							vel.y = -1;
 							Vector2 pos = new Vector2(this.transform.position.x, that.transform.position.y - dist - 0.03f);
 							this.transform.position = pos;
 						}
 						else if ((this.gameObject.tag != "Enemy") && (this.gameObject.tag != "Item")
 						         && (that.gameObject.tag != "Platform")) { // hit the left side
-							float dist = this.collider2D.bounds.size.x/2 + that.collider2D.bounds.size.x/2;
+							float dist = this.GetComponent<Collider2D>().bounds.size.x/2 + that.GetComponent<Collider2D>().bounds.size.x/2;
 							if (pos0.x < pos1.x) {
 								vel.x = 0;
 								// acc.x = 0;
@@ -292,16 +292,16 @@ public class PE_Obj2D : MonoBehaviour {
 							this.transform.position = pos;
 						}
 					} else if (delta.x < 0 && delta.y >= 0) { // Top, Left
-						eX0 = pos0.x + this.collider2D.bounds.size.x / 2;
-						eY0 = pos0.y - this.collider2D.bounds.size.y / 2;
-						eX1 = pos1.x + this.collider2D.bounds.size.x / 2;
-						eY1 = pos1.y - this.collider2D.bounds.size.y / 2;
-						eX2 = thatP.x - that.collider2D.bounds.size.x / 2 ;
-						eY2 = thatP.y + that.collider2D.bounds.size.y / 2 ;
+						eX0 = pos0.x + this.GetComponent<Collider2D>().bounds.size.x / 2;
+						eY0 = pos0.y - this.GetComponent<Collider2D>().bounds.size.y / 2;
+						eX1 = pos1.x + this.GetComponent<Collider2D>().bounds.size.x / 2;
+						eY1 = pos1.y - this.GetComponent<Collider2D>().bounds.size.y / 2;
+						eX2 = thatP.x - that.GetComponent<Collider2D>().bounds.size.x / 2 ;
+						eY2 = thatP.y + that.GetComponent<Collider2D>().bounds.size.y / 2 ;
 
 						if ((Mathf.Abs(eY1 - eY2) <= 0.3f)  
 							&& !((that.gameObject.tag == "Platform") && (vel.y > 0))) { // land on top
-							float dist = this.collider2D.bounds.size.y/2 + that.collider2D.bounds.size.y/2;
+							float dist = this.GetComponent<Collider2D>().bounds.size.y/2 + that.GetComponent<Collider2D>().bounds.size.y/2;
 							vel.y = 0;
 							acc.y = 0;
 							Vector2 pos = new Vector2(this.transform.position.x, that.transform.position.y + dist + 0.03f);
@@ -309,7 +309,7 @@ public class PE_Obj2D : MonoBehaviour {
 						}
 						else if ((this.gameObject.tag != "Enemy") && (this.gameObject.tag != "Item")
 						         && (that.gameObject.tag != "Platform")){ // hit the left side
-							float dist = this.collider2D.bounds.size.x/2 + that.collider2D.bounds.size.x/2;
+							float dist = this.GetComponent<Collider2D>().bounds.size.x/2 + that.GetComponent<Collider2D>().bounds.size.x/2;
 							if (pos0.x < pos1.x) {
 								print ("shouldn't print");
 								vel.x = 0;
@@ -372,8 +372,8 @@ public class PE_Obj2D : MonoBehaviour {
 		}
 		else if ((this.gameObject.tag == "Block_item") && (that.gameObject.tag == "Player" || that.gameObject.tag == "Tail" || that.gameObject.tag == "Shell") && (!blockhit)){
 			thatP = that.transform.position;
-			if (((thatP.x <= this.transform.position.x + this.collider2D.bounds.size.x/2 - 0.1f ) &&
-			     (thatP.x >= this.transform.position.x - this.collider2D.bounds.size.x/2 + 0.1f)) || that.gameObject.tag == "Tail" || that.gameObject.tag == "Shell") { // if the center of this obj is between the x-bounds of that obj
+			if (((thatP.x <= this.transform.position.x + this.GetComponent<Collider2D>().bounds.size.x/2 - 0.1f ) &&
+			     (thatP.x >= this.transform.position.x - this.GetComponent<Collider2D>().bounds.size.x/2 + 0.1f)) || that.gameObject.tag == "Tail" || that.gameObject.tag == "Shell") { // if the center of this obj is between the x-bounds of that obj
 				if ((thatP.y < this.transform.position.y) || that.gameObject.tag == "Tail" || that.gameObject.tag == "Shell") {
 //					float dist = this.collider2D.bounds.size.y/2 + that.collider2D.bounds.size.y/2;
 //					Vector2 pos = new Vector2(that.transform.position.x, this.transform.position.y - dist-0.03f);
@@ -390,15 +390,15 @@ public class PE_Obj2D : MonoBehaviour {
 						spawn_tanooki = true;
 					}
 					else {
-						if (audio.isPlaying && audio.clip == BlockSound) {
-							audio.Stop ();
+						if (GetComponent<AudioSource>().isPlaying && GetComponent<AudioSource>().clip == BlockSound) {
+							GetComponent<AudioSource>().Stop ();
 						}
-						if (!audio.isPlaying) {
+						if (!GetComponent<AudioSource>().isPlaying) {
 							playSound(CoinSound, 1.0f);
 						}
 						go_coin.GetComponent<ItemBehavior>().end_pos = this.transform.position.y + 5.0f;
 						Instantiate(go_coin, new Vector2(this.transform.position.x,
-						                                    this.transform.position.y + this.collider2D.bounds.size.y/2 + 0.5f), 
+						                                    this.transform.position.y + this.GetComponent<Collider2D>().bounds.size.y/2 + 0.5f), 
 						            this.transform.rotation);
 					}
 					blockhit = true;

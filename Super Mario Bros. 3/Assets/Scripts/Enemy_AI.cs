@@ -46,10 +46,10 @@ public class Enemy_AI : PE_Obj2D {
 
 public virtual void Update () {
 
-		Vector2 point1 = new Vector2(is_on_ground.transform.position.x - is_on_ground.collider2D.bounds.size.x/2, 
-		                             is_on_ground.transform.position.y - is_on_ground.collider2D.bounds.size.y/2);
-		Vector2 point2 = new Vector2(is_on_ground.transform.position.x + is_on_ground.collider2D.bounds.size.x/2, 
-		                             is_on_ground.transform.position.y + is_on_ground.collider2D.bounds.size.y/2);
+		Vector2 point1 = new Vector2(is_on_ground.transform.position.x - is_on_ground.GetComponent<Collider2D>().bounds.size.x/2, 
+		                             is_on_ground.transform.position.y - is_on_ground.GetComponent<Collider2D>().bounds.size.y/2);
+		Vector2 point2 = new Vector2(is_on_ground.transform.position.x + is_on_ground.GetComponent<Collider2D>().bounds.size.x/2, 
+		                             is_on_ground.transform.position.y + is_on_ground.GetComponent<Collider2D>().bounds.size.y/2);
 		canJump = Physics2D.OverlapArea(point1, point2, GroundLayers, 0, 0);
 		// next bool needed so that you can't jump off walls
 		canJump2 = Physics2D.OverlapPoint(is_on_ground.position, GroundLayers);
@@ -90,8 +90,8 @@ public virtual void Update () {
 				vel.y = 4f;
 				transform.position = new Vector3(transform.position.x, transform.position.y + .04f, transform.position.z);
 				this.gameObject.layer = 0;
-				audio.Play ();
-				audio.PlayOneShot(hit_by_shell);
+				GetComponent<AudioSource>().Play ();
+				GetComponent<AudioSource>().PlayOneShot(hit_by_shell);
 				dead = true;
 			}
 			else {
@@ -103,13 +103,13 @@ public virtual void Update () {
 			vel.y = 4f;
 			transform.position = new Vector3(transform.position.x, transform.position.y + .04f, transform.position.z);
 			this.gameObject.layer = 0;
-			audio.Play ();
-			audio.PlayOneShot(hit_by_shell);
+			GetComponent<AudioSource>().Play ();
+			GetComponent<AudioSource>().PlayOneShot(hit_by_shell);
 			dead = true;
 		}
 		else if ((otherColl.gameObject.tag == "Block_item" || otherColl.gameObject.tag == "Block_empty" || otherColl.gameObject.tag == "Block_breakable")
-				&& (transform.position.y < otherColl.gameObject.transform.position.y + otherColl.collider2D.bounds.size.y - 0.1f) &&
-		         (transform.position.y > otherColl.gameObject.transform.position.y - otherColl.collider2D.bounds.size.y + 0.1f)) {
+				&& (transform.position.y < otherColl.gameObject.transform.position.y + otherColl.GetComponent<Collider2D>().bounds.size.y - 0.1f) &&
+		         (transform.position.y > otherColl.gameObject.transform.position.y - otherColl.GetComponent<Collider2D>().bounds.size.y + 0.1f)) {
 			turnAround();
 			base.OnTriggerEnter2D(otherColl);
 		} else {
