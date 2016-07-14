@@ -5,6 +5,7 @@
 To try out the game, go to Super Mario Bros. 3/Web Build/Web Build.html
 
 If you downloaded the Unity Web Player but it's bugged and says that you still need to download it:
+- If you're using Google Chrome, try a different browser first
 - go to Super Mario Bros. 3/Assets/Scene_0.unity
 - click on the Play Button at the top-center
 
