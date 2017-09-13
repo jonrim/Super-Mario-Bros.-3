@@ -16,7 +16,7 @@ If you downloaded the Unity Web Player but it's bugged and says that you still n
 
 ### Controls
 
-Use arrow keys to move
+Use arrow keys to move,
 X to jump, Z to do action
 
 ### Big Mario & Tanooki Suit
